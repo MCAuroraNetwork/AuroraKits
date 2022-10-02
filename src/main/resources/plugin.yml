@@ -1,0 +1,31 @@
+name: AuroraKits
+version: '${version}'
+main: club.aurorapvp.AuroraKits
+api-version: 1.19
+authors: [ Villagers654 ]
+description: A Crystal PvP Kits Plugin for the Aurora Network
+website: aurorapvp.club
+commands:
+  aurorakits:
+    subcommands: reload
+  kit:
+    description: Opens a kit
+    usage: /kit [name]
+  kits:
+    description: Opens the Kit GUI
+    usage: /kits
+  createkit:
+    description: Creates a kit
+    usage: /createkit [name]
+  deletekit:
+    description: Deletes a kit
+    usage: /deletekit [name]
+  createpublickit:
+    description: Creates a Public Kit
+    usage: /createpublickit [name]
+  createframe:
+    description: Creates an item frame which can dispense items
+    usage: /createframe [name]
+  deleteframe:
+    description: Deletes a an item frame
+    usage: /deleteframe [name]
