@@ -5,6 +5,10 @@ import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.inventoryData;
 import static club.aurorapvp.listeners.CommandListener.p;
+import static club.aurorapvp.util.DataHandler.dir;
+import static club.aurorapvp.util.DataHandler.file;
+import static club.aurorapvp.util.DataHandler.get;
+import static club.aurorapvp.util.DataHandler.save;
 
 import club.aurorapvp.listeners.CommandListener;
 import java.io.File;
@@ -12,11 +16,7 @@ import java.io.IOException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-// TODO make KitDataHandler, CustomConfigHandler, and ItemFrameDataHandler all use a shared util class
 public class KitDataHandler {
-
-  private static File file;
-  private static File dir;
   private static File guiFile;
   private static File[] files;
 
@@ -82,10 +82,6 @@ public class KitDataHandler {
     setFile();
     file.delete();
   }
-
-  public static FileConfiguration get() {
-    return customFile;
-  }
   public static void checkKits() {
     dir = new File(DataFolder, "/kits/" + p.getUniqueId() + "/");
     if (!dir.exists()) {
@@ -120,13 +116,6 @@ public class KitDataHandler {
       }
     }
     customFile = YamlConfiguration.loadConfiguration(file);
-  }
-  public static void save() {
-    try {
-      customFile.save(file);
-    } catch (IOException e) {
-      plugin.getLogger().warning("Couldn't save kit");
-    }
   }
   public static void createGUIEntry() throws IOException {
     dir = new File(DataFolder, "/GUIs/");

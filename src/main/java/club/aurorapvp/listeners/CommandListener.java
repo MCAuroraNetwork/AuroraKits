@@ -3,7 +3,8 @@ package club.aurorapvp.listeners;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.filehandlers.KitDataHandler.checkKitAmount;
 import static club.aurorapvp.filehandlers.KitDataHandler.checkKits;
-import static club.aurorapvp.filehandlers.KitDataHandler.get;
+import static club.aurorapvp.util.DataHandler.get;
+import static club.aurorapvp.util.DataHandler.save;
 
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.filehandlers.GUIHandler;
@@ -103,8 +104,8 @@ public class CommandListener implements CommandExecutor {
     if (commandArg0 != null) {
       ItemFrameDataHandler.checkFile();
 
-      ItemFrameDataHandler.get().set("frames." + commandArg0, null);
-      ItemFrameDataHandler.save();
+      get().set("frames." + commandArg0, null);
+      save();
     } else {
       p.sendMessage(Component.text("Invalid frame name"));
     }

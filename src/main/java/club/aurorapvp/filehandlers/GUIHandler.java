@@ -3,6 +3,9 @@ package club.aurorapvp.filehandlers;
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.listeners.CommandListener.p;
+import static club.aurorapvp.util.DataHandler.dir;
+import static club.aurorapvp.util.DataHandler.customFile;
+import static club.aurorapvp.util.DataHandler.get;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +13,6 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.Listener;
@@ -20,9 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class GUIHandler implements Listener {
   public static Inventory inv;
-  private static File dir;
   private static File guiFile;
-  private static FileConfiguration customFile;
 
   public static void GUIHandler() {
     inv = Bukkit.createInventory(null, 54, Component.text("KitGUI"));
@@ -31,7 +31,6 @@ public class GUIHandler implements Listener {
   }
 
   public static void initializeItems() {
-    // TODO use util class (whenever I make one)
     dir = new File(DataFolder + "/GUIS/");
     dir = new File(DataFolder, "/GUIs/");
     if (!dir.exists()) {
@@ -48,8 +47,8 @@ public class GUIHandler implements Listener {
     customFile = YamlConfiguration.loadConfiguration(guiFile);
 
     for (int i = 0; i < 2; i++) {
-      for (Object path : customFile.getConfigurationSection("kits").getKeys(false).toArray()) {
-        inv.addItem(createGuiItem(customFile.getItemStack("kits." + path + ".displayItem").getType(), (String) path));
+      for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
+        inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(), (String) path));
       }
       guiFile = new File(dir, p.getUniqueId() + ".yml");
       customFile = YamlConfiguration.loadConfiguration(guiFile);

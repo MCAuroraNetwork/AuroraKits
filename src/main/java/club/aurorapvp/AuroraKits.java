@@ -1,5 +1,7 @@
 package club.aurorapvp;
 
+import static club.aurorapvp.util.DataHandler.get;
+
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.filehandlers.ItemFrameDataHandler;
 import club.aurorapvp.filehandlers.KitDataHandler;
@@ -34,7 +36,7 @@ public final class AuroraKits extends JavaPlugin {
     getConfig().options().copyDefaults();
     saveDefaultConfig();
     CustomConfigHandler.setup();
-    CustomConfigHandler.get().options().copyDefaults(true);
+    get().options().copyDefaults(true);
     CustomConfigHandler.save();
 
     // Setup storage dirs

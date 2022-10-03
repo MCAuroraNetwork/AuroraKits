@@ -2,16 +2,16 @@ package club.aurorapvp.config;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
+import static club.aurorapvp.util.DataHandler.customFile;
+import static club.aurorapvp.util.DataHandler.file;
+import static club.aurorapvp.util.DataHandler.get;
 
 import java.io.File;
 import java.io.IOException;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 // TODO make KitDataHandler, CustomConfigHandler, and ItemFrameDataHandler all use a shared util class
 public class CustomConfigHandler {
-  private static File file;
-  private static FileConfiguration customFile;
 
   // Finds or generates the custom config file
   public static void setup() {
@@ -27,10 +27,6 @@ public class CustomConfigHandler {
       customFile = YamlConfiguration.loadConfiguration(file);
 
     GenerateDefaults();
-  }
-
-  public static FileConfiguration get() {
-    return customFile;
   }
 
   public static void save() {

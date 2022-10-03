@@ -6,22 +6,19 @@ import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.mainHandData;
 import static club.aurorapvp.listeners.CommandListener.p;
 import static club.aurorapvp.listeners.EventListener.clickLoc;
+import static club.aurorapvp.util.DataHandler.customFile;
+import static club.aurorapvp.util.DataHandler.dir;
+import static club.aurorapvp.util.DataHandler.file;
+import static club.aurorapvp.util.DataHandler.get;
+import static club.aurorapvp.util.DataHandler.save;
 
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ItemFrame;
 
-// TODO make KitDataHandler, CustomConfigHandler, and ItemFrameDataHandler all use a shared util class
 public class ItemFrameDataHandler {
-
-  private static File file;
-  private static File dir;
-
-  private static FileConfiguration customFile;
-
   public static void setup() {
     new File(DataFolder, "/frames/").mkdir();
     dir = new File(DataFolder, "/frames/");
@@ -49,27 +46,10 @@ public class ItemFrameDataHandler {
     get().set("frames." + commandArg0 + ".location", frame.getLocation());
     save();
   }
-
-  public static void delete() {
-    checkFile();
-    file.delete();
-  }
-
-  public static FileConfiguration get() {
-    return customFile;
-  }
-
   public static void checkFile() {
     // Defines the dir and file variables
     if (!dir.exists() || !file.exists()) {
       setup();
-    }
-  }
-  public static void save() {
-    try {
-      customFile.save(file);
-    } catch (IOException e) {
-      plugin.getLogger().warning("Couldn't save frame");
     }
   }
   public static String checkLocation() {
