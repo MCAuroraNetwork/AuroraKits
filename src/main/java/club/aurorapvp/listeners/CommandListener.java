@@ -58,7 +58,7 @@ public class CommandListener implements CommandExecutor {
         p.hasPermission("AuroraKits.public")) {
       KitDataHandler.deletepublic();
     }
-    
+
     return true;
   }
 

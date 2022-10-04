@@ -29,6 +29,7 @@ public final class AuroraKits extends JavaPlugin {
     getCommand("deletekit").setExecutor(new CommandListener());
     getCommand("createframe").setExecutor(new CommandListener());
     getCommand("deleteframe").setExecutor(new CommandListener());
+    getCommand("deletepublickit").setExecutor(new CommandListener());
 
     // Config setup
     CustomConfigHandler.setup();
