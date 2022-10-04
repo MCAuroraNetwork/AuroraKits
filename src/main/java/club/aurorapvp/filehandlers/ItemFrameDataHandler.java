@@ -32,8 +32,6 @@ public class ItemFrameDataHandler {
       }
     }
     customFile = YamlConfiguration.loadConfiguration(file);
-    get().createSection("frames");
-    save();
   }
 
   public static void create() {

@@ -1,16 +1,17 @@
 package club.aurorapvp;
 
-import static club.aurorapvp.util.DataHandler.get;
-
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.filehandlers.ItemFrameDataHandler;
 import club.aurorapvp.filehandlers.KitDataHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
-import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+
+import static club.aurorapvp.config.CustomConfigHandler.GenerateDefaults;
 
 public final class AuroraKits extends JavaPlugin {
 
@@ -28,16 +29,11 @@ public final class AuroraKits extends JavaPlugin {
     getCommand("deletekit").setExecutor(new CommandListener());
     getCommand("createframe").setExecutor(new CommandListener());
     getCommand("deleteframe").setExecutor(new CommandListener());
-    getCommand("createpublickit");
-
-
 
     // Config setup
-    getConfig().options().copyDefaults();
-    saveDefaultConfig();
     CustomConfigHandler.setup();
-    get().options().copyDefaults(true);
-    CustomConfigHandler.save();
+    GenerateDefaults();
+    saveDefaultConfig();
 
     // Setup storage dirs
     plugin = Bukkit.getPluginManager().getPlugin("AuroraKits");

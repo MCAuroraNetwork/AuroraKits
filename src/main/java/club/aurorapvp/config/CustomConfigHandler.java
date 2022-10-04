@@ -1,14 +1,13 @@
 package club.aurorapvp.config;
 
-import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.plugin;
-import static club.aurorapvp.util.DataHandler.customFile;
-import static club.aurorapvp.util.DataHandler.file;
-import static club.aurorapvp.util.DataHandler.get;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import org.bukkit.configuration.file.YamlConfiguration;
+
+import static club.aurorapvp.AuroraKits.DataFolder;
+import static club.aurorapvp.AuroraKits.plugin;
+import static club.aurorapvp.util.DataHandler.*;
 
 // TODO make KitDataHandler, CustomConfigHandler, and ItemFrameDataHandler all use a shared util class
 public class CustomConfigHandler {
@@ -25,25 +24,15 @@ public class CustomConfigHandler {
       }
     }
       customFile = YamlConfiguration.loadConfiguration(file);
-
-    GenerateDefaults();
+    save();
   }
-
-  public static void save() {
-    try {
-      customFile.save(file);
-    } catch (IOException e) {
-      plugin.getLogger().warning("Couldn't save config");
-    }
-  }
-
   public static void reload() {
     customFile = YamlConfiguration.loadConfiguration(file);
     plugin.getLogger().info("Config reloaded");
   }
 
   public static void GenerateDefaults() {
-    get().createSection("message");
+    get().addDefault("message", "");
     get().addDefault("message.joinMessage", "Welcome to Aurora PvP!");
     get().addDefault("message.firstJoinMessage", "You can use /kits to get a kit, or /createkit to make your own!");
   }
