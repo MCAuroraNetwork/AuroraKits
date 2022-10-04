@@ -39,19 +39,19 @@ public class CommandListener implements CommandExecutor {
 
     if (command.getName().equals("aurorakits") && Objects.equals(args[0], "reload")) {
       reloadcmd();
-    } else if (command.getName().equals("kit")) {
+    } else if (command.getName().equals("kit") && p.hasPermission("AuroraKits.kit")) {
       kitcmd();
-    } else if (command.getName().equals("kits")) {
+    } else if (command.getName().equals("kits") && p.hasPermission("AuroraKits.kit")) {
       GUIHandler.openGUI(p);
-    } else if (command.getName().equals("createkit")) {
+    } else if (command.getName().equals("createkit") && p.hasPermission("AuroraKits.createkit")) {
       createkitcmd();
-    } else if (command.getName().equals("deletekit")) {
+    } else if (command.getName().equals("deletekit") && p.hasPermission("AuroraKits.deletekit")) {
       KitDataHandler.delete();
-    } else if (command.getName().equals("createpublickit")) {
+    } else if (command.getName().equals("createpublickit") && p.hasPermission("AuroraKits.public")) {
       createpublickitcmd();
-    } else if (command.getName().equals("createframe")) {
+    } else if (command.getName().equals("createframe") && p.hasPermission("AuroraKits.frame")) {
       createframe();
-    } else if (command.getName().equals("deleteframe")) {
+    } else if (command.getName().equals("deleteframe") && p.hasPermission("AuroraKits.frame")) {
       deleteframe();
     }
     return true;

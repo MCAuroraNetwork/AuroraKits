@@ -29,3 +29,19 @@ commands:
   deleteframe:
     description: Deletes a an item frame
     usage: /deleteframe [name]
+permissions:
+  AuroraKits.kit:
+    description: Receive alerts for violations
+    default: true
+  AuroraKits.deletekit:
+    description: Receive alerts for violations
+    default: true
+  AuroraKits.createkit:
+    description: Receive alerts for violations
+    default: true
+  AuroraKits.public:
+    description: Show client brands on join
+    default: op
+  AuorraKits.frames:
+    description: Send cheater alert
+    default: op
