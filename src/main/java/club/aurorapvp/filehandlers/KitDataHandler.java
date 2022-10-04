@@ -23,8 +23,8 @@ public class KitDataHandler {
   private static FileConfiguration customFile;
 
   public static void setup() {
-    new File(DataFolder,"/kits/").mkdir();
-    new File(DataFolder,"/GUIs/").mkdir();
+    new File(DataFolder, "/kits/").mkdir();
+    new File(DataFolder, "/GUIs/").mkdir();
   }
 
   public static void create() {
@@ -66,7 +66,9 @@ public class KitDataHandler {
       try {
         get().set("items." + i, inventoryData[i]);
       } catch (Exception e) {
-        plugin.getLogger().severe(String.format("Unable to save data for %s's %s in slot %s", inventoryData[i].getType(), i));
+        plugin.getLogger().severe(
+            String.format("Unable to save data for %s's %s in slot %s", inventoryData[i].getType(),
+                i));
         e.printStackTrace();
       }
     }
@@ -82,6 +84,7 @@ public class KitDataHandler {
     setFile();
     file.delete();
   }
+
   public static void checkKits() {
     dir = new File(DataFolder, "/kits/" + p.getUniqueId() + "/");
     if (!dir.exists()) {
@@ -100,6 +103,7 @@ public class KitDataHandler {
       }
     }
   }
+
   public static void setFile() {
     // Defines the dir and file variables
     dir = new File(DataFolder, "/kits/" + p.getUniqueId() + "/");
@@ -117,12 +121,13 @@ public class KitDataHandler {
     }
     customFile = YamlConfiguration.loadConfiguration(file);
   }
+
   public static void createGUIEntry() throws IOException {
     dir = new File(DataFolder, "/GUIs/");
     if (!dir.exists()) {
       new File(DataFolder, "/GUIs/").mkdir();
     }
-    guiFile = new File(dir,p.getUniqueId() + ".yml");
+    guiFile = new File(dir, p.getUniqueId() + ".yml");
     if (!guiFile.exists()) {
       guiFile.createNewFile();
     }
@@ -132,6 +137,7 @@ public class KitDataHandler {
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
     get().save(guiFile);
   }
+
   public static void createPublicGUIEntry() throws IOException {
     dir = new File(DataFolder, "/GUIs/");
     if (!dir.exists()) {
@@ -147,9 +153,10 @@ public class KitDataHandler {
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
     get().save(guiFile);
   }
+
   public static boolean checkKitAmount() {
     int length;
-    files =  new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles();
+    files = new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles();
     if (files != null) {
       length = files.length;
       files = new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles();

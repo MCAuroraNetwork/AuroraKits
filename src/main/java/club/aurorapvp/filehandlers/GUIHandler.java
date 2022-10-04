@@ -3,8 +3,8 @@ package club.aurorapvp.filehandlers;
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.listeners.CommandListener.p;
-import static club.aurorapvp.util.DataHandler.dir;
 import static club.aurorapvp.util.DataHandler.customFile;
+import static club.aurorapvp.util.DataHandler.dir;
 import static club.aurorapvp.util.DataHandler.get;
 
 import java.io.File;
@@ -48,7 +48,8 @@ public class GUIHandler implements Listener {
 
     for (int i = 0; i < 2; i++) {
       for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
-        inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(), (String) path));
+        inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(),
+            (String) path));
       }
       guiFile = new File(dir, p.getUniqueId() + ".yml");
       customFile = YamlConfiguration.loadConfiguration(guiFile);

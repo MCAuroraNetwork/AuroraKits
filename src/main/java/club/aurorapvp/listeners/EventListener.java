@@ -34,6 +34,8 @@ public class EventListener extends YamlConfiguration implements Listener {
       p.sendMessage(Component.text((DataHandler.get().getString("message.firstJoinMessage"))));
     }
   }
+
+  @SuppressWarnings("checkstyle:MethodName")
   @EventHandler
   public void PlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
@@ -42,25 +44,33 @@ public class EventListener extends YamlConfiguration implements Listener {
       checkLocation();
 
       if (checkLocation() != null) {
-        CommandListener.p.getInventory().addItem(DataHandler.get().getItemStack("frames." + checkLocation() + ".item"));
+        CommandListener.p.getInventory()
+            .addItem(DataHandler.get().getItemStack("frames." + checkLocation() + ".item"));
         event.setCancelled(true);
       }
     }
   }
+
   @EventHandler
   public void onInventoryClick(final InventoryClickEvent event) {
-    if (!event.getInventory().equals(inv)) return;
+    if (!event.getInventory().equals(inv)) {
+      return;
+    }
 
     event.setCancelled(true);
 
     final ItemStack clickedItem = event.getCurrentItem();
 
-    if (clickedItem == null || clickedItem.getType().isAir()) return;
+    if (clickedItem == null || clickedItem.getType().isAir()) {
+      return;
+    }
 
     final Player p = (Player) event.getWhoClicked();
 
-    p.performCommand("kit " + PlainTextComponentSerializer.plainText().serialize(event.getCurrentItem().getItemMeta().displayName()));
+    p.performCommand("kit " + PlainTextComponentSerializer.plainText()
+        .serialize(event.getCurrentItem().getItemMeta().displayName()));
   }
+
   @EventHandler
   public void onInventoryClick(final InventoryDragEvent event) {
     if (event.getInventory().equals(inv)) {

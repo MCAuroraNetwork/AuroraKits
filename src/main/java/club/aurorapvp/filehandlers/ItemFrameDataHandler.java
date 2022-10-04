@@ -23,7 +23,7 @@ public class ItemFrameDataHandler {
     new File(DataFolder, "/frames/").mkdir();
     dir = new File(DataFolder, "/frames/");
 
-    file = new File(dir,"data.yml");
+    file = new File(dir, "data.yml");
     if (!file.exists()) {
       try {
         file.createNewFile();
@@ -44,12 +44,14 @@ public class ItemFrameDataHandler {
     get().set("frames." + commandArg0 + ".location", frame.getLocation());
     save();
   }
+
   public static void checkFile() {
     // Defines the dir and file variables
     if (!dir.exists() || !file.exists()) {
       setup();
     }
   }
+
   public static String checkLocation() {
     for (Object path : get().getConfigurationSection("frames").getKeys(false).toArray()) {
       if (get().getLocation("frames." + path + ".location").equals(clickLoc)) {

@@ -1,22 +1,22 @@
 package club.aurorapvp;
 
+import static club.aurorapvp.config.CustomConfigHandler.generateDefaults;
+
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.filehandlers.ItemFrameDataHandler;
 import club.aurorapvp.filehandlers.KitDataHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
+import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-
-import static club.aurorapvp.config.CustomConfigHandler.GenerateDefaults;
 
 public final class AuroraKits extends JavaPlugin {
 
   public static Plugin plugin;
   public static File DataFolder;
+
   @Override
   public void onEnable() {
 
@@ -32,7 +32,7 @@ public final class AuroraKits extends JavaPlugin {
 
     // Config setup
     CustomConfigHandler.setup();
-    GenerateDefaults();
+    generateDefaults();
     saveDefaultConfig();
 
     // Setup storage dirs
@@ -43,6 +43,7 @@ public final class AuroraKits extends JavaPlugin {
 
     getLogger().info("Aurora Kits Loaded");
   }
+
   @Override
   public void onDisable() {
     getLogger().info("Aurora Kits Unloaded");
