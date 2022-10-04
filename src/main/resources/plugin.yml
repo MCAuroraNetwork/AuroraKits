@@ -23,6 +23,9 @@ commands:
   createpublickit:
     description: Creates a Public Kit
     usage: /createpublickit [name]
+  deletepublickit:
+    description: Deletes a Public Kit
+    usage: /deletepublickit [name]
   createframe:
     description: Creates an item frame which can dispense items
     usage: /createframe [name]

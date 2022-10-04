@@ -47,13 +47,18 @@ public class CommandListener implements CommandExecutor {
       createkitcmd();
     } else if (command.getName().equals("deletekit") && p.hasPermission("AuroraKits.deletekit")) {
       KitDataHandler.delete();
-    } else if (command.getName().equals("createpublickit") && p.hasPermission("AuroraKits.public")) {
+    } else if (command.getName().equals("createpublickit") &&
+        p.hasPermission("AuroraKits.public")) {
       createpublickitcmd();
     } else if (command.getName().equals("createframe") && p.hasPermission("AuroraKits.frame")) {
       createframe();
     } else if (command.getName().equals("deleteframe") && p.hasPermission("AuroraKits.frame")) {
       deleteframe();
+    } else if (command.getName().equals("deletepublickit") &&
+        p.hasPermission("AuroraKits.public")) {
+      KitDataHandler.deletepublic();
     }
+    
     return true;
   }
 

@@ -85,6 +85,18 @@ public class KitDataHandler {
     file.delete();
   }
 
+  public static void deletepublic() {
+    dir = new File(DataFolder, "/kits/public/");
+    if (!dir.exists()) {
+      new File(DataFolder, "/kits/public/").mkdir();
+    }
+
+    file = new File(dir, CommandListener.commandArg0 + ".yml");
+    if (file.exists()) {
+      file.delete();
+    }
+  }
+
   public static void checkKits() {
     dir = new File(DataFolder, "/kits/" + p.getUniqueId() + "/");
     if (!dir.exists()) {
