@@ -18,6 +18,7 @@ public class ItemFrameDataHandler {
   private static File dir;
   private static File file;
   private static FileConfiguration customFile;
+
   public static void setup() {
     new File(DataFolder, "/frames/").mkdir();
     dir = new File(DataFolder, "/frames/");
@@ -66,6 +67,7 @@ public class ItemFrameDataHandler {
     }
     return null;
   }
+
   public static FileConfiguration get() {
     return customFile;
   }

@@ -33,11 +33,11 @@ public class EventListener extends YamlConfiguration implements Listener {
     p.sendMessage(Component.text((CustomConfigHandler.get().getString("message.joinMessage"))));
 
     if (!event.getPlayer().hasPlayedBefore()) {
-      p.sendMessage(Component.text((CustomConfigHandler.get().getString("message.firstJoinMessage"))));
+      p.sendMessage(
+          Component.text((CustomConfigHandler.get().getString("message.firstJoinMessage"))));
     }
   }
 
-  @SuppressWarnings("checkstyle:MethodName")
   @EventHandler
   public void PlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
@@ -47,7 +47,8 @@ public class EventListener extends YamlConfiguration implements Listener {
 
       if (checkLocation() != null) {
         event.getPlayer().getInventory()
-            .addItem(ItemFrameDataHandler.get().getItemStack("frames." + checkLocation() + ".item"));
+            .addItem(
+                ItemFrameDataHandler.get().getItemStack("frames." + checkLocation() + ".item"));
         event.setCancelled(true);
       }
     }

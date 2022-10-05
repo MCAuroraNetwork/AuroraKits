@@ -77,6 +77,7 @@ public class GUIHandler implements Listener {
     GUIHandler();
     ent.openInventory(inv);
   }
+
   public static void createGUIEntry() throws IOException {
     dir = new File(DataFolder, "/GUIs/");
     if (!dir.exists()) {
@@ -92,6 +93,7 @@ public class GUIHandler implements Listener {
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
     save();
   }
+
   public static void deleteGUIEntry() {
     dir = new File(DataFolder, "/GUIs/");
     if (!dir.exists()) {
@@ -106,6 +108,7 @@ public class GUIHandler implements Listener {
       save();
     }
   }
+
   public static void createPublicGUIEntry() throws IOException {
     dir = new File(DataFolder, "/GUIs/");
     if (!dir.exists()) {
@@ -121,6 +124,7 @@ public class GUIHandler implements Listener {
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
     save();
   }
+
   public static void deletePublicGUIEntry() {
     dir = new File(DataFolder, "/GUIs/");
     if (!dir.exists()) {
@@ -135,6 +139,7 @@ public class GUIHandler implements Listener {
       save();
     }
   }
+
   public static void save() {
     try {
       customFile.save(file);
@@ -142,6 +147,7 @@ public class GUIHandler implements Listener {
       plugin.getLogger().warning("Couldn't save");
     }
   }
+
   public static FileConfiguration get() {
     return customFile;
   }

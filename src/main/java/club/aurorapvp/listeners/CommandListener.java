@@ -76,12 +76,15 @@ public class CommandListener implements CommandExecutor {
 
   public void createkitcmd() {
     checkKitAmount();
-    if (checkKitAmount() && commandArg0 != null) {
+    if (checkKitAmount() && commandArg0 != null &&
+        p.getInventory().getItemInMainHand().getItemMeta() != null) {
       inventoryData = p.getInventory().getContents();
 
       KitDataHandler.create();
     } else if (commandArg0 == null) {
       p.sendMessage(Component.text("Invalid kit name!"));
+    } else if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
+      p.sendMessage(Component.text("Invalid Display Item!"));
     } else {
       p.sendMessage(Component.text("You have too many kits!"));
     }
@@ -89,12 +92,15 @@ public class CommandListener implements CommandExecutor {
 
   public void createpublickitcmd() {
     checkKitAmount();
-    if (checkKitAmount() && commandArg0 != null) {
+    if (checkKitAmount() && commandArg0 != null &&
+        p.getInventory().getItemInMainHand().getItemMeta() != null) {
       inventoryData = p.getInventory().getContents();
 
       KitDataHandler.createPublic();
     } else if (commandArg0 == null) {
       p.sendMessage(Component.text("Invalid kit name!"));
+    } else if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
+      p.sendMessage(Component.text("Invalid Display Item!"));
     } else {
       p.sendMessage(Component.text("You have too many kits!"));
     }
