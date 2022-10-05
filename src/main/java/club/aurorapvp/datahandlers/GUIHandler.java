@@ -2,6 +2,7 @@ package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
+import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.p;
 
 import java.io.File;
@@ -76,7 +77,71 @@ public class GUIHandler implements Listener {
     GUIHandler();
     ent.openInventory(inv);
   }
+  public static void createGUIEntry() throws IOException {
+    dir = new File(DataFolder, "/GUIs/");
+    if (!dir.exists()) {
+      new File(DataFolder, "/GUIs/").mkdir();
+    }
+    file = new File(dir, p.getUniqueId() + ".yml");
+    if (!file.exists()) {
+      file.createNewFile();
+    }
+    customFile = YamlConfiguration.loadConfiguration(file);
 
+    get().createSection("kits");
+    get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
+    save();
+  }
+  public static void deleteGUIEntry() {
+    dir = new File(DataFolder, "/GUIs/");
+    if (!dir.exists()) {
+      new File(DataFolder, "/GUIs/").mkdir();
+    }
+    file = new File(dir, p.getUniqueId() + ".yml");
+    if (file.exists()) {
+      customFile = YamlConfiguration.loadConfiguration(file);
+
+      get().createSection("kits");
+      get().set("kits." + commandArg0, "");
+      save();
+    }
+  }
+  public static void createPublicGUIEntry() throws IOException {
+    dir = new File(DataFolder, "/GUIs/");
+    if (!dir.exists()) {
+      new File(DataFolder, "/GUIs/").mkdir();
+    }
+    file = new File(dir, "public.yml");
+    if (!file.exists()) {
+      file.createNewFile();
+    }
+    customFile = YamlConfiguration.loadConfiguration(file);
+
+    get().createSection("kits");
+    get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
+    save();
+  }
+  public static void deletePublicGUIEntry() {
+    dir = new File(DataFolder, "/GUIs/");
+    if (!dir.exists()) {
+      new File(DataFolder, "/GUIs/").mkdir();
+    }
+    file = new File(dir, "public.yml");
+    if (file.exists()) {
+      customFile = YamlConfiguration.loadConfiguration(file);
+
+      get().createSection("kits");
+      get().set("kits." + commandArg0, "");
+      save();
+    }
+  }
+  public static void save() {
+    try {
+      customFile.save(file);
+    } catch (IOException e) {
+      plugin.getLogger().warning("Couldn't save");
+    }
+  }
   public static FileConfiguration get() {
     return customFile;
   }

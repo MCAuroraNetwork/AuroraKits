@@ -2,6 +2,10 @@ package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
+import static club.aurorapvp.datahandlers.GUIHandler.createGUIEntry;
+import static club.aurorapvp.datahandlers.GUIHandler.createPublicGUIEntry;
+import static club.aurorapvp.datahandlers.GUIHandler.deleteGUIEntry;
+import static club.aurorapvp.datahandlers.GUIHandler.deletePublicGUIEntry;
 import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.inventoryData;
 import static club.aurorapvp.listeners.CommandListener.p;
@@ -13,7 +17,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class KitDataHandler {
-  private static File guiFile;
   private static File[] files;
   private static File file;
   private static File dir;
@@ -80,6 +83,7 @@ public class KitDataHandler {
   public static void delete() {
     setFile();
     file.delete();
+    deleteGUIEntry();
   }
 
   public static void deletepublic() {
@@ -92,6 +96,7 @@ public class KitDataHandler {
     if (file.exists()) {
       file.delete();
     }
+    deletePublicGUIEntry();
   }
 
   public static void checkKits() {
@@ -129,38 +134,6 @@ public class KitDataHandler {
       }
     }
     customFile = YamlConfiguration.loadConfiguration(file);
-  }
-
-  public static void createGUIEntry() throws IOException {
-    dir = new File(DataFolder, "/GUIs/");
-    if (!dir.exists()) {
-      new File(DataFolder, "/GUIs/").mkdir();
-    }
-    guiFile = new File(dir, p.getUniqueId() + ".yml");
-    if (!guiFile.exists()) {
-      guiFile.createNewFile();
-    }
-    customFile = YamlConfiguration.loadConfiguration(guiFile);
-
-    get().createSection("kits");
-    get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
-    save();
-  }
-
-  public static void createPublicGUIEntry() throws IOException {
-    dir = new File(DataFolder, "/GUIs/");
-    if (!dir.exists()) {
-      new File(DataFolder, "/GUIs/").mkdir();
-    }
-    guiFile = new File(dir, "public.yml");
-    if (!guiFile.exists()) {
-      guiFile.createNewFile();
-    }
-    customFile = YamlConfiguration.loadConfiguration(guiFile);
-
-    get().createSection("kits");
-    get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
-    get().save(guiFile);
   }
 
   public static boolean checkKitAmount() {
