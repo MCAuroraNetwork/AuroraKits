@@ -4,7 +4,7 @@ import static club.aurorapvp.datahandlers.GUIHandler.inv;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.checkLocation;
 
 import club.aurorapvp.config.CustomConfigHandler;
-import club.aurorapvp.util.DataHandler;
+import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Location;
@@ -30,10 +30,10 @@ public class EventListener extends YamlConfiguration implements Listener {
     CustomConfigHandler.setup();
     Player p = event.getPlayer();
 
-    p.sendMessage(Component.text((DataHandler.get().getString("message.joinMessage"))));
+    p.sendMessage(Component.text((CustomConfigHandler.get().getString("message.joinMessage"))));
 
     if (!event.getPlayer().hasPlayedBefore()) {
-      p.sendMessage(Component.text((DataHandler.get().getString("message.firstJoinMessage"))));
+      p.sendMessage(Component.text((CustomConfigHandler.get().getString("message.firstJoinMessage"))));
     }
   }
 
@@ -46,8 +46,8 @@ public class EventListener extends YamlConfiguration implements Listener {
       checkLocation();
 
       if (checkLocation() != null) {
-        CommandListener.p.getInventory()
-            .addItem(DataHandler.get().getItemStack("frames." + checkLocation() + ".item"));
+        event.getPlayer().getInventory()
+            .addItem(ItemFrameDataHandler.get().getItemStack("frames." + checkLocation() + ".item"));
         event.setCancelled(true);
       }
     }
