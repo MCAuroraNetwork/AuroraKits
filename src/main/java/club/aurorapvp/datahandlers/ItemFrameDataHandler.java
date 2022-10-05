@@ -1,4 +1,4 @@
-package club.aurorapvp.filehandlers;
+package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
@@ -53,6 +53,7 @@ public class ItemFrameDataHandler {
   }
 
   public static String checkLocation() {
+    setup();
     for (Object path : get().getConfigurationSection("frames").getKeys(false).toArray()) {
       if (get().getLocation("frames." + path + ".location").equals(clickLoc)) {
         return (String) path;

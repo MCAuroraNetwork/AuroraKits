@@ -1,8 +1,9 @@
 package club.aurorapvp.listeners;
 
-import static club.aurorapvp.filehandlers.GUIHandler.inv;
-import static club.aurorapvp.filehandlers.ItemFrameDataHandler.checkLocation;
+import static club.aurorapvp.datahandlers.GUIHandler.inv;
+import static club.aurorapvp.datahandlers.ItemFrameDataHandler.checkLocation;
 
+import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.util.DataHandler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -26,6 +27,7 @@ public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
 
+    CustomConfigHandler.setup();
     Player p = event.getPlayer();
 
     p.sendMessage(Component.text((DataHandler.get().getString("message.joinMessage"))));

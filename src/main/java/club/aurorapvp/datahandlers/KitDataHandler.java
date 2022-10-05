@@ -1,4 +1,4 @@
-package club.aurorapvp.filehandlers;
+package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;

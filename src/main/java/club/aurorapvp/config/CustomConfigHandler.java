@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-// TODO make KitDataHandler, CustomConfigHandler, and ItemFrameDataHandler all use a shared util class
 public class CustomConfigHandler {
 
   // Finds or generates the custom config file
@@ -27,11 +26,6 @@ public class CustomConfigHandler {
     }
     customFile = YamlConfiguration.loadConfiguration(file);
     save();
-  }
-
-  public static void reload() {
-    customFile = YamlConfiguration.loadConfiguration(file);
-    plugin.getLogger().info("Config reloaded");
   }
 
   public static void generateDefaults() {

@@ -3,8 +3,8 @@ package club.aurorapvp;
 import static club.aurorapvp.config.CustomConfigHandler.generateDefaults;
 
 import club.aurorapvp.config.CustomConfigHandler;
-import club.aurorapvp.filehandlers.ItemFrameDataHandler;
-import club.aurorapvp.filehandlers.KitDataHandler;
+import club.aurorapvp.datahandlers.ItemFrameDataHandler;
+import club.aurorapvp.datahandlers.KitDataHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
 import java.io.File;
@@ -32,9 +32,9 @@ public final class AuroraKits extends JavaPlugin {
     getCommand("deletepublickit").setExecutor(new CommandListener());
 
     // Config setup
+    saveDefaultConfig();
     CustomConfigHandler.setup();
     generateDefaults();
-    saveDefaultConfig();
 
     // Setup storage dirs
     plugin = Bukkit.getPluginManager().getPlugin("AuroraKits");

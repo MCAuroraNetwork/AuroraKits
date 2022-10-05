@@ -1,15 +1,15 @@
 package club.aurorapvp.listeners;
 
 import static club.aurorapvp.AuroraKits.plugin;
-import static club.aurorapvp.filehandlers.KitDataHandler.checkKitAmount;
-import static club.aurorapvp.filehandlers.KitDataHandler.checkKits;
+import static club.aurorapvp.datahandlers.KitDataHandler.checkKitAmount;
+import static club.aurorapvp.datahandlers.KitDataHandler.checkKits;
 import static club.aurorapvp.util.DataHandler.get;
+import static club.aurorapvp.util.DataHandler.reload;
 import static club.aurorapvp.util.DataHandler.save;
 
-import club.aurorapvp.config.CustomConfigHandler;
-import club.aurorapvp.filehandlers.GUIHandler;
-import club.aurorapvp.filehandlers.ItemFrameDataHandler;
-import club.aurorapvp.filehandlers.KitDataHandler;
+import club.aurorapvp.datahandlers.GUIHandler;
+import club.aurorapvp.datahandlers.ItemFrameDataHandler;
+import club.aurorapvp.datahandlers.KitDataHandler;
 import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
@@ -103,7 +103,7 @@ public class CommandListener implements CommandExecutor {
   }
 
   public void reloadcmd() {
-    CustomConfigHandler.reload();
+    reload();
     plugin.getLogger().info("Configs reloaded");
   }
 
