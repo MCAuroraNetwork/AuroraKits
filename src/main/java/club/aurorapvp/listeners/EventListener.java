@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class EventListener extends YamlConfiguration implements Listener {
-  private static ArrayList falldamage;
+  public static ArrayList<Player> falldamage = new ArrayList<>();
   public static Location clickLoc;
 
   @EventHandler
@@ -39,8 +39,6 @@ public class EventListener extends YamlConfiguration implements Listener {
       p.sendMessage(
           Component.text((CustomConfigHandler.get().getString("message.firstJoinMessage"))));
     }
-    ArrayList<Player> falldamage = new ArrayList<Player>();
-
     falldamage.add(p);
   }
 
@@ -91,21 +89,18 @@ public class EventListener extends YamlConfiguration implements Listener {
   public void onPlayerRespawn(PlayerRespawnEvent event) {
     Player p = event.getPlayer();
 
-    if (!falldamage.contains(p)) {
-      falldamage.add(p);
-    }
+    falldamage.add(p);
   }
 
   @EventHandler
   public void onPlayerFall(EntityDamageEvent event) {
     CustomConfigHandler.setup();
-    Player player = (Player) event.getEntity();
+    Player p = (Player) event.getEntity();
 
-    if (event.getCause() == EntityDamageEvent.DamageCause.FALL && !falldamage.contains(player) &&
-        CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
+    if (event.getCause() == EntityDamageEvent.DamageCause.FALL && falldamage.contains(p) &&
+        !CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
       event.setCancelled(true);
-      falldamage.remove(player);
+      falldamage.remove(p);
     }
-    return;
   }
 }
