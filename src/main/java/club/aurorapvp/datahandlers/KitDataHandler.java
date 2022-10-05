@@ -5,10 +5,6 @@ import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.inventoryData;
 import static club.aurorapvp.listeners.CommandListener.p;
-import static club.aurorapvp.util.DataHandler.dir;
-import static club.aurorapvp.util.DataHandler.file;
-import static club.aurorapvp.util.DataHandler.get;
-import static club.aurorapvp.util.DataHandler.save;
 
 import club.aurorapvp.listeners.CommandListener;
 import java.io.File;
@@ -19,7 +15,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class KitDataHandler {
   private static File guiFile;
   private static File[] files;
-
+  private static File file;
+  private static File dir;
   private static FileConfiguration customFile;
 
   public static void setup() {
@@ -147,7 +144,7 @@ public class KitDataHandler {
 
     get().createSection("kits");
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
-    get().save(guiFile);
+    save();
   }
 
   public static void createPublicGUIEntry() throws IOException {
@@ -180,5 +177,16 @@ public class KitDataHandler {
       }
     }
     return true;
+  }
+  public static FileConfiguration get() {
+    return customFile;
+  }
+
+  public static void save() {
+    try {
+      customFile.save(file);
+    } catch (IOException e) {
+      plugin.getLogger().warning("Couldn't save");
+    }
   }
 }

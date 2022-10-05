@@ -2,16 +2,15 @@ package club.aurorapvp.config;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
-import static club.aurorapvp.util.DataHandler.customFile;
-import static club.aurorapvp.util.DataHandler.file;
-import static club.aurorapvp.util.DataHandler.get;
-import static club.aurorapvp.util.DataHandler.save;
 
 import java.io.File;
 import java.io.IOException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class CustomConfigHandler {
+  private static FileConfiguration customFile;
+  private static File file;
 
   // Finds or generates the custom config file
   public static void setup() {
@@ -28,10 +27,26 @@ public class CustomConfigHandler {
     save();
   }
 
+  public static FileConfiguration get() {
+    return customFile;
+  }
+
+  public static void save() {
+    try {
+      customFile.save(file);
+    } catch (IOException e) {
+      plugin.getLogger().warning("Couldn't save");
+    }
+  }
+
   public static void generateDefaults() {
     get().addDefault("message", "");
     get().addDefault("message.joinMessage", "Welcome to Aurora PvP!");
     get().addDefault("message.firstJoinMessage",
         "You can use /kits to get a kit, or /createkit to make your own!");
+  }
+
+  public static void reload() {
+    customFile = YamlConfiguration.loadConfiguration(file);
   }
 }

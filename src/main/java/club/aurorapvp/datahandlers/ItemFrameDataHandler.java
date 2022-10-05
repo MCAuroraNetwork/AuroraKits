@@ -6,19 +6,18 @@ import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.mainHandData;
 import static club.aurorapvp.listeners.CommandListener.p;
 import static club.aurorapvp.listeners.EventListener.clickLoc;
-import static club.aurorapvp.util.DataHandler.customFile;
-import static club.aurorapvp.util.DataHandler.dir;
-import static club.aurorapvp.util.DataHandler.file;
-import static club.aurorapvp.util.DataHandler.get;
-import static club.aurorapvp.util.DataHandler.save;
 
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ItemFrame;
 
 public class ItemFrameDataHandler {
+  private static File dir;
+  private static File file;
+  private static FileConfiguration customFile;
   public static void setup() {
     new File(DataFolder, "/frames/").mkdir();
     dir = new File(DataFolder, "/frames/");
@@ -46,9 +45,15 @@ public class ItemFrameDataHandler {
   }
 
   public static void checkFile() {
+    new File(DataFolder, "/frames/").mkdir();
+    dir = new File(DataFolder, "/frames/");
+
+    file = new File(dir, "data.yml");
     // Defines the dir and file variables
     if (!dir.exists() || !file.exists()) {
       setup();
+    } else {
+      customFile = YamlConfiguration.loadConfiguration(file);
     }
   }
 
@@ -60,5 +65,16 @@ public class ItemFrameDataHandler {
       }
     }
     return null;
+  }
+  public static FileConfiguration get() {
+    return customFile;
+  }
+
+  public static void save() {
+    try {
+      customFile.save(file);
+    } catch (IOException e) {
+      plugin.getLogger().warning("Couldn't save");
+    }
   }
 }

@@ -3,10 +3,8 @@ package club.aurorapvp.listeners;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.datahandlers.KitDataHandler.checkKitAmount;
 import static club.aurorapvp.datahandlers.KitDataHandler.checkKits;
-import static club.aurorapvp.util.DataHandler.get;
-import static club.aurorapvp.util.DataHandler.reload;
-import static club.aurorapvp.util.DataHandler.save;
 
+import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.datahandlers.GUIHandler;
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import club.aurorapvp.datahandlers.KitDataHandler;
@@ -67,7 +65,7 @@ public class CommandListener implements CommandExecutor {
       checkKits();
 
       for (int i = 0; i < inventoryData.length; i++) {
-        inventoryData[i] = get().getItemStack("items." + i);
+        inventoryData[i] = KitDataHandler.get().getItemStack("items." + i);
       }
 
       p.getInventory().setContents(inventoryData);
@@ -103,7 +101,7 @@ public class CommandListener implements CommandExecutor {
   }
 
   public void reloadcmd() {
-    reload();
+    CustomConfigHandler.reload();
     plugin.getLogger().info("Configs reloaded");
   }
 
@@ -121,8 +119,8 @@ public class CommandListener implements CommandExecutor {
     if (commandArg0 != null) {
       ItemFrameDataHandler.checkFile();
 
-      get().set("frames." + commandArg0, null);
-      save();
+      ItemFrameDataHandler.get().set("frames." + commandArg0, null);
+      ItemFrameDataHandler.save();
     } else {
       p.sendMessage(Component.text("Invalid frame name"));
     }
