@@ -40,9 +40,6 @@ public class CustomConfigHandler {
   }
 
   public static void generateDefaults() {
-    get().addDefault("message.joinMessage", "Welcome to Aurora PvP!");
-    get().addDefault("message.firstJoinMessage",
-        "You can use /kits to get a kit, or /createkit to make your own!");
     get().addDefault("doFirstFallDamage", "false");
   }
 

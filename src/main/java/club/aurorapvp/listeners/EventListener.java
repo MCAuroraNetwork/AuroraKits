@@ -29,16 +29,7 @@ public class EventListener extends YamlConfiguration implements Listener {
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-
-    CustomConfigHandler.setup();
     Player p = event.getPlayer();
-
-    p.sendMessage(Component.text((CustomConfigHandler.get().getString("message.joinMessage"))));
-
-    if (!event.getPlayer().hasPlayedBefore()) {
-      p.sendMessage(
-          Component.text((CustomConfigHandler.get().getString("message.firstJoinMessage"))));
-    }
     falldamage.add(p);
   }
 
