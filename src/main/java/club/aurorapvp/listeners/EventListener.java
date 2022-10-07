@@ -6,7 +6,6 @@ import static club.aurorapvp.datahandlers.ItemFrameDataHandler.checkLocation;
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import java.util.ArrayList;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,7 +29,9 @@ public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player p = event.getPlayer();
-    falldamage.add(p);
+    if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
+      falldamage.add(p);
+    }
   }
 
   @EventHandler
