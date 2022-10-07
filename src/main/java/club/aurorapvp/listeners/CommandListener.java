@@ -63,6 +63,7 @@ public class CommandListener implements CommandExecutor {
   public void kitcmd() {
     if (commandArg0 != null) {
       checkKits();
+      inventoryData = p.getInventory().getContents();
 
       for (int i = 0; i < inventoryData.length; i++) {
         inventoryData[i] = KitDataHandler.get().getItemStack("items." + i);
