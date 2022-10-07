@@ -8,7 +8,6 @@ import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.datahandlers.GUIHandler;
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import club.aurorapvp.datahandlers.KitDataHandler;
-import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,25 +34,23 @@ public class CommandListener implements CommandExecutor {
       commandArg0 = args[0];
     }
 
-    if (command.getName().equals("aurorakits") && Objects.equals(args[0], "reload")) {
+    if (command.getName().equals("aurorakits")) {
       reloadcmd();
-    } else if (command.getName().equals("kit") && p.hasPermission("AuroraKits.kit")) {
+    } else if (command.getName().equals("kit")) {
       kitcmd();
-    } else if (command.getName().equals("kits") && p.hasPermission("AuroraKits.kit")) {
+    } else if (command.getName().equals("kits")) {
       GUIHandler.openGUI(p);
-    } else if (command.getName().equals("createkit") && p.hasPermission("AuroraKits.createkit")) {
+    } else if (command.getName().equals("createkit")) {
       createkitcmd();
-    } else if (command.getName().equals("deletekit") && p.hasPermission("AuroraKits.deletekit")) {
+    } else if (command.getName().equals("deletekit")) {
       KitDataHandler.delete();
-    } else if (command.getName().equals("createpublickit") &&
-        p.hasPermission("AuroraKits.public")) {
+    } else if (command.getName().equals("createpublickit")) {
       createpublickitcmd();
-    } else if (command.getName().equals("createframe") && p.hasPermission("AuroraKits.frame")) {
+    } else if (command.getName().equals("createframe")) {
       createframe();
-    } else if (command.getName().equals("deleteframe") && p.hasPermission("AuroraKits.frame")) {
+    } else if (command.getName().equals("deleteframe")) {
       deleteframe();
-    } else if (command.getName().equals("deletepublickit") &&
-        p.hasPermission("AuroraKits.public")) {
+    } else if (command.getName().equals("deletepublickit")) {
       KitDataHandler.deletepublic();
     }
 

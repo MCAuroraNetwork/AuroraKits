@@ -11,40 +11,42 @@ commands:
   kit:
     description: Opens a kit
     usage: /kit [name]
+    permission: AuroraKits.kit
   kits:
     description: Opens the Kit GUI
     usage: /kits
+    permission: AuroraKits.kit
   createkit:
     description: Creates a kit
     usage: /createkit [name]
+    permission: AuroraKits.kit
   deletekit:
     description: Deletes a kit
     usage: /deletekit [name]
+    permission: AuroraKits.kit
   createpublickit:
     description: Creates a Public Kit
     usage: /createpublickit [name]
+    permission: AuroraKits.public
   deletepublickit:
     description: Deletes a Public Kit
     usage: /deletepublickit [name]
+    permission: AuroraKits.public
   createframe:
     description: Creates an item frame which can dispense items
     usage: /createframe [name]
+    permission: AuroraKits.frame
   deleteframe:
     description: Deletes a an item frame
     usage: /deleteframe [name]
+    permission: AuroraKits.frame
 permissions:
   AuroraKits.kit:
-    description: Receive alerts for violations
-    default: true
-  AuroraKits.deletekit:
-    description: Receive alerts for violations
-    default: true
-  AuroraKits.createkit:
-    description: Receive alerts for violations
+    description: Allows the use of kits
     default: true
   AuroraKits.public:
-    description: Show client brands on join
+    description: Allows for the creation of public kits
     default: op
   AuorraKits.frames:
-    description: Send cheater alert
+    description: Allows for the creation of frames
     default: op
