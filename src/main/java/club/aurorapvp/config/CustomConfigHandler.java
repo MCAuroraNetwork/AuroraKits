@@ -41,9 +41,6 @@ public class CustomConfigHandler {
 
   public static void generateDefaults() {
     get().addDefault("doFirstFallDamage", "false");
-
-    get().options().copyDefaults(true);
-    save();
   }
 
   public static void reload() {
