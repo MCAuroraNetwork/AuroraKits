@@ -42,7 +42,7 @@ public class GUIHandler implements Listener {
       try {
         file.createNewFile();
       } catch (IOException e) {
-        plugin.getLogger().warning("Couldn't save GUI Data");
+        plugin.getLogger().warning("Couldn't save GUI File");
       }
     }
     customFile = YamlConfiguration.loadConfiguration(file);
@@ -88,8 +88,7 @@ public class GUIHandler implements Listener {
       file.createNewFile();
     }
     customFile = YamlConfiguration.loadConfiguration(file);
-
-    get().createSection("kits");
+    
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
     save();
   }
