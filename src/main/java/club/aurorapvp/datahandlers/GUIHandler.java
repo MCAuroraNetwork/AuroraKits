@@ -103,7 +103,7 @@ public class GUIHandler implements Listener {
       customFile = YamlConfiguration.loadConfiguration(file);
 
       get().createSection("kits");
-      get().set("kits." + commandArg0, "");
+      get().set("kits." + commandArg0, null);
       save();
     }
   }
