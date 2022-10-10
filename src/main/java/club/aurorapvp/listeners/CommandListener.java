@@ -36,9 +36,10 @@ public class CommandListener implements CommandExecutor {
 
     if (command.getName().equals("aurorakits")) {
       reloadcmd();
-    } else if (command.getName().equals("kit")) {
+    } else if (command.getName().equals("kit") && args[0] != null) {
       kitcmd();
-    } else if (command.getName().equals("kits")) {
+    } else if (command.getName().equals("kits") ||
+        command.getName().equals("kit") && args[0] == null) {
       GUIHandler.openGUI(p);
     } else if (command.getName().equals("createkit")) {
       createkitcmd();
@@ -58,18 +59,14 @@ public class CommandListener implements CommandExecutor {
   }
 
   public void kitcmd() {
-    if (commandArg0 != null) {
-      checkKits();
-      inventoryData = p.getInventory().getContents();
+    checkKits();
+    inventoryData = p.getInventory().getContents();
 
-      for (int i = 0; i < inventoryData.length; i++) {
-        inventoryData[i] = KitDataHandler.get().getItemStack("items." + i);
-      }
-
-      p.getInventory().setContents(inventoryData);
-    } else {
-      p.sendMessage(Component.text("Invalid kit name!"));
+    for (int i = 0; i < inventoryData.length; i++) {
+      inventoryData[i] = KitDataHandler.get().getItemStack("items." + i);
     }
+
+    p.getInventory().setContents(inventoryData);
   }
 
   public void createkitcmd() {
