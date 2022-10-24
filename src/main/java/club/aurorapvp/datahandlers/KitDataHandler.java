@@ -86,7 +86,7 @@ public class KitDataHandler {
     deleteGUIEntry();
   }
 
-  public static void deletepublic() {
+  public static void deletePublic() {
     dir = new File(DataFolder, "/kits/public/");
     if (!dir.exists()) {
       new File(DataFolder, "/kits/public/").mkdir();
@@ -130,7 +130,7 @@ public class KitDataHandler {
       try {
         file.createNewFile();
       } catch (IOException e) {
-        plugin.getLogger().warning("Could not create kit");
+        plugin.getLogger().warning("Could not find kit");
       }
     }
     customFile = YamlConfiguration.loadConfiguration(file);

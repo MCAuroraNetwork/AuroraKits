@@ -3,6 +3,7 @@ package club.aurorapvp.listeners;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.datahandlers.KitDataHandler.checkKitAmount;
 import static club.aurorapvp.datahandlers.KitDataHandler.checkKits;
+import static club.aurorapvp.datahandlers.KitDataHandler.get;
 
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.datahandlers.GUIHandler;
@@ -24,7 +25,8 @@ public class CommandListener implements CommandExecutor {
   public static ItemStack mainHandData;
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label,
+  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
+                           @NotNull String label,
                            String[] args) {
 
     if (sender instanceof Player) {
@@ -35,41 +37,46 @@ public class CommandListener implements CommandExecutor {
     }
 
     if (command.getName().equals("aurorakits")) {
-      reloadcmd();
-    } else if (command.getName().equals("kit") && args[0] != null) {
-      kitcmd();
+      reloadCmd();
+    } else if (command.getName().equals("kit") && args.length != 0) {
+      kitCmd();
     } else if (command.getName().equals("kits") ||
-        command.getName().equals("kit") && args[0] == null) {
+        command.getName().equals("kit") && args.length == 0) {
       GUIHandler.openGUI(p);
     } else if (command.getName().equals("createkit")) {
-      createkitcmd();
+      createKitCmd();
     } else if (command.getName().equals("deletekit")) {
-      KitDataHandler.delete();
+      deleteKitCmd();
     } else if (command.getName().equals("createpublickit")) {
-      createpublickitcmd();
+      createPublicKitCmd();
     } else if (command.getName().equals("createframe")) {
-      createframe();
+      createFrameCmd();
     } else if (command.getName().equals("deleteframe")) {
-      deleteframe();
+      deleteFrameCmd();
     } else if (command.getName().equals("deletepublickit")) {
-      KitDataHandler.deletepublic();
+      deletePublicKitCmd();
     }
 
     return true;
   }
 
-  public void kitcmd() {
+  public void kitCmd() {
     checkKits();
-    inventoryData = p.getInventory().getContents();
+    if (KitDataHandler.get() != null) {
+      inventoryData = p.getInventory().getContents();
 
-    for (int i = 0; i < inventoryData.length; i++) {
-      inventoryData[i] = KitDataHandler.get().getItemStack("items." + i);
+      for (int i = 0; i < inventoryData.length; i++) {
+        inventoryData[i] = KitDataHandler.get().getItemStack("items." + i);
+      }
+
+      p.getInventory().setContents(inventoryData);
+      p.sendMessage(Component.text("Used kit " + commandArg0));
+    } else {
+      p.sendMessage(Component.text("Kit " + commandArg0 + " not found!"));
     }
-
-    p.getInventory().setContents(inventoryData);
   }
 
-  public void createkitcmd() {
+  public void createKitCmd() {
     checkKitAmount();
     if (checkKitAmount() && commandArg0 != null &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
@@ -83,9 +90,17 @@ public class CommandListener implements CommandExecutor {
     } else {
       p.sendMessage(Component.text("You have too many kits!"));
     }
+    p.sendMessage(Component.text("Kit " + commandArg0 + " sucessfully created"));
   }
 
-  public void createpublickitcmd() {
+  public void deleteKitCmd() {
+    KitDataHandler.delete();
+    GUIHandler.deleteGUIEntry();
+
+    p.sendMessage(Component.text("Kit " + commandArg0 + " sucessfully deleted"));
+  }
+
+  public void createPublicKitCmd() {
     checkKitAmount();
     if (checkKitAmount() && commandArg0 != null &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
@@ -99,14 +114,22 @@ public class CommandListener implements CommandExecutor {
     } else {
       p.sendMessage(Component.text("You have too many kits!"));
     }
+    p.sendMessage(Component.text("Public kit " + commandArg0 + " sucessfully created"));
   }
 
-  public void reloadcmd() {
+  public void deletePublicKitCmd() {
+    KitDataHandler.deletePublic();
+    GUIHandler.deletePublicGUIEntry();
+
+    p.sendMessage(Component.text("Kit " + commandArg0 + " sucessfully deleted"));
+  }
+
+  public void reloadCmd() {
     CustomConfigHandler.reload();
     plugin.getLogger().info("Configs reloaded");
   }
 
-  public void createframe() {
+  public void createFrameCmd() {
     if (commandArg0 != null) {
       mainHandData = p.getInventory().getItemInMainHand();
 
@@ -114,9 +137,10 @@ public class CommandListener implements CommandExecutor {
     } else {
       p.sendMessage(Component.text("Invalid frame name"));
     }
+    p.sendMessage(Component.text("Frame " + commandArg0 + " sucessfully created"));
   }
 
-  public void deleteframe() {
+  public void deleteFrameCmd() {
     if (commandArg0 != null) {
       ItemFrameDataHandler.checkFile();
 
@@ -125,5 +149,6 @@ public class CommandListener implements CommandExecutor {
     } else {
       p.sendMessage(Component.text("Invalid frame name"));
     }
+    p.sendMessage(Component.text("Frame " + commandArg0 + " sucessfully deleted"));
   }
 }
