@@ -8,6 +8,8 @@ import club.aurorapvp.datahandlers.KitDataHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
 import java.io.File;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -18,6 +20,7 @@ public final class AuroraKits extends JavaPlugin {
   public static Plugin plugin;
   public static File DataFolder;
   public static PlainTextComponentSerializer serializeComponent;
+  public static String prefix;
 
   @Override
   public void onEnable() {
@@ -45,6 +48,7 @@ public final class AuroraKits extends JavaPlugin {
     ItemFrameDataHandler.setup();
 
     serializeComponent = PlainTextComponentSerializer.plainText();
+    prefix = "<gradient:#FFAA00:#FF55FF>AuroraKits > <reset>";
 
     getLogger().info("Aurora Kits Loaded");
   }

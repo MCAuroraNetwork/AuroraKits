@@ -9,7 +9,6 @@ import static club.aurorapvp.listeners.CommandListener.p;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -29,7 +28,8 @@ public class GUIHandler implements Listener {
   private static File file;
 
   public static void GUIHandler() {
-    inv = Bukkit.createInventory(null, 54, Component.text("KitGUI"));
+    inv = Bukkit.createInventory(null, 54, MiniMessage.miniMessage()
+        .deserialize("<gradient:#FFAA00:#FF55FF>KitGUI"));
 
     initializeItems();
   }
@@ -50,20 +50,27 @@ public class GUIHandler implements Listener {
     }
     customFile = YamlConfiguration.loadConfiguration(file);
 
-    for (int i = 0; i < 2; i++) {
-      if (get().getConfigurationSection("kits") != null) {
-        for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
-          inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(),
-              (String) path, get().getString("kits." + path + ".creator")));
-        }
+    if (get().getConfigurationSection("kits") != null) {
+      for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
+        inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(),
+            (String) path, get().getString("kits." + path + ".creator"), 0));
       }
-      file = new File(dir, p.getUniqueId() + ".yml");
-      customFile = YamlConfiguration.loadConfiguration(file);
+    }
+
+    file = new File(dir, p.getUniqueId() + ".yml");
+    customFile = YamlConfiguration.loadConfiguration(file);
+
+    if (get().getConfigurationSection("kits") != null) {
+      for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
+        inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(),
+            (String) path, get().getString("kits." + path + ".creator"), 1));
+      }
     }
   }
 
+
   protected static ItemStack createGuiItem(final Material material, final String name,
-                                           String creator) {
+                                           String creator, int type) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
@@ -72,8 +79,17 @@ public class GUIHandler implements Listener {
             .decoration(TextDecoration.ITALIC, false)
             .decoration(TextDecoration.BOLD, true));
 
-    meta.lore(List.of(
-        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator)));
+    switch (type) {
+      case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
+              .deserialize("<gradient:#FFAA00:#FF55FF>This is a Public Kit"),
+          MiniMessage.miniMessage()
+              .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator)));
+      case 1 -> meta.lore(List.of(MiniMessage.miniMessage()
+              .deserialize("<gradient:#FFAA00:#FF55FF>This is a Private Kit"),
+          MiniMessage.miniMessage()
+              .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator)));
+      default -> meta.lore();
+    }
 
     item.setItemMeta(meta);
 
@@ -97,7 +113,7 @@ public class GUIHandler implements Listener {
     customFile = YamlConfiguration.loadConfiguration(file);
 
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
-    get().set("kits." + commandArg0 + ".creator", p.displayName());
+    get().set("kits." + commandArg0 + ".creator", serializeComponent.serialize(p.displayName()));
     save();
   }
 

@@ -1,15 +1,16 @@
 package club.aurorapvp.listeners;
 
 import static club.aurorapvp.AuroraKits.plugin;
+import static club.aurorapvp.AuroraKits.prefix;
 import static club.aurorapvp.datahandlers.KitDataHandler.checkKitAmount;
 import static club.aurorapvp.datahandlers.KitDataHandler.checkKits;
-import static club.aurorapvp.datahandlers.KitDataHandler.get;
 
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.datahandlers.GUIHandler;
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import club.aurorapvp.datahandlers.KitDataHandler;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,8 +27,7 @@ public class CommandListener implements CommandExecutor {
 
   @Override
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
-                           @NotNull String label,
-                           String[] args) {
+                           @NotNull String label, String[] args) {
 
     if (sender instanceof Player) {
       p = (Player) sender;
@@ -70,9 +70,11 @@ public class CommandListener implements CommandExecutor {
       }
 
       p.getInventory().setContents(inventoryData);
-      p.sendMessage(Component.text("Used kit " + commandArg0));
+      p.sendMessage(MiniMessage.miniMessage().deserialize(
+          prefix + "<gradient:#FFAA00:#FF55FF>Used kit " + commandArg0));
     } else {
-      p.sendMessage(Component.text("Kit " + commandArg0 + " not found!"));
+      p.sendMessage(MiniMessage.miniMessage().deserialize(
+          prefix + "<gradient:#FFAA00:#FF55FF>Kit " + commandArg0 + " not found!"));
     }
   }
 
@@ -84,20 +86,25 @@ public class CommandListener implements CommandExecutor {
 
       KitDataHandler.create();
     } else if (commandArg0 == null) {
-      p.sendMessage(Component.text("Invalid kit name!"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
-      p.sendMessage(Component.text("Invalid Display Item!"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
     } else {
-      p.sendMessage(Component.text("You have too many kits!"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>You have too many kits!"));
     }
-    p.sendMessage(Component.text("Kit " + commandArg0 + " sucessfully created"));
+    p.sendMessage(MiniMessage.miniMessage().deserialize(
+        prefix + "<gradient:#FFAA00:#FF55FF>Kit " + commandArg0 + " successfully created"));
   }
 
   public void deleteKitCmd() {
     KitDataHandler.delete();
     GUIHandler.deleteGUIEntry();
 
-    p.sendMessage(Component.text("Kit " + commandArg0 + " sucessfully deleted"));
+    p.sendMessage(MiniMessage.miniMessage().deserialize(
+        prefix + "<gradient:#FFAA00:#FF55FF>Kit " + commandArg0 + " successfully deleted"));
   }
 
   public void createPublicKitCmd() {
@@ -108,20 +115,26 @@ public class CommandListener implements CommandExecutor {
 
       KitDataHandler.createPublic();
     } else if (commandArg0 == null) {
-      p.sendMessage(Component.text("Invalid kit name!"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
-      p.sendMessage(Component.text("Invalid Display Item!"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
     } else {
-      p.sendMessage(Component.text("You have too many kits!"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>You have too many kits!"));
     }
-    p.sendMessage(Component.text("Public kit " + commandArg0 + " sucessfully created"));
+    p.sendMessage(Component.text("Kit " + commandArg0 + " successfully created"));
+    p.sendMessage(MiniMessage.miniMessage().deserialize(
+        prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 + " successfully created"));
   }
 
   public void deletePublicKitCmd() {
     KitDataHandler.deletePublic();
     GUIHandler.deletePublicGUIEntry();
 
-    p.sendMessage(Component.text("Kit " + commandArg0 + " sucessfully deleted"));
+    p.sendMessage(MiniMessage.miniMessage().deserialize(
+        prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 + " successfully deleted"));
   }
 
   public void reloadCmd() {
@@ -135,9 +148,11 @@ public class CommandListener implements CommandExecutor {
 
       ItemFrameDataHandler.create();
     } else {
-      p.sendMessage(Component.text("Invalid frame name"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid frame name!"));
     }
-    p.sendMessage(Component.text("Frame " + commandArg0 + " sucessfully created"));
+    p.sendMessage(MiniMessage.miniMessage().deserialize(
+        prefix + "<gradient:#FFAA00:#FF55FF>Frame " + commandArg0 + " successfully created"));
   }
 
   public void deleteFrameCmd() {
@@ -147,8 +162,10 @@ public class CommandListener implements CommandExecutor {
       ItemFrameDataHandler.get().set("frames." + commandArg0, null);
       ItemFrameDataHandler.save();
     } else {
-      p.sendMessage(Component.text("Invalid frame name"));
+      p.sendMessage(MiniMessage.miniMessage()
+          .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid frame name!"));
     }
-    p.sendMessage(Component.text("Frame " + commandArg0 + " sucessfully deleted"));
+    p.sendMessage(MiniMessage.miniMessage().deserialize(
+        prefix + "<gradient:#FFAA00:#FF55FF>Frame " + commandArg0 + " successfully deleted"));
   }
 }
