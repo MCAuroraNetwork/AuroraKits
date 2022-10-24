@@ -5,10 +5,12 @@ import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.p;
 
+import club.aurorapvp.listeners.CommandListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -59,17 +61,18 @@ public class GUIHandler implements Listener {
     }
   }
 
-  protected static ItemStack createGuiItem(final Material material, final String name,
-                                           final Component... lore) {
+  protected static ItemStack createGuiItem(final Material material, final String name) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
-    meta.displayName(Component.text(name));
+    meta.displayName(
+        Component.text("<#FFAA00>" + name + "</#FF55FF>").decoration(TextDecoration.ITALIC, false)
+            .decoration(TextDecoration.BOLD, true));
 
     item.setItemMeta(meta);
 
-    meta.lore(List.of(lore));
-
+    meta.lore(List.of(
+        Component.text("<#FFAA00>Created by" + CommandListener.p.displayName() + "</#FF55FF>")));
     return item;
   }
 
@@ -88,7 +91,7 @@ public class GUIHandler implements Listener {
       file.createNewFile();
     }
     customFile = YamlConfiguration.loadConfiguration(file);
-    
+
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
     save();
   }

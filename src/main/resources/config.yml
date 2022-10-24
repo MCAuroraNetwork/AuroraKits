@@ -1,1 +1,4 @@
 doFirstFallDamage: false
+giveKitOnJoin:
+  enabled: false
+  kit: Default
