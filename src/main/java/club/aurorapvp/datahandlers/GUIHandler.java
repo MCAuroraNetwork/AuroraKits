@@ -68,13 +68,13 @@ public class GUIHandler implements Listener {
     final ItemMeta meta = item.getItemMeta();
 
     meta.displayName(
-        MiniMessage.miniMessage().deserialize("<#FFAA00>" + name + "</#FF55FF>").decoration(TextDecoration.ITALIC, false)
+        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + name).decoration(TextDecoration.ITALIC, false)
             .decoration(TextDecoration.BOLD, true));
 
     item.setItemMeta(meta);
 
     meta.lore(List.of(
-        MiniMessage.miniMessage().deserialize("<#FFAA00>" + creator + "</#FF55FF>")));
+        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + creator)));
     return item;
   }
 
