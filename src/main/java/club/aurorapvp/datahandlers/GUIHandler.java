@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -53,7 +54,7 @@ public class GUIHandler implements Listener {
       if (get().getConfigurationSection("kits") != null) {
         for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
           inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(),
-              (String) path));
+              (String) path, Component.text(get().getString("kits." + path + "creator"))));
         }
       }
       file = new File(dir, p.getUniqueId() + ".yml");
@@ -61,18 +62,18 @@ public class GUIHandler implements Listener {
     }
   }
 
-  protected static ItemStack createGuiItem(final Material material, final String name) {
+  protected static ItemStack createGuiItem(final Material material, final String name, Component creator) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
     meta.displayName(
-        Component.text("<#FFAA00>" + name + "</#FF55FF>").decoration(TextDecoration.ITALIC, false)
+        MiniMessage.miniMessage().deserialize("<#FFAA00>" + name + "</#FF55FF>").decoration(TextDecoration.ITALIC, false)
             .decoration(TextDecoration.BOLD, true));
 
     item.setItemMeta(meta);
 
     meta.lore(List.of(
-        Component.text("<#FFAA00>Created by" + CommandListener.p.displayName() + "</#FF55FF>")));
+        MiniMessage.miniMessage().deserialize("<#FFAA00>" + creator + "</#FF55FF>")));
     return item;
   }
 
@@ -93,6 +94,7 @@ public class GUIHandler implements Listener {
     customFile = YamlConfiguration.loadConfiguration(file);
 
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
+    get().set("kits." + commandArg0 + ".creator", p.displayName());
     save();
   }
 
