@@ -54,7 +54,7 @@ public class GUIHandler implements Listener {
       if (get().getConfigurationSection("kits") != null) {
         for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
           inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(),
-              (String) path, Component.text(get().getString("kits." + path + "creator"))));
+              (String) path, Component.text(get().getString("kits." + path + ".creator"))));
         }
       }
       file = new File(dir, p.getUniqueId() + ".yml");
@@ -126,6 +126,7 @@ public class GUIHandler implements Listener {
 
     get().createSection("kits");
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
+    get().set("kits." + commandArg0 + ".creator", p.displayName());
     save();
   }
 
