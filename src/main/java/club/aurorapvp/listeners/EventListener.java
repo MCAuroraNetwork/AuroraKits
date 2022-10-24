@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -49,7 +50,15 @@ public class EventListener extends YamlConfiguration implements Listener {
   }
 
   @EventHandler
-  public void playerInteractEntityEvent(PlayerInteractEntityEvent event) {
+  public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
+    Player p = event.getPlayer();
+    if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
+      falldamage.add(p);
+    }
+  }
+
+  @EventHandler
+  public void onPlayerInteract(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
     if (clicked instanceof ItemFrame) {
       clickLoc = clicked.getLocation();
@@ -66,28 +75,19 @@ public class EventListener extends YamlConfiguration implements Listener {
 
   @EventHandler
   public void onInventoryClick(final InventoryClickEvent event) {
-    if (!event.getInventory().equals(inv)) {
-      return;
-    }
-
-    event.setCancelled(true);
-
-    final ItemStack clickedItem = event.getCurrentItem();
-
-    if (clickedItem == null || clickedItem.getType().isAir()) {
-      return;
-    }
-
-    final Player p = (Player) event.getWhoClicked();
-
-    p.performCommand("kit " + PlainTextComponentSerializer.plainText()
-        .serialize(event.getCurrentItem().getItemMeta().displayName()));
-  }
-
-  @EventHandler
-  public void onInventoryClick(final InventoryDragEvent event) {
     if (event.getInventory().equals(inv)) {
       event.setCancelled(true);
+
+      final ItemStack clickedItem = event.getCurrentItem();
+
+      if (clickedItem == null || clickedItem.getType().isAir()) {
+        return;
+      }
+
+      final Player p = (Player) event.getWhoClicked();
+
+      p.performCommand("kit " + PlainTextComponentSerializer.plainText()
+          .serialize(event.getCurrentItem().getItemMeta().displayName()));
     }
   }
 
