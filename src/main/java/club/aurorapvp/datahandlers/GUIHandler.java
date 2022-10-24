@@ -2,6 +2,7 @@ package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
+import static club.aurorapvp.AuroraKits.serializeComponent;
 import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.p;
 
@@ -126,7 +127,7 @@ public class GUIHandler implements Listener {
 
     get().createSection("kits");
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
-    get().set("kits." + commandArg0 + ".creator", p.displayName());
+    get().set("kits." + commandArg0 + ".creator", serializeComponent.serialize(p.displayName()));
     save();
   }
 

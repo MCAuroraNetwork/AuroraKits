@@ -9,14 +9,11 @@ import static club.aurorapvp.listeners.EventListener.clickLoc;
 
 import java.io.File;
 import java.io.IOException;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 public class ItemFrameDataHandler {
   private static File dir;
