@@ -54,7 +54,7 @@ public class GUIHandler implements Listener {
       if (get().getConfigurationSection("kits") != null) {
         for (Object path : get().getConfigurationSection("kits").getKeys(false).toArray()) {
           inv.addItem(createGuiItem(get().getItemStack("kits." + path + ".displayItem").getType(),
-              (String) path, Component.text(get().getString("kits." + path + ".creator"))));
+              (String) path, get().getString("kits." + path + ".creator")));
         }
       }
       file = new File(dir, p.getUniqueId() + ".yml");
@@ -63,7 +63,7 @@ public class GUIHandler implements Listener {
   }
 
   protected static ItemStack createGuiItem(final Material material, final String name,
-                                           Component creator) {
+                                           String creator) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
@@ -73,7 +73,7 @@ public class GUIHandler implements Listener {
             .decoration(TextDecoration.BOLD, true));
 
     meta.lore(List.of(
-        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + creator)));
+        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator)));
 
     item.setItemMeta(meta);
 
