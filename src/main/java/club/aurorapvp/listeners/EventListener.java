@@ -38,25 +38,6 @@ public class EventListener extends YamlConfiguration implements Listener {
   }
 
   @EventHandler
-  public void hangFrame(HangingPlaceEvent event) {
-    if (event.getEntity() instanceof ItemFrame) {
-      if (p.getFacing() == BlockFace.WEST) {
-        event.getEntity().teleport(
-            event.getBlock().getRelative(BlockFace.WEST).getRelative(BlockFace.UP).getLocation());
-        event.getEntity().setFacingDirection(BlockFace.WEST, true);
-      } else if (p.getFacing() == BlockFace.NORTH) {
-        event.getEntity().teleport(
-            event.getBlock().getRelative(BlockFace.SOUTH).getRelative(BlockFace.UP).getLocation());
-        event.getEntity().setFacingDirection(BlockFace.SOUTH, true);
-      } else if (p.getFacing() == BlockFace.SOUTH) {
-        event.getEntity().teleport(
-            event.getBlock().getRelative(BlockFace.NORTH).getRelative(BlockFace.UP).getLocation());
-        event.getEntity().setFacingDirection(BlockFace.NORTH, true);
-      }
-    }
-  }
-
-  @EventHandler
   public void playerInteractEntityEvent(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
     if (clicked instanceof ItemFrame) {
