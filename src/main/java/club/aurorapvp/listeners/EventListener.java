@@ -1,15 +1,16 @@
 package club.aurorapvp.listeners;
 
+import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.datahandlers.GUIHandler.inv;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.checkLocation;
-import static club.aurorapvp.listeners.CommandListener.p;
 
 import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
+import java.io.File;
 import java.util.ArrayList;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
@@ -17,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -34,6 +34,17 @@ public class EventListener extends YamlConfiguration implements Listener {
     Player p = event.getPlayer();
     if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
       falldamage.add(p);
+    }
+    if (CustomConfigHandler.get().getBoolean("giveKitOnJoin.enabled")) {
+      ItemStack[] inventoryData = p.getInventory().getContents();
+      FileConfiguration kitFile = YamlConfiguration.loadConfiguration(new File(DataFolder,
+          "/kits/public/" + CustomConfigHandler.get().getString("giveKitOnJoin.kit") + ".yml"));
+
+      for (int i = 0; i < inventoryData.length; i++) {
+        inventoryData[i] = kitFile.getItemStack("items." + i);
+      }
+
+      p.getInventory().setContents(inventoryData);
     }
   }
 
