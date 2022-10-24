@@ -6,7 +6,6 @@ import static club.aurorapvp.AuroraKits.serializeComponent;
 import static club.aurorapvp.listeners.CommandListener.commandArg0;
 import static club.aurorapvp.listeners.CommandListener.p;
 
-import club.aurorapvp.listeners.CommandListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -63,18 +62,21 @@ public class GUIHandler implements Listener {
     }
   }
 
-  protected static ItemStack createGuiItem(final Material material, final String name, Component creator) {
+  protected static ItemStack createGuiItem(final Material material, final String name,
+                                           Component creator) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
     meta.displayName(
-        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + name).decoration(TextDecoration.ITALIC, false)
+        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + name)
+            .decoration(TextDecoration.ITALIC, false)
             .decoration(TextDecoration.BOLD, true));
-
-    item.setItemMeta(meta);
 
     meta.lore(List.of(
         MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + creator)));
+
+    item.setItemMeta(meta);
+
     return item;
   }
 
