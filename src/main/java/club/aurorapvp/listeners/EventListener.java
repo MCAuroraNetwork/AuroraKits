@@ -33,7 +33,7 @@ public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player p = event.getPlayer();
-    if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
+    if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage") && !falldamage.contains(p)) {
       falldamage.add(p);
     }
     if (CustomConfigHandler.get().getBoolean("giveKitOnJoin.enabled")) {
@@ -52,7 +52,7 @@ public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
   public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
     Player p = event.getPlayer();
-    if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
+    if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage") && !falldamage.contains(p)) {
       falldamage.add(p);
     }
   }

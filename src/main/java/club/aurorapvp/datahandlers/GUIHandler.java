@@ -123,7 +123,7 @@ public class GUIHandler implements Listener {
     file = new File(dir, p.getUniqueId() + ".yml");
     if (file.exists()) {
       customFile = YamlConfiguration.loadConfiguration(file);
-      
+
       get().set("kits." + commandArg0, null);
       save();
     }
