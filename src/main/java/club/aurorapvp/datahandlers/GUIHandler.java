@@ -123,8 +123,7 @@ public class GUIHandler implements Listener {
     file = new File(dir, p.getUniqueId() + ".yml");
     if (file.exists()) {
       customFile = YamlConfiguration.loadConfiguration(file);
-
-      get().createSection("kits");
+      
       get().set("kits." + commandArg0, null);
       save();
     }
@@ -141,7 +140,6 @@ public class GUIHandler implements Listener {
     }
     customFile = YamlConfiguration.loadConfiguration(file);
 
-    get().createSection("kits");
     get().set("kits." + commandArg0 + ".displayItem", p.getInventory().getItemInMainHand());
     get().set("kits." + commandArg0 + ".creator", serializeComponent.serialize(p.displayName()));
     save();
@@ -156,7 +154,6 @@ public class GUIHandler implements Listener {
     if (file.exists()) {
       customFile = YamlConfiguration.loadConfiguration(file);
 
-      get().createSection("kits");
       get().set("kits." + commandArg0, "");
       save();
     }

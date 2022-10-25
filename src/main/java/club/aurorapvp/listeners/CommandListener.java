@@ -124,7 +124,6 @@ public class CommandListener implements CommandExecutor {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>You have too many kits!"));
     }
-    p.sendMessage(Component.text("Kit " + commandArg0 + " successfully created"));
     p.sendMessage(MiniMessage.miniMessage().deserialize(
         prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 + " successfully created"));
   }
