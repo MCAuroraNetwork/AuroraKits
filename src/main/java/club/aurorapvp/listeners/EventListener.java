@@ -103,7 +103,7 @@ public class EventListener extends YamlConfiguration implements Listener {
     if (event.getEntity() instanceof Player p) {
       CustomConfigHandler.setup();
       if (event.getCause() == EntityDamageEvent.DamageCause.FALL && falldamage.contains(p) &&
-          !CustomConfigHandler.get().getBoolean("doFirstFallDamage")) {
+          !CustomConfigHandler.get().getBoolean("doFirstFallDamage") && !event.isCancelled()) {
         event.setCancelled(true);
         falldamage.remove(p);
       }
