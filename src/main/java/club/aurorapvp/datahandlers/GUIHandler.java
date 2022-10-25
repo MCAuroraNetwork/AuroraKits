@@ -81,13 +81,11 @@ public class GUIHandler implements Listener {
 
     switch (type) {
       case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
-              .deserialize("<gradient:#FFAA00:#FF55FF>This is a Public Kit"),
-          MiniMessage.miniMessage()
-              .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator)));
+          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
+          .deserialize("This is a Public Kit")));
       case 1 -> meta.lore(List.of(MiniMessage.miniMessage()
-              .deserialize("<gradient:#FFAA00:#FF55FF>This is a Private Kit"),
-          MiniMessage.miniMessage()
-              .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator)));
+          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
+          .deserialize("This is a Private Kit")));
       default -> meta.lore();
     }
 
