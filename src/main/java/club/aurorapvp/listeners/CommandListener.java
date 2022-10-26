@@ -87,8 +87,8 @@ public class CommandListener implements CommandExecutor {
 
       p.sendMessage(MiniMessage.miniMessage().deserialize(
           prefix + "<gradient:#FFAA00:#FF55FF>Kit <bold>" + commandArg0 +
-              "</bold> successfully created! Use /kit <bold>" + commandArg0 +
-              "</bold> to use it!"));
+              "</bold> successfully created! Use /kit " + commandArg0 +
+              "to use it!"));
     } else if (commandArg0 == null && checkKitAmount() >= 55) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
@@ -100,8 +100,8 @@ public class CommandListener implements CommandExecutor {
       KitDataHandler.create();
       p.sendMessage(MiniMessage.miniMessage().deserialize(
           prefix + "<gradient:#FFAA00:#FF55FF>Kit <bold>" + commandArg0 +
-              "</bold> successfully created! Use /kit <bold>" + commandArg0 +
-              "</bold> to use it!"));
+              "</bold> successfully created! Use /kit " + commandArg0 +
+              " to use it!"));
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
@@ -130,8 +130,8 @@ public class CommandListener implements CommandExecutor {
 
       p.sendMessage(MiniMessage.miniMessage().deserialize(
           prefix + "<gradient:#FFAA00:#FF55FF>Public Kit <bold>" + commandArg0 +
-              "</bold> successfully created! Use /kit <bold>" + commandArg0 +
-              "</bold> to use it!"));
+              "</bold> successfully created! Use /kit " + commandArg0 +
+              " to use it!"));
     } else if (commandArg0 == null && checkKitAmount() >= 55) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
@@ -144,8 +144,8 @@ public class CommandListener implements CommandExecutor {
 
       p.sendMessage(MiniMessage.miniMessage().deserialize(
           prefix + "<gradient:#FFAA00:#FF55FF>Public Kit <bold>" + commandArg0 +
-              "</bold> successfully created! Use /kit <bold>" + commandArg0 +
-              "</bold> to use it!"));
+              "</bold> successfully created! Use /kit " + commandArg0 +
+              " to use it!"));
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
