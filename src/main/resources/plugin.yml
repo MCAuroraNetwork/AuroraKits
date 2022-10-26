@@ -47,6 +47,6 @@ permissions:
   AuroraKits.public:
     description: Allows for the creation of public kits
     default: op
-  AuorraKits.frames:
+  AuroraKits.frames:
     description: Allows for the creation of frames
     default: op

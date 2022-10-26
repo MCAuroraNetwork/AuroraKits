@@ -8,10 +8,13 @@ import club.aurorapvp.datahandlers.KitDataHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
 import java.io.File;
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,24 +28,22 @@ public final class AuroraKits extends JavaPlugin {
   @Override
   public void onEnable() {
 
+    //Register important variables
+    plugin = Bukkit.getPluginManager().getPlugin("AuroraKits");
+
     // Register Listeners
     getServer().getPluginManager().registerEvents(new EventListener(), this);
-    getCommand("kit").setExecutor(new CommandListener());
-    getCommand("kits").setExecutor(new CommandListener());
-    getCommand("createkit").setExecutor(new CommandListener());
-    getCommand("createpublickit").setExecutor(new CommandListener());
-    getCommand("deletekit").setExecutor(new CommandListener());
-    getCommand("createframe").setExecutor(new CommandListener());
-    getCommand("deleteframe").setExecutor(new CommandListener());
-    getCommand("deletepublickit").setExecutor(new CommandListener());
+    List<Command> commandList = PluginCommandYamlParser.parse(plugin);
+    for (Command command : commandList) {
+      getCommand(String.valueOf(command)).setExecutor(new CommandListener());
+    }
 
     // Config setup
     saveDefaultConfig();
     CustomConfigHandler.setup();
     generateDefaults();
 
-    // Setup storage dirs
-    plugin = Bukkit.getPluginManager().getPlugin("AuroraKits");
+    // Setup directories
     DataFolder = Bukkit.getServer().getPluginManager().getPlugin("AuroraKits").getDataFolder();
     KitDataHandler.setup();
     ItemFrameDataHandler.setup();
