@@ -48,7 +48,7 @@ public final class AuroraKits extends JavaPlugin {
     ItemFrameDataHandler.setup();
 
     serializeComponent = PlainTextComponentSerializer.plainText();
-    prefix = "<gradient:#FFAA00:#FF55FF>AuroraKits > <reset>";
+    prefix = "<gradient:#FFAA00:#FF55FF><bold>AuroraKits > <reset>";
 
     getLogger().info("Aurora Kits Loaded");
   }
