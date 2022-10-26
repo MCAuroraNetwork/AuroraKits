@@ -32,6 +32,7 @@ public class CommandListener implements CommandExecutor {
     if (sender instanceof Player) {
       p = (Player) sender;
     }
+    commandArg0 = null;
     if (args.length != 0) {
       commandArg0 = args[0];
     }
