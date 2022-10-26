@@ -88,9 +88,12 @@ public class CommandListener implements CommandExecutor {
 
       p.sendMessage(MiniMessage.miniMessage().deserialize(
           prefix + "<gradient:#FFAA00:#FF55FF>Kit " + commandArg0 + " successfully created"));
-    } else if (commandArg0 == null) {
+    } else if (commandArg0 == null && checkKitAmount() >= 55) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
+    } else if (commandArg0 == null && checkKitAmount() <= 54) {
+      commandArg0 = "Kit " + checkKitAmount() + 1;
+      KitDataHandler.create();
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
