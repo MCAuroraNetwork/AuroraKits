@@ -92,7 +92,7 @@ public class CommandListener implements CommandExecutor {
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
     } else if (commandArg0 == null && checkKitAmount() <= 54 &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
-      commandArg0 = "Kit " + Math.addExact(checkKitAmount(), 1);
+      commandArg0 = "Kit" + Math.addExact(checkKitAmount(), 1);
       inventoryData = p.getInventory().getContents();
 
       KitDataHandler.create();
@@ -130,7 +130,7 @@ public class CommandListener implements CommandExecutor {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
     } else if (commandArg0 == null && checkKitAmount() <= 54 && p.getInventory().getItemInMainHand().getItemMeta() != null) {
-      commandArg0 = "Kit " + Math.addExact(checkKitAmount(), 1);
+      commandArg0 = "Kit" + Math.addExact(checkKitAmount(), 1);
       inventoryData = p.getInventory().getContents();
 
       KitDataHandler.createPublic();
