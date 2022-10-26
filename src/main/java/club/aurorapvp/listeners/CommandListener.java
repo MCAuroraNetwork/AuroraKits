@@ -79,12 +79,14 @@ public class CommandListener implements CommandExecutor {
   }
 
   public void createKitCmd() {
-    checkKitAmount();
-    if (checkKitAmount() && commandArg0 != null &&
+    if (checkKitAmount() <= 54 && commandArg0 != null &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
       inventoryData = p.getInventory().getContents();
 
       KitDataHandler.create();
+
+      p.sendMessage(MiniMessage.miniMessage().deserialize(
+          prefix + "<gradient:#FFAA00:#FF55FF>Kit " + commandArg0 + " successfully created"));
     } else if (commandArg0 == null) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
@@ -95,8 +97,6 @@ public class CommandListener implements CommandExecutor {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>You have too many kits!"));
     }
-    p.sendMessage(MiniMessage.miniMessage().deserialize(
-        prefix + "<gradient:#FFAA00:#FF55FF>Kit " + commandArg0 + " successfully created"));
   }
 
   public void deleteKitCmd() {
@@ -109,14 +109,20 @@ public class CommandListener implements CommandExecutor {
 
   public void createPublicKitCmd() {
     checkKitAmount();
-    if (checkKitAmount() && commandArg0 != null &&
+    if (checkKitAmount() <= 54 && commandArg0 != null &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
       inventoryData = p.getInventory().getContents();
 
       KitDataHandler.createPublic();
-    } else if (commandArg0 == null) {
+
+      p.sendMessage(MiniMessage.miniMessage().deserialize(
+          prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 + " successfully created"));
+    } else if (commandArg0 == null && checkKitAmount() >= 55) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
+    } else if (commandArg0 == null && checkKitAmount() <= 54) {
+      commandArg0 = "Kit " + checkKitAmount() + 1;
+      KitDataHandler.create();
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
@@ -124,8 +130,6 @@ public class CommandListener implements CommandExecutor {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>You have too many kits!"));
     }
-    p.sendMessage(MiniMessage.miniMessage().deserialize(
-        prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 + " successfully created"));
   }
 
   public void deletePublicKitCmd() {

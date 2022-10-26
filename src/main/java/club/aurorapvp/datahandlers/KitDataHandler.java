@@ -136,7 +136,7 @@ public class KitDataHandler {
     customFile = YamlConfiguration.loadConfiguration(file);
   }
 
-  public static boolean checkKitAmount() {
+  public static int checkKitAmount() {
     int length;
     files = new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles();
     if (files != null) {
@@ -145,11 +145,11 @@ public class KitDataHandler {
       if (files != null) {
         length = length + files.length;
         if (length >= 55) {
-          return false;
+          return length;
         }
       }
     }
-    return true;
+    return 0;
   }
 
   public static FileConfiguration get() {
