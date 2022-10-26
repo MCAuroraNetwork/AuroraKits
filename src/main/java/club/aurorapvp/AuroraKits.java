@@ -35,7 +35,7 @@ public final class AuroraKits extends JavaPlugin {
     getServer().getPluginManager().registerEvents(new EventListener(), this);
     List<Command> commandList = PluginCommandYamlParser.parse(plugin);
     for (Command command : commandList) {
-      getCommand(String.valueOf(command)).setExecutor(new CommandListener());
+      getCommand(command.getName()).setExecutor(new CommandListener());
     }
 
     // Config setup
