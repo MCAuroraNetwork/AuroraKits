@@ -137,17 +137,8 @@ public class KitDataHandler {
   }
 
   public static int checkKitAmount() {
-    int length;
-    files = new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles();
-    if (files != null) {
-      length = files.length;
-      files = new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles();
-      if (files != null) {
-        length = length + files.length;
-        if (length >= 55) {
-          return length;
-        }
-      }
+    if (new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles() != null) {
+      return new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles().length;
     }
     return 0;
   }
