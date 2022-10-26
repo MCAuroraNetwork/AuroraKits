@@ -9,7 +9,6 @@ import club.aurorapvp.config.CustomConfigHandler;
 import club.aurorapvp.datahandlers.GUIHandler;
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import club.aurorapvp.datahandlers.KitDataHandler;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -91,9 +90,14 @@ public class CommandListener implements CommandExecutor {
     } else if (commandArg0 == null && checkKitAmount() >= 55) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
-    } else if (commandArg0 == null && checkKitAmount() <= 54) {
+    } else if (commandArg0 == null && checkKitAmount() <= 54 &&
+        p.getInventory().getItemInMainHand().getItemMeta() != null) {
       commandArg0 = "Kit " + checkKitAmount() + 1;
+      inventoryData = p.getInventory().getContents();
+
       KitDataHandler.create();
+      p.sendMessage(MiniMessage.miniMessage().deserialize(
+          prefix + "<gradient:#FFAA00:#FF55FF>Kit " + commandArg0 + " successfully created"));
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
@@ -120,13 +124,20 @@ public class CommandListener implements CommandExecutor {
       KitDataHandler.createPublic();
 
       p.sendMessage(MiniMessage.miniMessage().deserialize(
-          prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 + " successfully created"));
+          prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 +
+              " successfully created"));
     } else if (commandArg0 == null && checkKitAmount() >= 55) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid kit name!"));
-    } else if (commandArg0 == null && checkKitAmount() <= 54) {
+    } else if (commandArg0 == null && checkKitAmount() <= 54 && p.getInventory().getItemInMainHand().getItemMeta() != null) {
       commandArg0 = "Kit " + checkKitAmount() + 1;
-      KitDataHandler.create();
+      inventoryData = p.getInventory().getContents();
+
+      KitDataHandler.createPublic();
+
+      p.sendMessage(MiniMessage.miniMessage().deserialize(
+          prefix + "<gradient:#FFAA00:#FF55FF>Public Kit " + commandArg0 +
+              " successfully created"));
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
       p.sendMessage(MiniMessage.miniMessage()
           .deserialize(prefix + "<gradient:#FFAA00:#FF55FF>Invalid Display Item!"));
