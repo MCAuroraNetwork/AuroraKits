@@ -36,27 +36,37 @@ public class CommandListener implements CommandExecutor {
       commandArg0 = args[0];
     }
 
-    if (command.getName().equals("aurorakits")) {
-      reloadCmd();
-    } else if (command.getName().equals("kit") && args.length != 0) {
-      kitCmd();
-    } else if (command.getName().equals("kits") ||
-        command.getName().equals("kit") && args.length == 0) {
-      GUIHandler.openGUI(p);
-    } else if (command.getName().equals("createkit")) {
-      createKitCmd();
-    } else if (command.getName().equals("deletekit")) {
-      deleteKitCmd();
-    } else if (command.getName().equals("createpublickit")) {
-      createPublicKitCmd();
-    } else if (command.getName().equals("createframe")) {
-      createFrameCmd();
-    } else if (command.getName().equals("deleteframe")) {
-      deleteFrameCmd();
-    } else if (command.getName().equals("deletepublickit")) {
-      deletePublicKitCmd();
+    switch (command.getName()) {
+      case "aurorakits":
+        reloadCmd();
+        break;
+      case "kit":
+        if (args.length != 0) {
+          kitCmd();
+        } else {
+          GUIHandler.openGUI(p);
+        }
+        break;
+      case "createkit":
+        createKitCmd();
+        break;
+      case "deletekit":
+        deleteKitCmd();
+        break;
+      case "createpublickit":
+        createPublicKitCmd();
+        break;
+      case "deletepublickit":
+        deletePublicKitCmd();
+        break;
+      case "createframe":
+        createFrameCmd();
+        break;
+      case "deleteframe":
+        deleteFrameCmd();
+        break;
+      default: break;
     }
-
     return true;
   }
 
