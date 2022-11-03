@@ -1,6 +1,7 @@
 package club.aurorapvp.listeners;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
+import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.datahandlers.GUIHandler.inv;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.checkLocation;
 
@@ -20,12 +21,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 public class EventListener extends YamlConfiguration implements Listener {
   public static ArrayList<Player> falldamage = new ArrayList<>();
@@ -37,17 +39,22 @@ public class EventListener extends YamlConfiguration implements Listener {
     if (!CustomConfigHandler.get().getBoolean("doFirstFallDamage") && !falldamage.contains(p)) {
       falldamage.add(p);
     }
-    if (CustomConfigHandler.get().getBoolean("giveKitOnJoin.enabled")) {
-      ItemStack[] inventoryData = p.getInventory().getContents();
-      FileConfiguration kitFile = YamlConfiguration.loadConfiguration(new File(DataFolder,
-          "/kits/public/" + CustomConfigHandler.get().getString("giveKitOnJoin.kit") + ".yml"));
+    BukkitTask task = new BukkitRunnable() {
+      @Override
+      public void run() {
+        if (CustomConfigHandler.get().getBoolean("giveKitOnJoin.enabled")) {
+          ItemStack[] inventoryData = p.getInventory().getContents();
+          FileConfiguration kitFile = YamlConfiguration.loadConfiguration(new File(DataFolder,
+              "/kits/public/" + CustomConfigHandler.get().getString("giveKitOnJoin.kit") + ".yml"));
 
-      for (int i = 0; i < inventoryData.length; i++) {
-        inventoryData[i] = kitFile.getItemStack("items." + i);
+          for (int i = 0; i < inventoryData.length; i++) {
+            inventoryData[i] = kitFile.getItemStack("items." + i);
+          }
+
+          p.getInventory().setContents(inventoryData);
+        }
       }
-
-      p.getInventory().setContents(inventoryData);
-    }
+    }.runTaskLater(plugin, 3);
   }
 
   @EventHandler

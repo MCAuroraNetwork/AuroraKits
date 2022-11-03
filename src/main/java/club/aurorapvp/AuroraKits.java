@@ -9,8 +9,6 @@ import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
 import java.io.File;
 import java.util.List;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

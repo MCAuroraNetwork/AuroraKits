@@ -65,7 +65,8 @@ public class CommandListener implements CommandExecutor {
       case "deleteframe":
         deleteFrameCmd();
         break;
-      default: break;
+      default:
+        break;
     }
     return true;
   }
