@@ -4,7 +4,6 @@ import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.deserializeComponent;
 import static club.aurorapvp.AuroraKits.lang;
 
-import club.aurorapvp.listeners.CommandListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,7 +33,8 @@ public class LangHandler {
     Defaults.put("frame-deleted", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully deleted");
     Defaults.put("frame-invalid", "prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!");
     Defaults.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
-    Defaults.put("kit-created", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully created! Use /kits to access it!");
+    Defaults.put("kit-created",
+        "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully created! Use /kits to access it!");
     Defaults.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully used!");
     Defaults.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully deleted");
     Defaults.put("kit-too-many", "prefix <gradient:#FFAA00:#FF55FF>You have too many kits!");

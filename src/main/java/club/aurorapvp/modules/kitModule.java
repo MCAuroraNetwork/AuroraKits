@@ -8,22 +8,17 @@ import static club.aurorapvp.datahandlers.GUIDataHandler.createGUIData;
 import static club.aurorapvp.datahandlers.KitDataHandler.createKitData;
 import static club.aurorapvp.datahandlers.KitDataHandler.getKitAmount;
 import static club.aurorapvp.datahandlers.KitDataHandler.getKitFile;
-import static club.aurorapvp.datahandlers.KitDataHandler.setupKitFile;
 
 import java.io.File;
 import java.io.IOException;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class kitModule {
   public static void giveKitOnJoin(PlayerJoinEvent event) {
@@ -111,8 +106,7 @@ public class kitModule {
     }
   }
 
-  public static void getKit(CommandSender sender, String arg) {
-    Player p = Bukkit.getPlayer(sender.getName());
+  public static void getKit(Player p, String arg) {
     YamlConfiguration KitFile = getKitFile(String.valueOf(p.getUniqueId()), arg);
     ItemStack[] inventoryData = p.getInventory().getContents();
 
@@ -123,9 +117,9 @@ public class kitModule {
       }
 
       p.getInventory().setContents(inventoryData);
-      sender.sendMessage(getLangComponent("kit-used"));
+      p.sendMessage(getLangComponent("kit-used"));
     } else {
-      sender.sendMessage(getLangComponent("kit-not-found"));
+      p.sendMessage(getLangComponent("kit-not-found"));
     }
   }
 }

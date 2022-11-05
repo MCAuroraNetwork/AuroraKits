@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 public class GUIDataHandler {
 
   public static YamlConfiguration GUIData =
-      YamlConfiguration.loadConfiguration(new File(DataFolder, "/GUI/data.yml"));
+      YamlConfiguration.loadConfiguration(new File(DataFolder, "/GUIs/public.yml"));
   private static YamlConfiguration GUIFile;
 
   public static void setupGUIData() throws IOException {
-    if (!new File(DataFolder, "/GUI/data.yml").exists()) {
-      new File(DataFolder, "/GUI/data.yml").createNewFile();
+    if (!new File(DataFolder, "/GUIs/public.yml").exists()) {
+      new File(DataFolder, "/GUIs/public.yml").createNewFile();
     }
   }
 
@@ -31,7 +31,7 @@ public class GUIDataHandler {
   }
 
   public static void saveGUIData() throws IOException {
-    GUIData.save(new File(DataFolder, "/GUI/data.yml"));
+    GUIData.save(new File(DataFolder, "/GUI/public.yml"));
   }
 
   public static void createGUIData(Player p, String arg) throws IOException {

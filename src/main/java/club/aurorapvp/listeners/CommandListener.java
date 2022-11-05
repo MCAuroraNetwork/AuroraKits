@@ -26,11 +26,13 @@ public class CommandListener implements CommandExecutor {
     switch (command.getName()) {
       case "kit":
         if (args.length != 0) {
-          getKit(sender, args[0]);
+          getKit(Bukkit.getPlayer(sender.getName()), args[0]);
         } else {
           openGUI(p);
         }
         break;
+      case "kits":
+        openGUI(p);
       case "createkit":
         createKit(sender, args[0]);
         break;

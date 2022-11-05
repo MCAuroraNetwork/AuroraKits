@@ -24,6 +24,7 @@ public class ConfigHandler {
       }
     }
   }
+
   public static void saveConfigFile() throws IOException {
     lang.save(new File(DataFolder, "config.yml"));
   }
