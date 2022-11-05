@@ -1,6 +1,7 @@
 package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
+import static club.aurorapvp.AuroraKits.framesData;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 
 import java.io.File;
@@ -12,24 +13,23 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 
 public class ItemFrameDataHandler {
-  public static YamlConfiguration framesData =
-      YamlConfiguration.loadConfiguration(new File(DataFolder, "frames/data.yml"));
-
   public static void setupFrameData() throws IOException {
-    File file = new File(DataFolder, "frames/data.yml");
+    File file = new File(DataFolder, "/frames/data.yml");
     if (!file.exists()) {
+      file.getParentFile().mkdirs();
+
       file.createNewFile();
     }
   }
 
   public static void saveFrameData() throws IOException {
-    framesData.save(new File(DataFolder, "/frames/data.yml"));
+    getFrameData().save(new File(DataFolder, "/frames/data.yml"));
   }
 
   public static void deleteFrameData(CommandSender sender, String arg) {
     if (arg != null) {
 
-      framesData.set("frames." + arg, null);
+      getFrameData().set("frames." + arg, null);
       try {
         saveFrameData();
       } catch (IOException e) {
@@ -43,8 +43,8 @@ public class ItemFrameDataHandler {
   }
 
   public static void createFrameData(Player p, String arg, ItemFrame frame) {
-    framesData.set("frames." + arg + ".item", p.getInventory().getItemInMainHand());
-    framesData.set("frames." + arg + ".location", frame.getLocation());
+    getFrameData().set("frames." + arg + ".item", p.getInventory().getItemInMainHand());
+    getFrameData().set("frames." + arg + ".location", frame.getLocation());
     try {
       saveFrameData();
     } catch (IOException e) {
@@ -52,12 +52,15 @@ public class ItemFrameDataHandler {
     }
   }
 
-  public static String getFrameData(Location clickLoc) {
-    for (Object path : framesData.getConfigurationSection("frames").getKeys(false).toArray()) {
-      if (framesData.getLocation("frames." + path + ".location").equals(clickLoc)) {
+  public static String getFrame(Location clickLoc) {
+    for (Object path : getFrameData().getConfigurationSection("frames").getKeys(false).toArray()) {
+      if (getFrameData().getLocation("frames." + path + ".location").equals(clickLoc)) {
         return (String) path;
       }
     }
     return null;
+  }
+  public static YamlConfiguration getFrameData() {
+    return framesData;
   }
 }

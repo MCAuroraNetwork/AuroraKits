@@ -30,14 +30,14 @@ public class KitDataHandler {
 
   public static void deleteKitData(CommandSender sender, String arg, String dir) {
     if (getKitFile(dir, arg) != null) {
-      new File(DataFolder, "/GUI/" + dir + "/" + arg + ".yml").delete();
+      new File(DataFolder, "/GUIs/" + dir + "/" + arg + ".yml").delete();
     } else {
       sender.sendMessage(getLangComponent("kit-invalid"));
     }
   }
 
   public static void setupKitFile(String dir, String fileName) throws IOException {
-    File file = new File(DataFolder, "/GUI/" + dir + "/" + fileName + ".yml");
+    File file = new File(DataFolder, "/GUIs/" + dir + "/" + fileName + ".yml");
 
     if (!file.exists()) {
       file.createNewFile();
@@ -46,7 +46,7 @@ public class KitDataHandler {
   }
 
   public static YamlConfiguration getKitFile(String dir, String fileName) {
-    File file = new File(DataFolder, "/GUI/" + dir + "/" + fileName + ".yml");
+    File file = new File(DataFolder, "/GUIs/" + dir + "/" + fileName + ".yml");
     if (file.exists()) {
       kitFile = YamlConfiguration.loadConfiguration(file);
     } else {
@@ -56,7 +56,7 @@ public class KitDataHandler {
   }
 
   public static void saveKitFile() throws IOException {
-    kitFile.save(new File(DataFolder, "/GUI/data.yml"));
+    kitFile.save(new File(DataFolder, "/GUIs/data.yml"));
   }
 
   public static int getKitAmount(Player p) {

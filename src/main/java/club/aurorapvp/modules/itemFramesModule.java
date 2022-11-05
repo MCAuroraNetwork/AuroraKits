@@ -1,11 +1,10 @@
 package club.aurorapvp.modules;
 
+import static club.aurorapvp.AuroraKits.framesData;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.createFrameData;
-import static club.aurorapvp.datahandlers.ItemFrameDataHandler.framesData;
-import static club.aurorapvp.datahandlers.ItemFrameDataHandler.getFrameData;
 
-import org.bukkit.Bukkit;
+import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -20,10 +19,9 @@ public class itemFramesModule {
     final Entity clicked = event.getRightClicked();
     if (clicked instanceof ItemFrame) {
 
-      if (getFrameData(clicked.getLocation()) != null) {
-        event.getPlayer().getInventory()
-            .addItem(
-                framesData.getItemStack("frames." + getFrameData(clicked.getLocation()) + ".item"));
+      if (ItemFrameDataHandler.getFrame(clicked.getLocation()) != null) {
+        event.getPlayer().getInventory().addItem(
+            framesData.getItemStack("frames." + ItemFrameDataHandler.getFrame(clicked.getLocation()) + ".item"));
         event.setCancelled(true);
       }
     }

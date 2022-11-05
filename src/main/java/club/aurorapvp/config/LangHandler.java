@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import net.kyori.adventure.text.Component;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class LangHandler {
   private static final HashMap<String, String> placeholders = new HashMap<>();
@@ -17,16 +18,16 @@ public class LangHandler {
     if (!new File(DataFolder, "lang.yml").exists()) {
       new File(DataFolder, "lang.yml").createNewFile();
     }
-
-    for (Object path : lang.getKeys(false).toArray()) {
-      if (lang.getString((String) path).startsWith("~") &&
-          lang.getString((String) path).endsWith("~")) {
-        placeholders.put((String) path, lang.getString((String) path).replace("~", ""));
-      }
-    }
   }
 
   public static void generateLangDefaults() throws IOException {
+    for (Object path : getLangFile().getKeys(false).toArray()) {
+      if (getLangFile().getString((String) path).startsWith("~") &&
+          getLangFile().getString((String) path).endsWith("~")) {
+        placeholders.put((String) path, getLangFile().getString((String) path).replace("~", ""));
+      }
+    }
+
     Defaults.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraKits ><reset>~");
     Defaults.put("frame-created",
         "prefix <gradient:#FFAA00:#FF55FF>Frame successfully created");
@@ -43,16 +44,16 @@ public class LangHandler {
     Defaults.put("kit-not-found", "prefix <gradient:#FFAA00:#FF55FF>Kit not found!");
 
     for (String path : Defaults.keySet()) {
-      if (!lang.contains(path) || lang.getString(path) == null) {
-        lang.set(path, Defaults.get(path));
-        lang.save(new File(DataFolder, "lang.yml"));
+      if (!getLangFile().contains(path) || getLangFile().getString(path) == null) {
+        getLangFile().set(path, Defaults.get(path));
+        getLangFile().save(new File(DataFolder, "lang.yml"));
       }
     }
   }
 
   public static Component getLangComponent(String path) {
-    if (lang.contains(path)) {
-      String pathString = lang.getString(path);
+    if (getLangFile().contains(path)) {
+      String pathString = getLangFile().getString(path);
       for (String placeholder : placeholders.keySet()) {
         if (pathString.contains(placeholder)) {
           pathString = pathString.replace(placeholder,
@@ -65,6 +66,9 @@ public class LangHandler {
   }
 
   public static void saveLangFile() throws IOException {
-    lang.save(new File(DataFolder, "lang.yml"));
+    getLangFile().save(new File(DataFolder, "lang.yml"));
+  }
+  public static YamlConfiguration getLangFile() {
+    return lang;
   }
 }

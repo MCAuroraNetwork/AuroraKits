@@ -16,13 +16,16 @@ public class GUIDataHandler {
   private static YamlConfiguration GUIFile;
 
   public static void setupGUIData() throws IOException {
-    if (!new File(DataFolder, "/GUIs/public.yml").exists()) {
-      new File(DataFolder, "/GUIs/public.yml").createNewFile();
+    File file = new File(DataFolder, "/GUIs/public.yml");
+    if (!file.exists()) {
+      file.getParentFile().mkdirs();
+
+      file.createNewFile();
     }
   }
 
   public static void setupGUIFile(UUID fileName) throws IOException {
-    File file = new File(DataFolder, "/GUI/" + fileName + ".yml");
+    File file = new File(DataFolder, "/GUIs/" + fileName + ".yml");
 
     if (!file.exists()) {
       file.createNewFile();
@@ -31,7 +34,7 @@ public class GUIDataHandler {
   }
 
   public static void saveGUIData() throws IOException {
-    GUIData.save(new File(DataFolder, "/GUI/public.yml"));
+    GUIData.save(new File(DataFolder, "/GUIs/public.yml"));
   }
 
   public static void createGUIData(Player p, String arg) throws IOException {

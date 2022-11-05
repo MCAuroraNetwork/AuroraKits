@@ -27,6 +27,7 @@ public final class AuroraKits extends JavaPlugin {
   public static PlainTextComponentSerializer serializeComponent;
   public static YamlConfiguration lang;
   public static YamlConfiguration config;
+  public static YamlConfiguration framesData;
   public static MiniMessage deserializeComponent;
 
   @Override
@@ -34,8 +35,6 @@ public final class AuroraKits extends JavaPlugin {
 
     // Register important variables
     plugin = Bukkit.getPluginManager().getPlugin("AuroraKits");
-    lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
-    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
     DataFolder = Bukkit.getServer().getPluginManager().getPlugin("AuroraKits").getDataFolder();
     serializeComponent = PlainTextComponentSerializer.plainText();
     deserializeComponent = MiniMessage.miniMessage();
@@ -46,6 +45,17 @@ public final class AuroraKits extends JavaPlugin {
       setupLangFile();
       setupFrameData();
       setupGUIData();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    // Register files and directories
+    lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
+    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+    framesData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
+
+    // Generate default values
+    try {
       LangHandler.generateLangDefaults();
       ConfigHandler.generateConfigDefaults();
     } catch (IOException e) {
