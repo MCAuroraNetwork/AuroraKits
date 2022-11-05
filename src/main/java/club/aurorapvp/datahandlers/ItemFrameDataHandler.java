@@ -13,11 +13,12 @@ import org.bukkit.entity.Player;
 
 public class ItemFrameDataHandler {
   public static YamlConfiguration framesData =
-      YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
+      YamlConfiguration.loadConfiguration(new File(DataFolder, "frames/data.yml"));
 
   public static void setupFrameData() throws IOException {
-    if (!new File(DataFolder, "/frames/data.yml").exists()) {
-      new File(DataFolder, "/frames/data.yml").createNewFile();
+    File file = new File(DataFolder, "frames/data.yml");
+    if (!file.exists()) {
+      file.createNewFile();
     }
   }
 
@@ -41,8 +42,8 @@ public class ItemFrameDataHandler {
     }
   }
 
-  public static void createFrameData(String arg, Player p, ItemFrame frame) {
-    framesData.set("frames." + arg + ".item", p.getActiveItem());
+  public static void createFrameData(Player p, String arg, ItemFrame frame) {
+    framesData.set("frames." + arg + ".item", p.getInventory().getItemInMainHand());
     framesData.set("frames." + arg + ".location", frame.getLocation());
     try {
       saveFrameData();

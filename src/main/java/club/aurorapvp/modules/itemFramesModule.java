@@ -30,17 +30,16 @@ public class itemFramesModule {
   }
 
   public static void createFrame(CommandSender sender, String arg) {
-    if (arg != null && sender instanceof Player) {
-      Player p = Bukkit.getPlayer(sender.getName());
+    if (arg != null && sender instanceof Player p) {
 
       Block b = p.getTargetBlock(4);
-      ItemFrame frame = (ItemFrame) p.getWorld().spawn(b.getLocation(), ItemFrame.class);
+      ItemFrame frame = p.getWorld().spawn(b.getLocation(), ItemFrame.class);
       frame.teleport(b.getRelative(getFacingDirection(p)).getLocation());
       frame.setFacingDirection(getFacingDirection(p), true);
 
-      frame.setItem(p.getActiveItem());
+      frame.setItem(p.getInventory().getItemInMainHand());
 
-      createFrameData(arg, p, frame);
+      createFrameData(p, arg, frame);
 
       sender.sendMessage(getLangComponent("frame-created"));
     } else {
