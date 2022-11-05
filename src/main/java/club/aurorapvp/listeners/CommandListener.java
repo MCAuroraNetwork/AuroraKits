@@ -5,7 +5,6 @@ import static club.aurorapvp.datahandlers.KitDataHandler.deleteKitData;
 import static club.aurorapvp.modules.GUIModule.openGUI;
 import static club.aurorapvp.modules.itemFramesModule.createFrame;
 import static club.aurorapvp.modules.kitModule.createKit;
-import static club.aurorapvp.modules.kitModule.createPublicKit;
 import static club.aurorapvp.modules.kitModule.getKit;
 
 import org.bukkit.Bukkit;
@@ -35,14 +34,15 @@ public class CommandListener implements CommandExecutor {
         openGUI(p);
         break;
       case "createkit":
-        createKit(sender, args[0]);
+        createKit(sender, args[0],
+            String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
         break;
       case "deletekit":
         deleteKitData(sender, args[0],
             String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
         break;
       case "createpublickit":
-        createPublicKit(sender, args[0]);
+        createKit(sender, args[0], "public");
         break;
       case "deletepublickit":
         deleteKitData(sender, args[0], "public");
