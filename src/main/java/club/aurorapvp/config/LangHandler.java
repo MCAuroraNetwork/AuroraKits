@@ -12,7 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class LangHandler {
   private static final HashMap<String, String> placeholders = new HashMap<>();
   private static final HashMap<String, String> Defaults = new HashMap<>();
-  private static final YamlConfiguration lang =
+  private static YamlConfiguration lang =
       YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
 
   public static void setupLangFile() throws IOException {
@@ -72,5 +72,9 @@ public class LangHandler {
 
   public static YamlConfiguration getLangFile() {
     return lang;
+  }
+
+  public static void reloadLang() {
+    lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
   }
 }

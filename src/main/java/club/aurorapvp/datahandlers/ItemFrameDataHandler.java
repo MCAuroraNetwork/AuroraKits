@@ -70,4 +70,8 @@ public class ItemFrameDataHandler {
   public static YamlConfiguration getFrameData() {
     return framesData;
   }
+
+  public static void reloadFrameData() {
+    framesData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
+  }
 }

@@ -9,7 +9,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigHandler {
   private static final HashMap<String, String> Defaults = new HashMap<>();
-  private static final YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+  private static YamlConfiguration config =
+      YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+
   public static void setupConfigFile() throws IOException {
     if (!new File(DataFolder, "config.yml").exists()) {
       new File(DataFolder, "config.yml").createNewFile();
@@ -32,7 +34,12 @@ public class ConfigHandler {
   public static void saveConfigFile() throws IOException {
     getConfigFile().save(new File(DataFolder, "config.yml"));
   }
+
   public static YamlConfiguration getConfigFile() {
     return config;
+  }
+
+  public static void reloadConfig() {
+    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
   }
 }

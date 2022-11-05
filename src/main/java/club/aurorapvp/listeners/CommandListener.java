@@ -1,12 +1,16 @@
 package club.aurorapvp.listeners;
 
+import static club.aurorapvp.config.ConfigHandler.reloadConfig;
+import static club.aurorapvp.config.LangHandler.reloadLang;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.deleteFrameData;
+import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 import static club.aurorapvp.datahandlers.KitDataHandler.deleteKitData;
 import static club.aurorapvp.modules.GUIModule.openGUI;
 import static club.aurorapvp.modules.itemFramesModule.createFrame;
 import static club.aurorapvp.modules.kitModule.createKit;
 import static club.aurorapvp.modules.kitModule.getKit;
 
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,6 +27,13 @@ public class CommandListener implements CommandExecutor {
     Player p = Bukkit.getPlayer(sender.getName());
 
     switch (command.getName()) {
+      case "aurorakits": {
+        if (Objects.equals(args[0], "reload")) {
+          reloadFrameData();
+          reloadConfig();
+          reloadLang();
+        }
+      }
       case "kit":
         if (args.length != 0) {
           getKit(Bukkit.getPlayer(sender.getName()), args[0]);
