@@ -3,9 +3,13 @@ package club.aurorapvp.datahandlers;
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
+import static club.aurorapvp.datahandlers.GUIDataHandler.deleteGUIEntry;
 
+import club.aurorapvp.config.ConfigHandler;
+import club.aurorapvp.config.LangHandler;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -25,12 +29,18 @@ public class KitDataHandler {
         e.printStackTrace();
       }
     }
-    saveKitFile(String.valueOf(p.getUniqueId()), arg);
+    saveKitFile(dir, arg);
   }
 
   public static void deleteKitData(CommandSender sender, String arg, String dir) {
     if (getKitFile(dir, arg) != null) {
-      new File(DataFolder, "/GUIs/" + dir + "/" + arg + ".yml").delete();
+      new File(DataFolder, "/kits/" + dir + "/" + arg + ".yml").delete();
+      try {
+        deleteGUIEntry(dir, arg);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      sender.sendMessage(getLangComponent("kit-deleted"));
     } else {
       sender.sendMessage(getLangComponent("kit-invalid"));
     }
@@ -71,7 +81,13 @@ public class KitDataHandler {
     kitFile.save(file);
   }
 
-  public static int getKitAmount(Player p) {
-    return new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles().length;
+  public static int getKitAmount(UUID dir) {
+    File file = new File(DataFolder, "/kits/" + dir + "/");
+
+    if (file.listFiles() == null) {
+      return new File(DataFolder, "/kits/public/").listFiles().length;
+    } else {
+      return file.listFiles().length + new File(DataFolder, "/kits/public/").listFiles().length;
+    }
   }
 }

@@ -2,7 +2,6 @@ package club.aurorapvp;
 
 import static club.aurorapvp.config.ConfigHandler.setupConfigFile;
 import static club.aurorapvp.config.LangHandler.setupLangFile;
-import static club.aurorapvp.datahandlers.GUIDataHandler.setupGUIPublicData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.setupFrameData;
 
 import club.aurorapvp.config.ConfigHandler;
@@ -40,7 +39,6 @@ public final class AuroraKits extends JavaPlugin {
     try {
       setupLangFile();
       setupFrameData();
-      setupGUIPublicData();
       setupConfigFile();
     } catch (IOException e) {
       throw new RuntimeException(e);

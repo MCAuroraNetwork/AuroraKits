@@ -45,26 +45,26 @@ public class kitModule {
   public static void createKit(CommandSender sender, String arg) {
     Player p = Bukkit.getPlayer(sender.getName());
 
-    if (getKitAmount(p) <= 54 && arg != null &&
+    if (getKitAmount(p.getUniqueId()) <= 54 && arg != null &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
 
       try {
         createKitData(p, arg, String.valueOf(p.getUniqueId()));
-        createGUIEntry(p, arg);
+        createGUIEntry(p, String.valueOf(p.getUniqueId()), arg);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
 
       sender.sendMessage(getLangComponent("kit-created"));
 
-    } else if (getKitAmount(p) >= 55) {
+    } else if (getKitAmount(p.getUniqueId()) >= 55) {
       sender.sendMessage(getLangComponent("kit-too-many"));
-    } else if (arg == null && getKitAmount(p) <= 54 &&
+    } else if (arg == null && getKitAmount(p.getUniqueId()) <= 54 &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
 
       try {
-        createKitData(p, String.valueOf(getKitAmount(p) + 1), String.valueOf(p.getUniqueId()));
-        createGUIEntry(p, String.valueOf(getKitAmount(p) + 1));
+        createKitData(p, String.valueOf(getKitAmount(p.getUniqueId()) + 1), String.valueOf(p.getUniqueId()));
+        createGUIEntry(p, String.valueOf(p.getUniqueId()), String.valueOf(getKitAmount(p.getUniqueId())) + 1);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -77,30 +77,22 @@ public class kitModule {
   public static void createPublicKit(CommandSender sender, String arg) {
     Player p = Bukkit.getPlayer(sender.getName());
 
-    if (getKitAmount(p) <= 54 && arg != null &&
+    if (getKitAmount(p.getUniqueId()) <= 54 && arg != null &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
 
       try {
         createKitData(p, arg, "public");
-        createGUIEntry(p, arg);
+        createGUIEntry(p, "public", arg);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
 
       sender.sendMessage(getLangComponent("kit-created"));
 
-    } else if (getKitAmount(p) >= 55) {
+    } else if (getKitAmount(p.getUniqueId()) >= 55) {
       sender.sendMessage(getLangComponent("kit-too-many"));
-    } else if (arg == null && getKitAmount(p) <= 54 &&
-        p.getInventory().getItemInMainHand().getItemMeta() != null) {
-
-      try {
-        createKitData(p, String.valueOf(getKitAmount(p) + 1), "public");
-        createGUIEntry(p, String.valueOf(getKitAmount(p) + 1));
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-      sender.sendMessage(getLangComponent("kit-created"));
+    } else if (arg == null) {
+        p.sendMessage(getLangComponent("kit-invalid-name"));
     } else if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
       p.sendMessage(getLangComponent("kit-invalid-item"));
     }
