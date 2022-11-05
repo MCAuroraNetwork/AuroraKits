@@ -1,0 +1,12 @@
+kit-too-many: prefix <gradient:#FFAA00:#FF55FF>You have too many kits!
+frame-deleted: prefix <gradient:#FFAA00:#FF55FF>Frame successfully deleted
+kit-not-found: prefix <gradient:#FFAA00:#FF55FF>Kit not found!
+kit-deleted: prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully deleted
+kit-invalid-item: prefix <gradient:#FFAA00:#FF55FF>Invalid kit display item!
+prefix: ~<gradient:#FFAA00:#FF55FF><bold>AuroraKits ><reset>~
+frame-invalid: prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!
+frame-created: prefix <gradient:#FFAA00:#FF55FF>Frame successfully created
+GUIName: <gradient:#FFAA00:#FF55FF>KitGUI
+kit-created: prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully created! Use /kits to access it!
+kit-used: prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully used!
+kit-invalid-name: prefix <gradient:#FFAA00:#FF55FF>Invalid kit name!
