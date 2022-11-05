@@ -1,9 +1,9 @@
 package club.aurorapvp.modules;
 
-import static club.aurorapvp.AuroraKits.framesData;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.createFrameData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.getFrameData;
+import static club.aurorapvp.datahandlers.ItemFrameDataHandler.setFrameData;
 
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import org.bukkit.block.Block;
@@ -17,6 +17,10 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 public class itemFramesModule {
 
   public static void onFrameClicked(PlayerInteractEntityEvent event) {
+    if (getFrameData() == null) {
+      setFrameData();
+    }
+
     final Entity clicked = event.getRightClicked();
     if (clicked instanceof ItemFrame) {
 
@@ -29,6 +33,10 @@ public class itemFramesModule {
   }
 
   public static void createFrame(CommandSender sender, String arg) {
+    if (getFrameData() == null) {
+      setFrameData();
+    }
+
     if (arg != null && sender instanceof Player p) {
 
       Block b = p.getTargetBlock(4);

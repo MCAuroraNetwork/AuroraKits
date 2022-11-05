@@ -1,7 +1,6 @@
 package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.framesData;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 
 import java.io.File;
@@ -13,6 +12,8 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 
 public class ItemFrameDataHandler {
+  private static YamlConfiguration framesData = null;
+
   public static void setupFrameData() throws IOException {
     File file = new File(DataFolder, "/frames/data.yml");
     if (!file.exists()) {
@@ -20,6 +21,11 @@ public class ItemFrameDataHandler {
 
       file.createNewFile();
     }
+  }
+
+  public static void setFrameData() {
+    framesData =
+        YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
   }
 
   public static void saveFrameData() throws IOException {
@@ -60,6 +66,7 @@ public class ItemFrameDataHandler {
     }
     return null;
   }
+
   public static YamlConfiguration getFrameData() {
     return framesData;
   }
