@@ -1,7 +1,6 @@
 package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.GUIData;
 import static club.aurorapvp.AuroraKits.serializeComponent;
 
 import java.io.File;
@@ -12,6 +11,8 @@ import org.bukkit.entity.Player;
 
 public class GUIDataHandler {
   private static YamlConfiguration GUIFile;
+  private static final YamlConfiguration GUIData =
+      YamlConfiguration.loadConfiguration(new File(DataFolder, "/GUIs/public.yml"));
 
   public static void setupGUIData() throws IOException {
     File file = new File(DataFolder, "/GUIs/public.yml");
@@ -60,6 +61,7 @@ public class GUIDataHandler {
     getGUIData().set("kits." + arg, null);
     saveGUIData();
   }
+
   public static YamlConfiguration getGUIData() {
     return GUIData;
   }

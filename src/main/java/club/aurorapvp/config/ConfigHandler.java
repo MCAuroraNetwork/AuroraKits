@@ -1,8 +1,6 @@
 package club.aurorapvp.config;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.config;
-import static club.aurorapvp.AuroraKits.lang;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +9,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigHandler {
   private static final HashMap<String, String> Defaults = new HashMap<>();
+  private static final YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+  public static void setupConfigFile() throws IOException {
+    if (!new File(DataFolder, "config.yml").exists()) {
+      new File(DataFolder, "config.yml").createNewFile();
+    }
+  }
 
   public static void generateConfigDefaults() throws IOException {
     Defaults.put("doFirstFallDamage", "false");
@@ -18,7 +22,7 @@ public class ConfigHandler {
     Defaults.put("giveKitOnJoin.kit", "Default");
 
     for (String path : Defaults.keySet()) {
-      if (!getConfigFile().contains(path) || config.getString(path) == null) {
+      if (!getConfigFile().contains(path) || getConfigFile().getString(path) == null) {
         getConfigFile().set(path, Defaults.get(path));
         getConfigFile().save(new File(DataFolder, "config.yml"));
       }
@@ -26,7 +30,7 @@ public class ConfigHandler {
   }
 
   public static void saveConfigFile() throws IOException {
-    lang.save(new File(DataFolder, "config.yml"));
+    getConfigFile().save(new File(DataFolder, "config.yml"));
   }
   public static YamlConfiguration getConfigFile() {
     return config;

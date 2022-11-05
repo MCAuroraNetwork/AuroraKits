@@ -2,7 +2,6 @@ package club.aurorapvp.config;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.deserializeComponent;
-import static club.aurorapvp.AuroraKits.lang;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +12,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class LangHandler {
   private static final HashMap<String, String> placeholders = new HashMap<>();
   private static final HashMap<String, String> Defaults = new HashMap<>();
+  private static final YamlConfiguration lang =
+      YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
 
   public static void setupLangFile() throws IOException {
     if (!new File(DataFolder, "lang.yml").exists()) {
@@ -68,6 +69,7 @@ public class LangHandler {
   public static void saveLangFile() throws IOException {
     getLangFile().save(new File(DataFolder, "lang.yml"));
   }
+
   public static YamlConfiguration getLangFile() {
     return lang;
   }

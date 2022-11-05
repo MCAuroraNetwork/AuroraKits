@@ -1,5 +1,6 @@
 package club.aurorapvp;
 
+import static club.aurorapvp.config.ConfigHandler.setupConfigFile;
 import static club.aurorapvp.config.LangHandler.setupLangFile;
 import static club.aurorapvp.datahandlers.GUIDataHandler.setupGUIData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.setupFrameData;
@@ -25,11 +26,7 @@ public final class AuroraKits extends JavaPlugin {
   public static Plugin plugin;
   public static File DataFolder;
   public static PlainTextComponentSerializer serializeComponent;
-  public static YamlConfiguration lang;
-  public static YamlConfiguration config;
-  public static YamlConfiguration framesData;
   public static MiniMessage deserializeComponent;
-  public static YamlConfiguration GUIData;
 
   @Override
   public void onEnable() {
@@ -41,20 +38,14 @@ public final class AuroraKits extends JavaPlugin {
     deserializeComponent = MiniMessage.miniMessage();
 
     // Setup configs
-    saveDefaultConfig();
     try {
       setupLangFile();
       setupFrameData();
       setupGUIData();
+      setupConfigFile();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-
-    // Register files and directories
-    lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
-    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
-    framesData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
-    GUIData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/GUIs/public.yml"));
 
     // Generate default values
     try {

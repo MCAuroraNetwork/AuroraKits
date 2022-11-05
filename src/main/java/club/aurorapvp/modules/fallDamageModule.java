@@ -1,6 +1,6 @@
 package club.aurorapvp.modules;
 
-import static club.aurorapvp.AuroraKits.config;
+import static club.aurorapvp.config.ConfigHandler.getConfigFile;
 
 import java.util.ArrayList;
 import org.bukkit.entity.Entity;
@@ -14,7 +14,7 @@ public class fallDamageModule {
     Entity p = event.getEntity();
     if (event.getEntity() instanceof Player &&
         event.getCause() == EntityDamageEvent.DamageCause.FALL && falldamage.contains(p) &&
-        !config.getBoolean("doFirstFallDamage") && !event.isCancelled()) {
+        !getConfigFile().getBoolean("doFirstFallDamage") && !event.isCancelled()) {
       event.setCancelled(true);
       falldamage.add(p);
     }
