@@ -35,7 +35,7 @@ public class GUIDataHandler {
     if (Objects.equals(fileName, "public")) {
       GUIFile.set("kits." + arg + ".type", 0);
     } else {
-      GUIFile.set("kits" + arg + ".type", 1);
+      GUIFile.set("kits." + arg + ".type", 1);
     }
     saveGUIFile(fileName);
   }

@@ -49,8 +49,8 @@ public class kitModule {
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
 
       try {
-        createKitData(p, arg, String.valueOf(p.getUniqueId()));
-        createGUIEntry(p, String.valueOf(p.getUniqueId()), arg);
+        createKitData(p, arg, dir);
+        createGUIEntry(p, dir, arg);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -64,7 +64,7 @@ public class kitModule {
 
       try {
         createKitData(p, String.valueOf(getKitAmount(p.getUniqueId()) + 1), dir);
-        createGUIEntry(p, String.valueOf(p.getUniqueId()),
+        createGUIEntry(p, dir,
             String.valueOf(getKitAmount(p.getUniqueId())) + 1);
       } catch (IOException e) {
         throw new RuntimeException(e);

@@ -42,7 +42,7 @@ public class KitDataHandler {
       }
       sender.sendMessage(getLangComponent("kit-deleted"));
     } else {
-      sender.sendMessage(getLangComponent("kit-invalid"));
+      sender.sendMessage(getLangComponent("kit-invalid-name"));
     }
   }
 
