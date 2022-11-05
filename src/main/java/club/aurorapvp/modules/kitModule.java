@@ -4,7 +4,7 @@ import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.config.ConfigHandler.getConfigFile;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
-import static club.aurorapvp.datahandlers.GUIDataHandler.createGUIData;
+import static club.aurorapvp.datahandlers.GUIDataHandler.createGUIEntry;
 import static club.aurorapvp.datahandlers.KitDataHandler.createKitData;
 import static club.aurorapvp.datahandlers.KitDataHandler.getKitAmount;
 import static club.aurorapvp.datahandlers.KitDataHandler.getKitFile;
@@ -50,7 +50,7 @@ public class kitModule {
 
       try {
         createKitData(p, arg, String.valueOf(p.getUniqueId()));
-        createGUIData(p, arg);
+        createGUIEntry(p, arg);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -64,7 +64,7 @@ public class kitModule {
 
       try {
         createKitData(p, String.valueOf(getKitAmount(p) + 1), String.valueOf(p.getUniqueId()));
-        createGUIData(p, String.valueOf(getKitAmount(p) + 1));
+        createGUIEntry(p, String.valueOf(getKitAmount(p) + 1));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -82,7 +82,7 @@ public class kitModule {
 
       try {
         createKitData(p, arg, "public");
-        createGUIData(p, arg);
+        createGUIEntry(p, arg);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -96,7 +96,7 @@ public class kitModule {
 
       try {
         createKitData(p, String.valueOf(getKitAmount(p) + 1), "public");
-        createGUIData(p, String.valueOf(getKitAmount(p) + 1));
+        createGUIEntry(p, String.valueOf(getKitAmount(p) + 1));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }

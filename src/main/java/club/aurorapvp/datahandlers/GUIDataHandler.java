@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
 
 public class GUIDataHandler {
   private static YamlConfiguration GUIFile;
-  private static final YamlConfiguration GUIData =
+  private static final YamlConfiguration GUIPublicData =
       YamlConfiguration.loadConfiguration(new File(DataFolder, "/GUIs/public.yml"));
 
-  public static void setupGUIData() throws IOException {
+  public static void setupGUIPublicData() throws IOException {
     File file = new File(DataFolder, "/GUIs/public.yml");
     if (!file.exists()) {
       file.getParentFile().mkdirs();
@@ -27,42 +27,48 @@ public class GUIDataHandler {
     File file = new File(DataFolder, "/GUIs/" + fileName + ".yml");
 
     if (!file.exists()) {
+      file.getParentFile().mkdirs();
+
       file.createNewFile();
     }
     GUIFile = YamlConfiguration.loadConfiguration(file);
   }
 
-  public static void saveGUIData() throws IOException {
-    getGUIData().save(new File(DataFolder, "/GUIs/public.yml"));
+  public static void saveGUIPublicData() throws IOException {
+    getGUIPublicData().save(new File(DataFolder, "/GUIs/public.yml"));
   }
 
-  public static void createGUIData(Player p, String arg) throws IOException {
+  public static void saveGUIFile(UUID fileName) throws IOException {
+      GUIFile.save(new File(DataFolder, "/GUIs/" + fileName + ".yml"));
+  }
+
+  public static void createGUIEntry(Player p, String arg) throws IOException {
     setupGUIFile(p.getUniqueId());
 
     GUIFile.set("kits." + arg + ".displayItem", p.getInventory().getItemInMainHand());
     GUIFile.set("kits." + arg + ".creator", serializeComponent.serialize(p.displayName()));
-    saveGUIData();
+    saveGUIFile(p.getUniqueId());
   }
 
-  public static void deleteGUIData(Player p, String arg) throws IOException {
+  public static void deleteGUIEntry(Player p, String arg) throws IOException {
     setupGUIFile(p.getUniqueId());
 
     GUIFile.set("kits." + arg, null);
-    saveGUIData();
+    saveGUIPublicData();
   }
 
-  public static void createPublicGUIData(String arg, Player p) throws IOException {
-    getGUIData().set("kits." + arg + ".displayItem", p.getInventory().getItemInMainHand());
-    getGUIData().set("kits." + arg + ".creator", serializeComponent.serialize(p.displayName()));
-    saveGUIData();
+  public static void createGUIPublicData(String arg, Player p) throws IOException {
+    getGUIPublicData().set("kits." + arg + ".displayItem", p.getInventory().getItemInMainHand());
+    getGUIPublicData().set("kits." + arg + ".creator", serializeComponent.serialize(p.displayName()));
+    saveGUIPublicData();
   }
 
-  public static void deletePublicGUIData(String type, String arg) throws IOException {
-    getGUIData().set("kits." + arg, null);
-    saveGUIData();
+  public static void deleteGUIPublicData(String type, String arg) throws IOException {
+    getGUIPublicData().set("kits." + arg, null);
+    saveGUIPublicData();
   }
 
-  public static YamlConfiguration getGUIData() {
-    return GUIData;
+  public static YamlConfiguration getGUIPublicData() {
+    return GUIPublicData;
   }
 }

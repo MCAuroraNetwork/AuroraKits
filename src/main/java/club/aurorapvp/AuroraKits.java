@@ -2,7 +2,7 @@ package club.aurorapvp;
 
 import static club.aurorapvp.config.ConfigHandler.setupConfigFile;
 import static club.aurorapvp.config.LangHandler.setupLangFile;
-import static club.aurorapvp.datahandlers.GUIDataHandler.setupGUIData;
+import static club.aurorapvp.datahandlers.GUIDataHandler.setupGUIPublicData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.setupFrameData;
 
 import club.aurorapvp.config.ConfigHandler;
@@ -17,7 +17,6 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommandYamlParser;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,7 +40,7 @@ public final class AuroraKits extends JavaPlugin {
     try {
       setupLangFile();
       setupFrameData();
-      setupGUIData();
+      setupGUIPublicData();
       setupConfigFile();
     } catch (IOException e) {
       throw new RuntimeException(e);
