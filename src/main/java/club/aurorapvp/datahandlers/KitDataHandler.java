@@ -2,156 +2,65 @@ package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
-import static club.aurorapvp.datahandlers.GUIHandler.createGUIEntry;
-import static club.aurorapvp.datahandlers.GUIHandler.createPublicGUIEntry;
-import static club.aurorapvp.datahandlers.GUIHandler.deleteGUIEntry;
-import static club.aurorapvp.datahandlers.GUIHandler.deletePublicGUIEntry;
-import static club.aurorapvp.listeners.CommandListener.commandArg0;
-import static club.aurorapvp.listeners.CommandListener.inventoryData;
-import static club.aurorapvp.listeners.CommandListener.p;
+import static club.aurorapvp.config.LangHandler.getLangComponent;
 
-import club.aurorapvp.listeners.CommandListener;
 import java.io.File;
 import java.io.IOException;
-import org.bukkit.configuration.file.FileConfiguration;
+import java.util.UUID;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 public class KitDataHandler {
-  private static File[] files;
-  private static File file;
-  private static File dir;
-  private static FileConfiguration customFile;
 
-  public static void setup() {
-    new File(DataFolder, "/kits/").mkdir();
-    new File(DataFolder, "/GUIs/").mkdir();
-  }
+  private static YamlConfiguration kitFile;
 
-  public static void create() {
-    setFile();
+  public static void createKitData(Player p, String arg, String dir) throws IOException {
+    setupKitFile(dir, arg);
 
-    for (int i = 0; i < inventoryData.length; i++) {
+    for (int i = 0; i < p.getInventory().getContents().length; i++) {
       try {
-        get().set("items." + i, inventoryData[i]);
+        kitFile.set("items." + i, p.getInventory().getContents()[i]);
       } catch (Exception e) {
         plugin.getLogger().severe("Unable to save kit");
         e.printStackTrace();
       }
     }
-    save();
-    try {
-      createGUIEntry();
-    } catch (IOException e) {
-      plugin.getLogger().warning("Couldn't save GUI Data");
-    }
+    saveKitFile();
   }
 
-  public static void createPublic() {
-    dir = new File(DataFolder, "/kits/public/");
-    if (!dir.exists()) {
-      new File(DataFolder, "/kits/public/").mkdir();
-    }
-
-    file = new File(dir, CommandListener.commandArg0 + ".yml");
-    if (!file.exists()) {
-      try {
-        file.createNewFile();
-      } catch (IOException e) {
-        plugin.getLogger().warning("Could not create kit");
-      }
-    }
-    customFile = YamlConfiguration.loadConfiguration(file);
-
-    for (int i = 0; i < inventoryData.length; i++) {
-      try {
-        get().set("items." + i, inventoryData[i]);
-      } catch (Exception e) {
-        plugin.getLogger().severe(
-            String.format("Unable to save data for %s's %s in slot %s", inventoryData[i].getType(),
-                i));
-        e.printStackTrace();
-      }
-    }
-    save();
-    try {
-      createPublicGUIEntry();
-    } catch (IOException e) {
-      plugin.getLogger().warning("Couldn't save GUI Data");
-    }
-  }
-
-  public static void delete() {
-    setFile();
-    file.delete();
-    deleteGUIEntry();
-  }
-
-  public static void deletePublic() {
-    dir = new File(DataFolder, "/kits/public/");
-    if (!dir.exists()) {
-      new File(DataFolder, "/kits/public/").mkdir();
-    }
-
-    file = new File(dir, CommandListener.commandArg0 + ".yml");
-    if (file.exists()) {
-      file.delete();
-    }
-    deletePublicGUIEntry();
-  }
-
-  public static void checkKits() {
-    dir = new File(DataFolder, "/kits/" + p.getUniqueId() + "/");
-    if (!dir.exists()) {
-      new File(DataFolder, "/kits/" + p.getUniqueId() + "/").mkdir();
-    }
-
-    file = new File(dir, commandArg0 + ".yml");
-    if (file.exists()) {
-      customFile = YamlConfiguration.loadConfiguration(file);
+  public static void deleteKitData(CommandSender sender, String arg, String dir) {
+    if (getKitFile(dir, arg) != null) {
+      new File(DataFolder, "/GUI/" + dir + "/" + arg + ".yml").delete();
     } else {
-      file = new File(DataFolder, "/kits/public/" + commandArg0 + ".yml");
-      if (file.exists()) {
-        customFile = YamlConfiguration.loadConfiguration(file);
-      } else {
-        customFile = null;
-      }
+      sender.sendMessage(getLangComponent("kit-invalid"));
     }
   }
 
-  public static void setFile() {
-    // Defines the dir and file variables
-    dir = new File(DataFolder, "/kits/" + p.getUniqueId() + "/");
-    if (!dir.exists()) {
-      new File(DataFolder, "/kits/" + p.getUniqueId() + "/").mkdir();
-    }
+  public static void setupKitFile(String dir, String fileName) throws IOException {
+    File file = new File(DataFolder, "/GUI/" + dir + "/" + fileName + ".yml");
 
-    file = new File(dir, commandArg0 + ".yml");
     if (!file.exists()) {
-      try {
-        file.createNewFile();
-      } catch (IOException e) {
-        plugin.getLogger().warning("Could not find kit");
-      }
+      file.createNewFile();
     }
-    customFile = YamlConfiguration.loadConfiguration(file);
+    kitFile = YamlConfiguration.loadConfiguration(file);
   }
 
-  public static int checkKitAmount() {
-    if (new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles() != null) {
-      return new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles().length;
+  public static YamlConfiguration getKitFile(String dir, String fileName) {
+    File file = new File(DataFolder, "/GUI/" + dir + "/" + fileName + ".yml");
+    if (file.exists()) {
+      kitFile = YamlConfiguration.loadConfiguration(file);
+    } else {
+      kitFile = null;
     }
-    return 0;
+    return kitFile;
   }
 
-  public static FileConfiguration get() {
-    return customFile;
+  public static void saveKitFile() throws IOException {
+    kitFile.save(new File(DataFolder, "/GUI/data.yml"));
   }
 
-  public static void save() {
-    try {
-      customFile.save(file);
-    } catch (IOException e) {
-      plugin.getLogger().warning("Couldn't save");
-    }
+  public static int getKitAmount(Player p) {
+    return new File(DataFolder, "/kits/" + p.getUniqueId() + "/").listFiles().length;
   }
 }
