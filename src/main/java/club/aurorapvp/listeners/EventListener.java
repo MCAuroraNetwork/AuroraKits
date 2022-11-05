@@ -1,6 +1,7 @@
 package club.aurorapvp.listeners;
 
 import static club.aurorapvp.config.ConfigHandler.getConfigFile;
+import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 import static club.aurorapvp.modules.GUIModule.onGUIInventoryClicked;
 import static club.aurorapvp.modules.fallDamageModule.cancelFallDamage;
 import static club.aurorapvp.modules.fallDamageModule.falldamage;
@@ -17,6 +18,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 
 public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
@@ -54,5 +56,10 @@ public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPlayerFall(EntityDamageEvent event) {
     cancelFallDamage(event);
+  }
+
+  @EventHandler
+  public void onWorldLoad(WorldLoadEvent event) {
+    reloadFrameData();
   }
 }
