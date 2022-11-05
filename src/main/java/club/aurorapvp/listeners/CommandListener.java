@@ -33,6 +33,7 @@ public class CommandListener implements CommandExecutor {
           reloadConfig();
           reloadLang();
         }
+        break;
       }
       case "kit":
         if (args.length != 0) {

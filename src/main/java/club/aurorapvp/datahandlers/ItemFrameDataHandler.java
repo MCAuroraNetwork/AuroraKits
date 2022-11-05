@@ -1,6 +1,7 @@
 package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
+import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 
 import java.io.File;
@@ -73,5 +74,6 @@ public class ItemFrameDataHandler {
 
   public static void reloadFrameData() {
     framesData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
+    plugin.getLogger().info("Frame data reloaded!");
   }
 }

@@ -2,6 +2,7 @@ package club.aurorapvp.config;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.deserializeComponent;
+import static club.aurorapvp.AuroraKits.plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,5 +77,6 @@ public class LangHandler {
 
   public static void reloadLang() {
     lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
+    plugin.getLogger().info("Lang reloaded!");
   }
 }

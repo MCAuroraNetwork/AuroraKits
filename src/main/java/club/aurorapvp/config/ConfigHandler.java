@@ -1,6 +1,7 @@
 package club.aurorapvp.config;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
+import static club.aurorapvp.AuroraKits.plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,5 +42,6 @@ public class ConfigHandler {
 
   public static void reloadConfig() {
     config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+    plugin.getLogger().info("Config reloaded!");
   }
 }
