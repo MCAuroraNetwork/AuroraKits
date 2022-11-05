@@ -33,6 +33,7 @@ public class CommandListener implements CommandExecutor {
         break;
       case "kits":
         openGUI(p);
+        break;
       case "createkit":
         createKit(sender, args[0]);
         break;
