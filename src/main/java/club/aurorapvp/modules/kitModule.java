@@ -1,8 +1,8 @@
 package club.aurorapvp.modules;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.config;
 import static club.aurorapvp.AuroraKits.plugin;
+import static club.aurorapvp.config.ConfigHandler.getConfigFile;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.GUIDataHandler.createGUIData;
 import static club.aurorapvp.datahandlers.KitDataHandler.createKitData;
@@ -27,10 +27,10 @@ public class kitModule {
     new BukkitRunnable() {
       @Override
       public void run() {
-        if (config.getBoolean("giveKitOnJoin.enabled")) {
+        if (getConfigFile().getBoolean("giveKitOnJoin.enabled")) {
           ItemStack[] inventoryData = p.getInventory().getContents();
           FileConfiguration kitFile = YamlConfiguration.loadConfiguration(new File(DataFolder,
-              "/kits/public/" + config.getString("giveKitOnJoin.kit") + ".yml"));
+              "/kits/public/" + getConfigFile().getString("giveKitOnJoin.kit") + ".yml"));
 
           for (int i = 0; i < inventoryData.length; i++) {
             inventoryData[i] = kitFile.getItemStack("items." + i);

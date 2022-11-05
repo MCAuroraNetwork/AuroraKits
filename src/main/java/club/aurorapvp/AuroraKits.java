@@ -29,6 +29,7 @@ public final class AuroraKits extends JavaPlugin {
   public static YamlConfiguration config;
   public static YamlConfiguration framesData;
   public static MiniMessage deserializeComponent;
+  public static YamlConfiguration GUIData;
 
   @Override
   public void onEnable() {
@@ -53,6 +54,7 @@ public final class AuroraKits extends JavaPlugin {
     lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
     config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
     framesData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
+    GUIData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/GUIs/public.yml"));
 
     // Generate default values
     try {

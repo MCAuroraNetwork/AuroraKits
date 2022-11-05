@@ -3,6 +3,7 @@ package club.aurorapvp.modules;
 import static club.aurorapvp.AuroraKits.framesData;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.createFrameData;
+import static club.aurorapvp.datahandlers.ItemFrameDataHandler.getFrameData;
 
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import org.bukkit.block.Block;
@@ -21,7 +22,7 @@ public class itemFramesModule {
 
       if (ItemFrameDataHandler.getFrame(clicked.getLocation()) != null) {
         event.getPlayer().getInventory().addItem(
-            framesData.getItemStack("frames." + ItemFrameDataHandler.getFrame(clicked.getLocation()) + ".item"));
+            getFrameData().getItemStack("frames." + ItemFrameDataHandler.getFrame(clicked.getLocation()) + ".item"));
         event.setCancelled(true);
       }
     }

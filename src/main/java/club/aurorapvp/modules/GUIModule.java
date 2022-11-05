@@ -3,7 +3,7 @@ package club.aurorapvp.modules;
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.serializeComponent;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
-import static club.aurorapvp.datahandlers.GUIDataHandler.GUIData;
+import static club.aurorapvp.datahandlers.GUIDataHandler.getGUIData;
 import static club.aurorapvp.modules.kitModule.getKit;
 
 import java.io.File;
@@ -45,7 +45,7 @@ public class GUIModule {
 
   public static void initializeGUI(Player p) {
     inv = Bukkit.createInventory(null, 54, getLangComponent("GUIName"));
-    YamlConfiguration GUIFile = GUIData;
+    YamlConfiguration GUIFile = getGUIData();
 
     for (int i = 0; i < 2; i++) {
       if (GUIFile.getConfigurationSection("kits") != null) {

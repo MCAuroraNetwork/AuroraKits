@@ -1,6 +1,7 @@
 package club.aurorapvp.datahandlers;
 
 import static club.aurorapvp.AuroraKits.DataFolder;
+import static club.aurorapvp.AuroraKits.GUIData;
 import static club.aurorapvp.AuroraKits.serializeComponent;
 
 import java.io.File;
@@ -10,9 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class GUIDataHandler {
-
-  public static YamlConfiguration GUIData =
-      YamlConfiguration.loadConfiguration(new File(DataFolder, "/GUIs/public.yml"));
   private static YamlConfiguration GUIFile;
 
   public static void setupGUIData() throws IOException {
@@ -34,7 +32,7 @@ public class GUIDataHandler {
   }
 
   public static void saveGUIData() throws IOException {
-    GUIData.save(new File(DataFolder, "/GUIs/public.yml"));
+    getGUIData().save(new File(DataFolder, "/GUIs/public.yml"));
   }
 
   public static void createGUIData(Player p, String arg) throws IOException {
@@ -53,13 +51,16 @@ public class GUIDataHandler {
   }
 
   public static void createPublicGUIData(String arg, Player p) throws IOException {
-    GUIData.set("kits." + arg + ".displayItem", p.getInventory().getItemInMainHand());
-    GUIData.set("kits." + arg + ".creator", serializeComponent.serialize(p.displayName()));
+    getGUIData().set("kits." + arg + ".displayItem", p.getInventory().getItemInMainHand());
+    getGUIData().set("kits." + arg + ".creator", serializeComponent.serialize(p.displayName()));
     saveGUIData();
   }
 
   public static void deletePublicGUIData(String type, String arg) throws IOException {
-    GUIData.set("kits." + arg, null);
+    getGUIData().set("kits." + arg, null);
     saveGUIData();
+  }
+  public static YamlConfiguration getGUIData() {
+    return GUIData;
   }
 }
