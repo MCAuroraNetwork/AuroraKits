@@ -46,8 +46,12 @@ public class CommandListener implements CommandExecutor {
         openGUI(p);
         break;
       case "createkit":
-        createKit(sender, args[0],
-            String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
+        if (args.length == 0) {
+          createKit(sender, null, String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
+        } else {
+          createKit(sender, args[0],
+              String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
+        }
         break;
       case "deletekit":
         deleteKitData(sender, args[0],
