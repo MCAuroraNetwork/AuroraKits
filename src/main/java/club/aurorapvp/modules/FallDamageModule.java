@@ -16,6 +16,12 @@ public class FallDamageModule {
         event.getCause() == EntityDamageEvent.DamageCause.FALL && falldamage.contains(p) &&
         !getConfigFile().getBoolean("doFirstFallDamage") && !event.isCancelled()) {
       event.setCancelled(true);
+      falldamage.remove(p);
+    }
+  }
+
+  public static void checkFallDamage(Player p) {
+    if (!falldamage.contains(p) && !getConfigFile().getBoolean("doFirstFallDamage")) {
       falldamage.add(p);
     }
   }

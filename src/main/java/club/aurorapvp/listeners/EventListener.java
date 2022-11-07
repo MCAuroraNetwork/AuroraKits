@@ -1,10 +1,9 @@
 package club.aurorapvp.listeners;
 
-import static club.aurorapvp.config.ConfigHandler.getConfigFile;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
-import static club.aurorapvp.modules.GUIModule.onGUIInventoryClicked;
 import static club.aurorapvp.modules.FallDamageModule.cancelFallDamage;
-import static club.aurorapvp.modules.FallDamageModule.falldamage;
+import static club.aurorapvp.modules.FallDamageModule.checkFallDamage;
+import static club.aurorapvp.modules.GUIModule.onGUIInventoryClicked;
 import static club.aurorapvp.modules.ItemFramesModule.onFrameClicked;
 import static club.aurorapvp.modules.KitModule.giveKitOnJoin;
 
@@ -23,17 +22,13 @@ import org.bukkit.event.world.WorldLoadEvent;
 public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    if (!getConfigFile().getBoolean("doFirstFallDamage") && !falldamage.contains(event.getPlayer())) {
-      falldamage.add(event.getPlayer());
-    }
+    checkFallDamage(event.getPlayer());
     giveKitOnJoin(event);
   }
 
   @EventHandler
   public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
-    if (!getConfigFile().getBoolean("doFirstFallDamage") && !falldamage.contains(event.getPlayer())) {
-      falldamage.add(event.getPlayer());
-    }
+    checkFallDamage(event.getPlayer());
   }
 
   @EventHandler
@@ -48,9 +43,7 @@ public class EventListener extends YamlConfiguration implements Listener {
 
   @EventHandler
   public void onPlayerRespawn(PlayerRespawnEvent event) {
-    if (!getConfigFile().getBoolean("doFirstFallDamage") && !falldamage.contains(event.getPlayer())) {
-      falldamage.add(event.getPlayer());
-    }
+    checkFallDamage(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
