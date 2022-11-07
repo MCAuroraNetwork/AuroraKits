@@ -7,6 +7,7 @@ import static club.aurorapvp.modules.KitModule.getKit;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -33,7 +34,11 @@ public class GUIModule {
 
       final Player p = (Player) event.getWhoClicked();
 
-      getKit(p, serializeComponent.serialize(event.getCurrentItem().getItemMeta().displayName()));
+      if (event.getCurrentItem().getItemMeta().displayName() == null) {
+        p.sendMessage(getLangComponent("kit-invalid-name"));
+      } else {
+        getKit(p, serializeComponent.serialize(event.getCurrentItem().getItemMeta().displayName()));
+      }
     }
   }
 
