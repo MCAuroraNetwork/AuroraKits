@@ -28,15 +28,7 @@ public class KitModule {
       @Override
       public void run() {
         if (getConfigFile().getBoolean("giveKitOnJoin.enabled")) {
-          ItemStack[] inventoryData = p.getInventory().getContents();
-          FileConfiguration kitFile = YamlConfiguration.loadConfiguration(new File(DataFolder,
-              "/kits/public/" + getConfigFile().getString("giveKitOnJoin.kit") + ".yml"));
-
-          for (int i = 0; i < inventoryData.length; i++) {
-            inventoryData[i] = kitFile.getItemStack("items." + i);
-          }
-
-          p.getInventory().setContents(inventoryData);
+          getKit(event.getPlayer(), getConfigFile().getString("giveKitOnJoin.kit"));
         }
       }
     }.runTaskLater(plugin, 5);
