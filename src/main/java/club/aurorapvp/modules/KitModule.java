@@ -1,6 +1,5 @@
 package club.aurorapvp.modules;
 
-import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.config.ConfigHandler.getConfigFile;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
@@ -9,11 +8,9 @@ import static club.aurorapvp.datahandlers.KitDataHandler.createKitData;
 import static club.aurorapvp.datahandlers.KitDataHandler.getKitAmount;
 import static club.aurorapvp.datahandlers.KitDataHandler.getKitFile;
 
-import java.io.File;
 import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -22,8 +19,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class KitModule {
   public static void giveKitOnJoin(PlayerJoinEvent event) {
-    Player p = event.getPlayer();
-
     new BukkitRunnable() {
       @Override
       public void run() {
@@ -34,15 +29,15 @@ public class KitModule {
     }.runTaskLater(plugin, 5);
   }
 
-  public static void createKit(CommandSender sender, String arg, String dir) {
+  public static void createKit(CommandSender sender, String kitName, String kitLocation) {
     Player p = Bukkit.getPlayer(sender.getName());
 
-    if (getKitAmount(p.getUniqueId()) <= 54 && arg != null &&
+    if (getKitAmount(p.getUniqueId()) <= 54 && kitName != null &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
 
       try {
-        createKitData(p, arg, dir);
-        createGUIEntry(p, dir, arg);
+        createKitData(p, kitName, kitLocation);
+        createGUIEntry(p, kitLocation, kitName);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -51,12 +46,12 @@ public class KitModule {
 
     } else if (getKitAmount(p.getUniqueId()) >= 55) {
       sender.sendMessage(getLangComponent("kit-too-many"));
-    } else if (arg == null && getKitAmount(p.getUniqueId()) <= 54 &&
+    } else if (kitName == null && getKitAmount(p.getUniqueId()) <= 54 &&
         p.getInventory().getItemInMainHand().getItemMeta() != null) {
 
       try {
-        createKitData(p, "Kit" + Math.addExact(getKitAmount(p.getUniqueId()), 1), dir);
-        createGUIEntry(p, dir, "Kit" + getKitAmount(p.getUniqueId()));
+        createKitData(p, "Kit" + Math.addExact(getKitAmount(p.getUniqueId()), 1), kitLocation);
+        createGUIEntry(p, kitLocation, "Kit" + getKitAmount(p.getUniqueId()));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -66,8 +61,8 @@ public class KitModule {
     }
   }
 
-  public static void getKit(Player p, String arg) {
-    YamlConfiguration KitFile = getKitFile(String.valueOf(p.getUniqueId()), arg);
+  public static void getKit(Player p, String kitName) {
+    YamlConfiguration KitFile = getKitFile(String.valueOf(p.getUniqueId()), kitName);
     ItemStack[] inventoryData = p.getInventory().getContents();
 
     if (KitFile != null) {

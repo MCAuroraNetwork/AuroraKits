@@ -45,9 +45,9 @@ public class ItemFrameDataHandler {
     }
   }
 
-  public static void createFrameData(Player p, String arg, ItemFrame frame) {
-    getFrameData().set("frames." + arg + ".item", p.getInventory().getItemInMainHand());
-    getFrameData().set("frames." + arg + ".location", frame.getLocation());
+  public static void createFrameData(Player p, String frameName, ItemFrame frame) {
+    getFrameData().set("frames." + frameName + ".item", p.getInventory().getItemInMainHand());
+    getFrameData().set("frames." + frameName + ".location", frame.getLocation());
     try {
       saveFrameData();
     } catch (IOException e) {

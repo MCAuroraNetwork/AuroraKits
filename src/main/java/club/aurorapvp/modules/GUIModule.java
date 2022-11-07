@@ -7,7 +7,6 @@ import static club.aurorapvp.modules.KitModule.getKit;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;

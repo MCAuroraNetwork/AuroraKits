@@ -3,7 +3,6 @@ package club.aurorapvp.modules;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.createFrameData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.getFrameData;
-import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.setupFrameData;
 
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
@@ -32,13 +31,14 @@ public class ItemFramesModule {
 
       if (ItemFrameDataHandler.getFrame(clicked.getLocation()) != null) {
         event.getPlayer().getInventory().addItem(
-            getFrameData().getItemStack("frames." + ItemFrameDataHandler.getFrame(clicked.getLocation()) + ".item"));
+            getFrameData().getItemStack(
+                "frames." + ItemFrameDataHandler.getFrame(clicked.getLocation()) + ".item"));
         event.setCancelled(true);
       }
     }
   }
 
-  public static void createFrame(CommandSender sender, String arg) {
+  public static void createFrame(CommandSender sender, String frameName) {
     if (getFrameData() == null) {
       try {
         setupFrameData();
@@ -47,7 +47,7 @@ public class ItemFramesModule {
       }
     }
 
-    if (arg != null && sender instanceof Player p) {
+    if (frameName != null && sender instanceof Player p) {
 
       Block b = p.getTargetBlock(4);
       ItemFrame frame = p.getWorld().spawn(b.getLocation(), ItemFrame.class);
@@ -56,7 +56,7 @@ public class ItemFramesModule {
 
       frame.setItem(p.getInventory().getItemInMainHand());
 
-      createFrameData(p, arg, frame);
+      createFrameData(p, frameName, frame);
 
       sender.sendMessage(getLangComponent("frame-created"));
     } else {

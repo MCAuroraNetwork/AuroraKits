@@ -18,8 +18,8 @@ public class KitDataHandler {
 
   private static YamlConfiguration kitFile;
 
-  public static void createKitData(Player p, String arg, String dir) throws IOException {
-    setupKitFile(dir, arg);
+  public static void createKitData(Player p, String kitName, String kitLocation) throws IOException {
+    setupKitFile(kitLocation, kitName);
 
     for (int i = 0; i < p.getInventory().getContents().length; i++) {
       try {
@@ -29,14 +29,14 @@ public class KitDataHandler {
         e.printStackTrace();
       }
     }
-    saveKitFile(dir, arg);
+    saveKitFile(kitLocation, kitName);
   }
 
-  public static void deleteKitData(CommandSender sender, String arg, String dir) {
-    if (getKitFile(dir, arg) != null) {
-      new File(DataFolder, "/kits/" + dir + "/" + arg + ".yml").delete();
+  public static void deleteKitData(CommandSender sender, String kitName, String kitLocation) {
+    if (getKitFile(kitName, kitName) != null) {
+      new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml").delete();
       try {
-        deleteGUIEntry(dir, arg);
+        deleteGUIEntry(kitName, kitName);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -46,8 +46,8 @@ public class KitDataHandler {
     }
   }
 
-  public static void setupKitFile(String dir, String fileName) throws IOException {
-    File file = new File(DataFolder, "/kits/" + dir + "/" + fileName + ".yml");
+  public static void setupKitFile(String kitLocation, String kitName) throws IOException {
+    File file = new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml");
     if (!file.exists()) {
       file.getParentFile().mkdirs();
 
@@ -56,13 +56,13 @@ public class KitDataHandler {
     kitFile = YamlConfiguration.loadConfiguration(file);
   }
 
-  public static YamlConfiguration getKitFile(String dir, String fileName) {
-    File file = new File(DataFolder, "/kits/" + dir + "/" + fileName + ".yml");
+  public static YamlConfiguration getKitFile(String kitLocation, String kitName) {
+    File file = new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml");
     if (file.exists()) {
       kitFile = YamlConfiguration.loadConfiguration(file);
       return kitFile;
     } else {
-      file = new File(DataFolder, "/kits/public/" + fileName + ".yml");
+      file = new File(DataFolder, "/kits/public/" + kitName + ".yml");
       if (file.exists()) {
         kitFile = YamlConfiguration.loadConfiguration(file);
         return kitFile;
@@ -71,8 +71,8 @@ public class KitDataHandler {
     return null;
   }
 
-  public static void saveKitFile(String dir, String fileName) throws IOException {
-    File file = new File(DataFolder, "/kits/" + dir + "/" + fileName + ".yml");
+  public static void saveKitFile(String kitLocation, String kitName) throws IOException {
+    File file = new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml");
     if (!file.exists()) {
       file.getParentFile().mkdirs();
 
@@ -81,8 +81,8 @@ public class KitDataHandler {
     kitFile.save(file);
   }
 
-  public static int getKitAmount(UUID dir) {
-    File file = new File(DataFolder, "/kits/" + dir + "/");
+  public static int getKitAmount(UUID playerUUID) {
+    File file = new File(DataFolder, "/kits/" + playerUUID + "/");
 
     if (file.listFiles() == null) {
       return new File(DataFolder, "/kits/public/").listFiles().length;

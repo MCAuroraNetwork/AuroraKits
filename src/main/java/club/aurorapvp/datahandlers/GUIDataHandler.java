@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 public class GUIDataHandler {
   public static YamlConfiguration GUIFile;
 
-  public static YamlConfiguration getGUIFile(String fileName) throws IOException {
+  public static YamlConfiguration getGUIFile() {
     return GUIFile;
   }
 
-  public static void setGUIFile(String fileName) throws IOException {
-    File file = new File(DataFolder, "/GUIs/" + fileName + ".yml");
+  public static void setGUIFile(String GUIMenu) throws IOException {
+    File file = new File(DataFolder, "/GUIs/" + GUIMenu + ".yml");
 
     if (!file.exists()) {
       file.getParentFile().mkdirs();
@@ -27,28 +27,28 @@ public class GUIDataHandler {
     GUIFile = YamlConfiguration.loadConfiguration(file);
   }
 
-  public static void saveGUIFile(String fileName) throws IOException {
-    GUIFile.save(new File(DataFolder, "/GUIs/" + fileName + ".yml"));
+  public static void saveGUIFile(String GUIMenu) throws IOException {
+    GUIFile.save(new File(DataFolder, "/GUIs/" + GUIMenu + ".yml"));
   }
 
-  public static void createGUIEntry(Player p, String fileName, String arg) throws IOException {
-    setGUIFile(fileName);
+  public static void createGUIEntry(Player p, String GUIMenu, String kitName) throws IOException {
+    setGUIFile(GUIMenu);
 
-    getGUIFile(fileName).set("kits." + arg + ".displayItem", p.getInventory().getItemInMainHand());
-    getGUIFile(fileName).set("kits." + arg + ".creator",
+    getGUIFile().set("kits." + kitName + ".displayItem", p.getInventory().getItemInMainHand());
+    getGUIFile().set("kits." + kitName + ".creator",
         serializeComponent.serialize(p.displayName()));
-    if (Objects.equals(fileName, "public")) {
-      getGUIFile(fileName).set("kits." + arg + ".type", 0);
+    if (Objects.equals(GUIMenu, "public")) {
+      getGUIFile().set("kits." + kitName + ".type", 0);
     } else {
-      getGUIFile(fileName).set("kits." + arg + ".type", 1);
+      getGUIFile().set("kits." + kitName + ".type", 1);
     }
-    saveGUIFile(fileName);
+    saveGUIFile(GUIMenu);
   }
 
-  public static void deleteGUIEntry(String fileName, String arg) throws IOException {
-    setGUIFile(fileName);
+  public static void deleteGUIEntry(String GUIMenu, String KitName) throws IOException {
+    setGUIFile(GUIMenu);
 
-    getGUIFile(fileName).set("kits." + arg, null);
-    saveGUIFile(fileName);
+    getGUIFile().set("kits." + KitName, null);
+    saveGUIFile(GUIMenu);
   }
 }
