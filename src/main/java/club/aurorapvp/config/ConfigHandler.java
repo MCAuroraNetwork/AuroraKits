@@ -22,8 +22,8 @@ public class ConfigHandler {
 
   public static void generateConfigDefaults() throws IOException {
     Defaults.put("doFirstFallDamage", "false");
-    Defaults.put("giveKitOnJoin.enabled", "false");
-    Defaults.put("giveKitOnJoin.kit", "Default");
+    Defaults.put("kits.lastUsedKit.enabled", "false");
+    Defaults.put("kits.lastUsedKit.defaultKit", "Default");
 
     for (String path : Defaults.keySet()) {
       if (!getConfigFile().contains(path) || getConfigFile().getString(path) == null) {

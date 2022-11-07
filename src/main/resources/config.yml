@@ -1,4 +1,5 @@
 doFirstFallDamage: false
-giveKitOnJoin:
-  enabled: false
-  kit: Default
+kits:
+  giveLastUsedKit:
+    enabled: true
+    defaultKit: Default

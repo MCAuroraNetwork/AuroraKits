@@ -9,6 +9,7 @@ import static club.aurorapvp.datahandlers.KitDataHandler.getKitAmount;
 import static club.aurorapvp.datahandlers.KitDataHandler.getKitFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,15 +19,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class KitModule {
-  public static void giveKitOnJoin(PlayerJoinEvent event) {
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        if (getConfigFile().getBoolean("giveKitOnJoin.enabled")) {
-          getKit(event.getPlayer(), getConfigFile().getString("giveKitOnJoin.kit"));
-        }
-      }
-    }.runTaskLater(plugin, 5);
+  private static HashMap<String, String> lastUsedKit = new HashMap<>();
+  public static void giveLastUsedKit(Player p) {
+    if (!lastUsedKit.containsKey(p.getName())) {
+      getKit(p, getConfigFile().getString("kits.lastUsedKit.defaultKit"));
+    } else {
+      getKit(p, lastUsedKit.get(p.getName()));
+    }
   }
 
   public static void createKit(CommandSender sender, String kitName, String kitLocation) {
@@ -73,6 +72,7 @@ public class KitModule {
 
       p.getInventory().setContents(inventoryData);
       p.sendMessage(getLangComponent("kit-used"));
+      lastUsedKit.put(p.getName(), kitName);
     } else {
       p.sendMessage(getLangComponent("kit-not-found"));
     }

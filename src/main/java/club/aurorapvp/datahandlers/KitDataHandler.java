@@ -5,8 +5,6 @@ import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.GUIDataHandler.deleteGUIEntry;
 
-import club.aurorapvp.config.ConfigHandler;
-import club.aurorapvp.config.LangHandler;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -18,7 +16,8 @@ public class KitDataHandler {
 
   private static YamlConfiguration kitFile;
 
-  public static void createKitData(Player p, String kitName, String kitLocation) throws IOException {
+  public static void createKitData(Player p, String kitName, String kitLocation)
+      throws IOException {
     setupKitFile(kitLocation, kitName);
 
     for (int i = 0; i < p.getInventory().getContents().length; i++) {
