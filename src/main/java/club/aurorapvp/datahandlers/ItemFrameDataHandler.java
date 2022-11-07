@@ -22,6 +22,7 @@ public class ItemFrameDataHandler {
 
       file.createNewFile();
     }
+    reloadFrameData();
   }
 
   public static void saveFrameData() throws IOException {

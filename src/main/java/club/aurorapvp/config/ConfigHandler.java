@@ -9,14 +9,15 @@ import java.util.HashMap;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigHandler {
+  private static final File file = new File(DataFolder, "config.yml");
   private static final HashMap<String, String> Defaults = new HashMap<>();
-  private static YamlConfiguration config =
-      YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+  private static YamlConfiguration config;
 
   public static void setupConfigFile() throws IOException {
     if (!new File(DataFolder, "config.yml").exists()) {
       new File(DataFolder, "config.yml").createNewFile();
     }
+    reloadConfig();
   }
 
   public static void generateConfigDefaults() throws IOException {
