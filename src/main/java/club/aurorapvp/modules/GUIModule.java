@@ -3,7 +3,7 @@ package club.aurorapvp.modules;
 import static club.aurorapvp.AuroraKits.DataFolder;
 import static club.aurorapvp.AuroraKits.serializeComponent;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
-import static club.aurorapvp.modules.kitModule.getKit;
+import static club.aurorapvp.modules.KitModule.getKit;
 
 import java.io.File;
 import java.util.List;

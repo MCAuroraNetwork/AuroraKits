@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class kitModule {
+public class KitModule {
   public static void giveKitOnJoin(PlayerJoinEvent event) {
     Player p = event.getPlayer();
 

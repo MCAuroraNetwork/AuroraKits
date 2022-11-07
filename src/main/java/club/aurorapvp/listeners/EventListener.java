@@ -3,10 +3,10 @@ package club.aurorapvp.listeners;
 import static club.aurorapvp.config.ConfigHandler.getConfigFile;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 import static club.aurorapvp.modules.GUIModule.onGUIInventoryClicked;
-import static club.aurorapvp.modules.fallDamageModule.cancelFallDamage;
-import static club.aurorapvp.modules.fallDamageModule.falldamage;
-import static club.aurorapvp.modules.itemFramesModule.onFrameClicked;
-import static club.aurorapvp.modules.kitModule.giveKitOnJoin;
+import static club.aurorapvp.modules.FallDamageModule.cancelFallDamage;
+import static club.aurorapvp.modules.FallDamageModule.falldamage;
+import static club.aurorapvp.modules.ItemFramesModule.onFrameClicked;
+import static club.aurorapvp.modules.KitModule.giveKitOnJoin;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;

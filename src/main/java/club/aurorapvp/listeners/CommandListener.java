@@ -6,9 +6,9 @@ import static club.aurorapvp.datahandlers.ItemFrameDataHandler.deleteFrameData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 import static club.aurorapvp.datahandlers.KitDataHandler.deleteKitData;
 import static club.aurorapvp.modules.GUIModule.openGUI;
-import static club.aurorapvp.modules.itemFramesModule.createFrame;
-import static club.aurorapvp.modules.kitModule.createKit;
-import static club.aurorapvp.modules.kitModule.getKit;
+import static club.aurorapvp.modules.ItemFramesModule.createFrame;
+import static club.aurorapvp.modules.KitModule.createKit;
+import static club.aurorapvp.modules.KitModule.getKit;
 
 import java.util.Objects;
 import org.bukkit.Bukkit;

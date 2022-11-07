@@ -14,7 +14,7 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class itemFramesModule {
+public class ItemFramesModule {
 
   public static void onFrameClicked(PlayerInteractEntityEvent event) {
     if (getFrameData() == null) {

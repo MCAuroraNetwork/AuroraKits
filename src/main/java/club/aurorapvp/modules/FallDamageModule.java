@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class fallDamageModule {
+public class FallDamageModule {
   public static ArrayList<Entity> falldamage = new ArrayList<>();
 
   public static void cancelFallDamage(EntityDamageEvent event) {
