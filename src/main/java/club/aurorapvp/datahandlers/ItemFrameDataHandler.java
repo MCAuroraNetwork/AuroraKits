@@ -13,10 +13,10 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 
 public class ItemFrameDataHandler {
-  private static YamlConfiguration framesData = null;
+  private static YamlConfiguration framesData;
+  private static final File file = new File(DataFolder, "/frames/data.yml");
 
   public static void setupFrameData() throws IOException {
-    File file = new File(DataFolder, "/frames/data.yml");
     if (!file.exists()) {
       file.getParentFile().mkdirs();
 
@@ -24,13 +24,8 @@ public class ItemFrameDataHandler {
     }
   }
 
-  public static void setFrameData() {
-    framesData =
-        YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
-  }
-
   public static void saveFrameData() throws IOException {
-    getFrameData().save(new File(DataFolder, "/frames/data.yml"));
+    getFrameData().save(file);
   }
 
   public static void deleteFrameData(CommandSender sender, String arg) {
@@ -73,7 +68,7 @@ public class ItemFrameDataHandler {
   }
 
   public static void reloadFrameData() {
-    framesData = YamlConfiguration.loadConfiguration(new File(DataFolder, "/frames/data.yml"));
+    framesData = YamlConfiguration.loadConfiguration(file);
     plugin.getLogger().info("Frame data reloaded!");
   }
 }
