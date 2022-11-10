@@ -8,6 +8,7 @@ import static club.aurorapvp.modules.GUIModule.onGUIInventoryClicked;
 import static club.aurorapvp.modules.ItemFramesModule.onFrameClicked;
 import static club.aurorapvp.modules.KitModule.giveLastUsedKit;
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +20,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
@@ -45,7 +47,7 @@ public class EventListener extends YamlConfiguration implements Listener {
   }
 
   @EventHandler
-  public void onPlayerRespawn(PlayerRespawnEvent event) {
+  public void onPlayerRespawn(PlayerPostRespawnEvent event) {
     if (getConfigFile().getBoolean("kits.lastUsedKit.enabled")) {
       giveLastUsedKit(event.getPlayer());
     }

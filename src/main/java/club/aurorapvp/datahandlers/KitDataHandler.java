@@ -32,10 +32,10 @@ public class KitDataHandler {
   }
 
   public static void deleteKitData(CommandSender sender, String kitName, String kitLocation) {
-    if (getKitFile(kitName, kitName) != null) {
+    if (getKitFile(kitLocation, kitName) != null) {
       new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml").delete();
       try {
-        deleteGUIEntry(kitName, kitName);
+        deleteGUIEntry(kitLocation, kitName);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
