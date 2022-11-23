@@ -17,13 +17,6 @@ public class LangHandler {
 
   private static YamlConfiguration lang;
 
-  public static void setupLangFile() throws IOException {
-    if (!file.exists()) {
-      file.createNewFile();
-    }
-    reloadLang();
-  }
-
   public static void generateLangDefaults() throws IOException {
     for (Object path : getLangFile().getKeys(false).toArray()) {
       if (getLangFile().getString((String) path).startsWith("~") &&

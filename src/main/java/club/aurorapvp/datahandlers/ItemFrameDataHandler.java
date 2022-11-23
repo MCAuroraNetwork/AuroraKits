@@ -16,15 +16,6 @@ public class ItemFrameDataHandler {
   private static YamlConfiguration framesData;
   private static final File file = new File(DataFolder, "/frames/data.yml");
 
-  public static void setupFrameData() throws IOException {
-    if (!file.exists()) {
-      file.getParentFile().mkdirs();
-
-      file.createNewFile();
-    }
-    reloadFrameData();
-  }
-
   public static void saveFrameData() throws IOException {
     getFrameData().save(file);
   }

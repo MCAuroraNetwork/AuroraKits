@@ -1,11 +1,10 @@
 package club.aurorapvp;
 
 import static club.aurorapvp.config.ConfigHandler.generateConfigDefaults;
-import static club.aurorapvp.config.ConfigHandler.setupConfigFile;
 import static club.aurorapvp.config.ConfigHandler.setupDataFolder;
 import static club.aurorapvp.config.LangHandler.generateLangDefaults;
-import static club.aurorapvp.config.LangHandler.setupLangFile;
-import static club.aurorapvp.datahandlers.ItemFrameDataHandler.setupFrameData;
+import static club.aurorapvp.config.LangHandler.reloadLang;
+import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
@@ -39,9 +38,9 @@ public final class AuroraKits extends JavaPlugin {
     // Setup configs
     try {
       setupDataFolder();
-      setupLangFile();
-      setupFrameData();
-      setupConfigFile();
+      reloadLang();
+      reloadConfig();
+      reloadFrameData();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

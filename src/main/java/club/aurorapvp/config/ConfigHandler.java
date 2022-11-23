@@ -13,13 +13,6 @@ public class ConfigHandler {
   private static final File file = new File(DataFolder, "config.yml");
   private static YamlConfiguration config;
 
-  public static void setupConfigFile() throws IOException {
-    if (!file.exists()) {
-      file.createNewFile();
-    }
-    reloadConfig();
-  }
-
   public static void setupDataFolder() throws IOException {
     if (!DataFolder.exists()) {
       DataFolder.mkdirs();
