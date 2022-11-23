@@ -68,7 +68,12 @@ public class ItemFrameDataHandler {
     return framesData;
   }
 
-  public static void reloadFrameData() {
+  public static void reloadFrameData() throws IOException {
+    if (!file.exists()) {
+      file.getParentFile().mkdirs();
+
+      file.createNewFile();
+    }
     framesData = YamlConfiguration.loadConfiguration(file);
     plugin.getLogger().info("Frame data reloaded!");
   }

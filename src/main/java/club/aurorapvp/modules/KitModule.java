@@ -1,6 +1,5 @@
 package club.aurorapvp.modules;
 
-import static club.aurorapvp.AuroraKits.plugin;
 import static club.aurorapvp.config.ConfigHandler.getConfigFile;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.GUIDataHandler.createGUIEntry;
@@ -14,12 +13,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class KitModule {
   private static HashMap<String, String> lastUsedKit = new HashMap<>();
+
   public static void giveLastUsedKit(Player p) {
     if (!lastUsedKit.containsKey(p.getName())) {
       getKit(p, getConfigFile().getString("kits.lastUsedKit.defaultKit"));

@@ -10,6 +10,7 @@ import static club.aurorapvp.modules.ItemFramesModule.createFrame;
 import static club.aurorapvp.modules.KitModule.createKit;
 import static club.aurorapvp.modules.KitModule.getKit;
 
+import java.io.IOException;
 import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -27,48 +28,39 @@ public class CommandListener implements CommandExecutor {
     Player p = Bukkit.getPlayer(sender.getName());
 
     switch (command.getName()) {
-      case "aurorakits": {
+      case "aurorakits" -> {
         if (Objects.equals(args[0], "reload")) {
-          reloadFrameData();
-          reloadConfig();
-          reloadLang();
+          try {
+            reloadFrameData();
+            reloadConfig();
+            reloadLang();
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
         }
-        break;
       }
-      case "kit":
+      case "kit" -> {
         if (args.length != 0) {
           getKit(Bukkit.getPlayer(sender.getName()), args[0]);
         } else {
           openGUI(p);
         }
-        break;
-      case "kits":
-        openGUI(p);
-        break;
-      case "createkit":
+      }
+      case "kits" -> openGUI(p);
+      case "createkit" -> {
         if (args.length == 0) {
           createKit(sender, null, String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
         } else {
           createKit(sender, args[0],
               String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
         }
-        break;
-      case "deletekit":
-        deleteKitData(sender, args[0],
-            String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
-        break;
-      case "createpublickit":
-        createKit(sender, args[0], "public");
-        break;
-      case "deletepublickit":
-        deleteKitData(sender, args[0], "public");
-        break;
-      case "createframe":
-        createFrame(sender, args[0]);
-        break;
-      case "deleteframe":
-        deleteFrameData(sender, args[0]);
-        break;
+      }
+      case "deletekit" -> deleteKitData(sender, args[0],
+          String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
+      case "createpublickit" -> createKit(sender, args[0], "public");
+      case "deletepublickit" -> deleteKitData(sender, args[0], "public");
+      case "createframe" -> createFrame(sender, args[0]);
+      case "deleteframe" -> deleteFrameData(sender, args[0]);
     }
     return true;
   }

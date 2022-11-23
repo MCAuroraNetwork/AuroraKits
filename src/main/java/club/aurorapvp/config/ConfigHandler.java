@@ -9,15 +9,21 @@ import java.util.HashMap;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigHandler {
-  private static final File file = new File(DataFolder, "config.yml");
   private static final HashMap<String, String> Defaults = new HashMap<>();
+  private static final File file = new File(DataFolder, "config.yml");
   private static YamlConfiguration config;
 
   public static void setupConfigFile() throws IOException {
-    if (!new File(DataFolder, "config.yml").exists()) {
-      new File(DataFolder, "config.yml").createNewFile();
+    if (!file.exists()) {
+      file.createNewFile();
     }
     reloadConfig();
+  }
+
+  public static void setupDataFolder() throws IOException {
+    if (!DataFolder.exists()) {
+      DataFolder.mkdirs();
+    }
   }
 
   public static void generateConfigDefaults() throws IOException {
@@ -28,21 +34,26 @@ public class ConfigHandler {
     for (String path : Defaults.keySet()) {
       if (!getConfigFile().contains(path) || getConfigFile().getString(path) == null) {
         getConfigFile().set(path, Defaults.get(path));
-        getConfigFile().save(new File(DataFolder, "config.yml"));
+        getConfigFile().save(file);
       }
     }
   }
 
   public static void saveConfigFile() throws IOException {
-    getConfigFile().save(new File(DataFolder, "config.yml"));
+    getConfigFile().save(file);
   }
 
   public static YamlConfiguration getConfigFile() {
     return config;
   }
 
-  public static void reloadConfig() {
-    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+  public static void reloadConfig() throws IOException {
+    if (!file.exists()) {
+      file.getParentFile().mkdirs();
+
+      file.createNewFile();
+    }
+    config = YamlConfiguration.loadConfiguration(file);
     plugin.getLogger().info("Config reloaded!");
   }
 }

@@ -13,13 +13,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class LangHandler {
   private static final HashMap<String, String> placeholders = new HashMap<>();
   private static final HashMap<String, String> Defaults = new HashMap<>();
-  private static YamlConfiguration lang =
-      YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
+  private static final File file = new File(DataFolder, "lang.yml");
+
+  private static YamlConfiguration lang;
 
   public static void setupLangFile() throws IOException {
-    if (!new File(DataFolder, "lang.yml").exists()) {
-      new File(DataFolder, "lang.yml").createNewFile();
+    if (!file.exists()) {
+      file.createNewFile();
     }
+    reloadLang();
   }
 
   public static void generateLangDefaults() throws IOException {
@@ -48,7 +50,7 @@ public class LangHandler {
     for (String path : Defaults.keySet()) {
       if (!getLangFile().contains(path) || getLangFile().getString(path) == null) {
         getLangFile().set(path, Defaults.get(path));
-        getLangFile().save(new File(DataFolder, "lang.yml"));
+        getLangFile().save(file);
       }
     }
   }
@@ -68,15 +70,21 @@ public class LangHandler {
   }
 
   public static void saveLangFile() throws IOException {
-    getLangFile().save(new File(DataFolder, "lang.yml"));
+    getLangFile().save(file);
   }
 
   public static YamlConfiguration getLangFile() {
     return lang;
   }
 
-  public static void reloadLang() {
-    lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
+  public static void reloadLang() throws IOException {
+    if (!file.exists()) {
+      file.getParentFile().mkdirs();
+
+      file.createNewFile();
+    }
+
+    lang = YamlConfiguration.loadConfiguration(file);
     plugin.getLogger().info("Lang reloaded!");
   }
 }

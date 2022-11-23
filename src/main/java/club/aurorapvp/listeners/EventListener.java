@@ -9,6 +9,7 @@ import static club.aurorapvp.modules.ItemFramesModule.onFrameClicked;
 import static club.aurorapvp.modules.KitModule.giveLastUsedKit;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,9 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.world.WorldLoadEvent;
-import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 public class EventListener extends YamlConfiguration implements Listener {
   @EventHandler
@@ -61,6 +60,10 @@ public class EventListener extends YamlConfiguration implements Listener {
 
   @EventHandler
   public void onWorldLoad(WorldLoadEvent event) {
-    reloadFrameData();
+    try {
+      reloadFrameData();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
