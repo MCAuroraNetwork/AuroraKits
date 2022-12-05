@@ -20,12 +20,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class CommandListener implements CommandExecutor {
+  private Player p;
 
   @Override
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                            @NotNull String label, String[] args) {
 
-    Player p = Bukkit.getPlayer(sender.getName());
+    if (sender instanceof Player) {
+      p = (Player) sender;
+    }
 
     switch (command.getName()) {
       case "aurorakits" -> {

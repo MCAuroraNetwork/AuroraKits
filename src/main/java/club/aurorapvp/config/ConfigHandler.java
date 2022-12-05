@@ -13,12 +13,6 @@ public class ConfigHandler {
   private static final File file = new File(DataFolder, "config.yml");
   private static YamlConfiguration config;
 
-  public static void setupDataFolder() throws IOException {
-    if (!DataFolder.exists()) {
-      DataFolder.mkdirs();
-    }
-  }
-
   public static void generateConfigDefaults() throws IOException {
     Defaults.put("doFirstFallDamage", "false");
     Defaults.put("kits.lastUsedKit.enabled", "false");

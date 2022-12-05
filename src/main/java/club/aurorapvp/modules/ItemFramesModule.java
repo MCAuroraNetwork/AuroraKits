@@ -3,7 +3,7 @@ package club.aurorapvp.modules;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.createFrameData;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.getFrameData;
-import static club.aurorapvp.datahandlers.ItemFrameDataHandler.setupFrameData;
+import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 
 import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ItemFramesModule {
   public static void onFrameClicked(PlayerInteractEntityEvent event) {
     if (getFrameData() == null) {
       try {
-        setupFrameData();
+        reloadFrameData();
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -41,7 +41,7 @@ public class ItemFramesModule {
   public static void createFrame(CommandSender sender, String frameName) {
     if (getFrameData() == null) {
       try {
-        setupFrameData();
+        reloadFrameData();
       } catch (IOException e) {
         throw new RuntimeException(e);
       }

@@ -10,7 +10,6 @@ import static club.aurorapvp.modules.KitModule.giveLastUsedKit;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import java.io.IOException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,7 +20,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 
-public class EventListener extends YamlConfiguration implements Listener {
+public class EventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     checkFallDamage(event.getPlayer());

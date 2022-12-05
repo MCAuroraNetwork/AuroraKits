@@ -1,7 +1,6 @@
 package club.aurorapvp;
 
 import static club.aurorapvp.config.ConfigHandler.generateConfigDefaults;
-import static club.aurorapvp.config.ConfigHandler.setupDataFolder;
 import static club.aurorapvp.config.LangHandler.generateLangDefaults;
 import static club.aurorapvp.config.LangHandler.reloadLang;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
@@ -20,7 +19,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuroraKits extends JavaPlugin {
-
   public static Plugin plugin;
   public static File DataFolder;
   public static PlainTextComponentSerializer serializeComponent;
@@ -37,7 +35,6 @@ public final class AuroraKits extends JavaPlugin {
 
     // Setup configs
     try {
-      setupDataFolder();
       reloadLang();
       reloadConfig();
       reloadFrameData();
