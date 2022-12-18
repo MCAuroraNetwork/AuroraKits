@@ -1,6 +1,6 @@
 package club.aurorapvp.listeners;
 
-import static club.aurorapvp.config.ConfigHandler.getConfigFile;
+import static club.aurorapvp.config.ConfigHandler.getConfig;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 import static club.aurorapvp.modules.FallDamageModule.cancelFallDamage;
 import static club.aurorapvp.modules.FallDamageModule.checkFallDamage;
@@ -24,7 +24,7 @@ public class EventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     checkFallDamage(event.getPlayer());
-    if (getConfigFile().getBoolean("kits.lastUsedKit.enabled")) {
+    if (getConfig().getBoolean("kits.lastUsedKit.enabled")) {
       giveLastUsedKit(event.getPlayer());
     }
   }
@@ -46,7 +46,7 @@ public class EventListener implements Listener {
 
   @EventHandler
   public void onPlayerRespawn(PlayerPostRespawnEvent event) {
-    if (getConfigFile().getBoolean("kits.lastUsedKit.enabled")) {
+    if (getConfig().getBoolean("kits.lastUsedKit.enabled")) {
       giveLastUsedKit(event.getPlayer());
     }
     checkFallDamage(event.getPlayer());

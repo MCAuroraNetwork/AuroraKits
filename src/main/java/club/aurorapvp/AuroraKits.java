@@ -5,6 +5,7 @@ import static club.aurorapvp.config.LangHandler.generateLangDefaults;
 import static club.aurorapvp.config.LangHandler.reloadLang;
 import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
 
+import club.aurorapvp.config.ConfigHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
 import java.io.File;
@@ -36,7 +37,7 @@ public final class AuroraKits extends JavaPlugin {
     // Setup configs
     try {
       reloadLang();
-      reloadConfig();
+      ConfigHandler.reloadConfig();
       reloadFrameData();
     } catch (IOException e) {
       throw new RuntimeException(e);

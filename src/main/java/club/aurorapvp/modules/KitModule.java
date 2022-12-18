@@ -1,6 +1,6 @@
 package club.aurorapvp.modules;
 
-import static club.aurorapvp.config.ConfigHandler.getConfigFile;
+import static club.aurorapvp.config.ConfigHandler.getConfig;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.datahandlers.GUIDataHandler.createGUIEntry;
 import static club.aurorapvp.datahandlers.KitDataHandler.createKitData;
@@ -20,7 +20,7 @@ public class KitModule {
 
   public static void giveLastUsedKit(Player p) {
     if (!lastUsedKit.containsKey(p.getName())) {
-      getKit(p, getConfigFile().getString("kits.lastUsedKit.defaultKit"));
+      getKit(p, getConfig().getString("kits.lastUsedKit.defaultKit"));
     } else {
       getKit(p, lastUsedKit.get(p.getName()));
     }

@@ -19,18 +19,18 @@ public class ConfigHandler {
     Defaults.put("kits.lastUsedKit.defaultKit", "Default");
 
     for (String path : Defaults.keySet()) {
-      if (!getConfigFile().contains(path) || getConfigFile().getString(path) == null) {
-        getConfigFile().set(path, Defaults.get(path));
-        getConfigFile().save(file);
+      if (!getConfig().contains(path) || getConfig().getString(path) == null) {
+        getConfig().set(path, Defaults.get(path));
+        getConfig().save(file);
       }
     }
   }
 
   public static void saveConfigFile() throws IOException {
-    getConfigFile().save(file);
+    getConfig().save(file);
   }
 
-  public static YamlConfiguration getConfigFile() {
+  public static YamlConfiguration getConfig() {
     return config;
   }
 
