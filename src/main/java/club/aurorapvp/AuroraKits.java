@@ -1,69 +1,66 @@
 package club.aurorapvp;
 
-import static club.aurorapvp.config.ConfigHandler.generateConfigDefaults;
-import static club.aurorapvp.config.LangHandler.generateLangDefaults;
-import static club.aurorapvp.config.LangHandler.reloadLang;
-import static club.aurorapvp.datahandlers.ItemFrameDataHandler.reloadFrameData;
-
 import club.aurorapvp.config.ConfigHandler;
+import club.aurorapvp.config.LangHandler;
+import club.aurorapvp.datahandlers.ItemFrameDataHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 public final class AuroraKits extends JavaPlugin {
-  public static Plugin plugin;
-  public static File DataFolder;
-  public static PlainTextComponentSerializer serializeComponent;
-  public static MiniMessage deserializeComponent;
+    public static Plugin PLUGIN;
+    public static File DATA_FOLDER;
+    public static PlainTextComponentSerializer SERIALIZE_COMPONENT;
+    public static MiniMessage DESERIALIZE_COMPONENT;
 
-  @Override
-  public void onEnable() {
+    @Override
+    public void onEnable() {
 
-    // Register important variables
-    plugin = Bukkit.getPluginManager().getPlugin("AuroraKits");
-    DataFolder = Bukkit.getServer().getPluginManager().getPlugin("AuroraKits").getDataFolder();
-    serializeComponent = PlainTextComponentSerializer.plainText();
-    deserializeComponent = MiniMessage.miniMessage();
+        // Register important variables
+        PLUGIN = this;
+        DATA_FOLDER = this.getDataFolder();
+        SERIALIZE_COMPONENT = PlainTextComponentSerializer.plainText();
+        DESERIALIZE_COMPONENT = MiniMessage.miniMessage();
 
-    // Setup configs
-    try {
-      reloadLang();
-      ConfigHandler.reloadConfig();
-      reloadFrameData();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+        // Setup configs
+        try {
+            LangHandler.reload();
+            ConfigHandler.reload();
+            ItemFrameDataHandler.reload();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Generate default values
+        try {
+            LangHandler.generateDefaults();
+            ConfigHandler.generateDefaults();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Register Listeners
+        getServer().getPluginManager().registerEvents(new EventListener(), this);
+        List<Command> commandList = PluginCommandYamlParser.parse(PLUGIN);
+        for (Command command : commandList) {
+            getCommand(command.getName()).setExecutor(new CommandListener());
+        }
+
+        getLogger().info("Aurora Kits Loaded");
     }
 
-    // Generate default values
-    try {
-      generateLangDefaults();
-      generateConfigDefaults();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    @Override
+    public void onDisable() {
+        getLogger().info("Aurora Kits Unloaded");
     }
-
-    // Register Listeners
-    getServer().getPluginManager().registerEvents(new EventListener(), this);
-    List<Command> commandList = PluginCommandYamlParser.parse(plugin);
-    for (Command command : commandList) {
-      getCommand(command.getName()).setExecutor(new CommandListener());
-    }
-
-    getLogger().info("Aurora Kits Loaded");
-  }
-
-  @Override
-  public void onDisable() {
-    getLogger().info("Aurora Kits Unloaded");
-  }
 }
 

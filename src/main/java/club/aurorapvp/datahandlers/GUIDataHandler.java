@@ -1,54 +1,53 @@
 package club.aurorapvp.datahandlers;
 
-import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.serializeComponent;
+import club.aurorapvp.AuroraKits;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 public class GUIDataHandler {
-  public static YamlConfiguration GUIFile;
+    public static YamlConfiguration GUIFile;
 
-  public static YamlConfiguration getGUIFile() {
-    return GUIFile;
-  }
-
-  public static void setGUIFile(String GUIMenu) throws IOException {
-    File file = new File(DataFolder, "/GUIs/" + GUIMenu + ".yml");
-
-    if (!file.exists()) {
-      file.getParentFile().mkdirs();
-
-      file.createNewFile();
+    public static YamlConfiguration getFile() {
+        return GUIFile;
     }
-    GUIFile = YamlConfiguration.loadConfiguration(file);
-  }
 
-  public static void saveGUIFile(String GUIMenu) throws IOException {
-    GUIFile.save(new File(DataFolder, "/GUIs/" + GUIMenu + ".yml"));
-  }
+    public static void setFile(String GUIMenu) throws IOException {
+        File file = new File(AuroraKits.DATA_FOLDER, "/GUIs/" + GUIMenu + ".yml");
 
-  public static void createGUIEntry(Player p, String GUIMenu, String kitName) throws IOException {
-    setGUIFile(GUIMenu);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
 
-    getGUIFile().set("kits." + kitName + ".displayItem", p.getInventory().getItemInMainHand());
-    getGUIFile().set("kits." + kitName + ".creator",
-        serializeComponent.serialize(p.displayName()));
-    if (Objects.equals(GUIMenu, "public")) {
-      getGUIFile().set("kits." + kitName + ".type", 0);
-    } else {
-      getGUIFile().set("kits." + kitName + ".type", 1);
+            file.createNewFile();
+        }
+        GUIFile = YamlConfiguration.loadConfiguration(file);
     }
-    saveGUIFile(GUIMenu);
-  }
 
-  public static void deleteGUIEntry(String GUIMenu, String KitName) throws IOException {
-    setGUIFile(GUIMenu);
+    public static void saveFile(String GUIMenu) throws IOException {
+        GUIFile.save(new File(AuroraKits.DATA_FOLDER, "/GUIs/" + GUIMenu + ".yml"));
+    }
 
-    getGUIFile().set("kits." + KitName, null);
-    saveGUIFile(GUIMenu);
-  }
+    public static void createEntry(Player p, String GUIMenu, String kitName) throws IOException {
+        setFile(GUIMenu);
+
+        getFile().set("kits." + kitName + ".displayItem", p.getInventory().getItemInMainHand());
+        getFile().set("kits." + kitName + ".creator",
+                AuroraKits.SERIALIZE_COMPONENT.serialize(p.displayName()));
+        if (Objects.equals(GUIMenu, "public")) {
+            getFile().set("kits." + kitName + ".type", 0);
+        } else {
+            getFile().set("kits." + kitName + ".type", 1);
+        }
+        saveFile(GUIMenu);
+    }
+
+    public static void deleteEntry(String GUIMenu, String KitName) throws IOException {
+        setFile(GUIMenu);
+
+        getFile().set("kits." + KitName, null);
+        saveFile(GUIMenu);
+    }
 }

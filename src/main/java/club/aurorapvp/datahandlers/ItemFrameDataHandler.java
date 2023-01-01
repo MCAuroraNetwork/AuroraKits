@@ -1,71 +1,70 @@
 package club.aurorapvp.datahandlers;
 
-import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.plugin;
-import static club.aurorapvp.config.LangHandler.getLangComponent;
-
-import java.io.File;
-import java.io.IOException;
+import club.aurorapvp.AuroraKits;
+import club.aurorapvp.config.LangHandler;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ItemFrameDataHandler {
-  private static YamlConfiguration framesData;
-  private static final File file = new File(DataFolder, "/frames/data.yml");
+    private static final File FILE = new File(AuroraKits.DATA_FOLDER, "/frames/data.yml");
+    private static YamlConfiguration framesData;
 
-  public static void saveFrameData() throws IOException {
-    getFrameData().save(file);
-  }
-
-  public static void deleteFrameData(CommandSender sender, String arg) {
-    if (arg != null) {
-
-      getFrameData().set("frames." + arg, null);
-      try {
-        saveFrameData();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-
-      sender.sendMessage(getLangComponent("frame-deleted"));
-    } else {
-      sender.sendMessage(getLangComponent("frame-invalid"));
+    public static void save() throws IOException {
+        get().save(FILE);
     }
-  }
 
-  public static void createFrameData(Player p, String frameName, ItemFrame frame) {
-    getFrameData().set("frames." + frameName + ".item", p.getInventory().getItemInMainHand());
-    getFrameData().set("frames." + frameName + ".location", frame.getLocation());
-    try {
-      saveFrameData();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    public static void delete(CommandSender sender, String arg) {
+        if (arg != null) {
+
+            get().set("frames." + arg, null);
+            try {
+                save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            sender.sendMessage(LangHandler.getComponent("frame-deleted"));
+        } else {
+            sender.sendMessage(LangHandler.getComponent("frame-invalid"));
+        }
     }
-  }
 
-  public static String getFrame(Location clickLoc) {
-    for (Object path : getFrameData().getConfigurationSection("frames").getKeys(false).toArray()) {
-      if (getFrameData().getLocation("frames." + path + ".location").equals(clickLoc)) {
-        return (String) path;
-      }
+    public static void create(Player p, String frameName, ItemFrame frame) {
+        get().set("frames." + frameName + ".item", p.getInventory().getItemInMainHand());
+        get().set("frames." + frameName + ".location", frame.getLocation());
+        try {
+            save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    return null;
-  }
 
-  public static YamlConfiguration getFrameData() {
-    return framesData;
-  }
-
-  public static void reloadFrameData() throws IOException {
-    if (!file.exists()) {
-      file.getParentFile().mkdirs();
-
-      file.createNewFile();
+    public static String getFrame(Location clickLoc) {
+        for (Object path : get().getConfigurationSection("frames").getKeys(false).toArray()) {
+            if (get().getLocation("frames." + path + ".location").equals(clickLoc)) {
+                return (String) path;
+            }
+        }
+        return null;
     }
-    framesData = YamlConfiguration.loadConfiguration(file);
-    plugin.getLogger().info("Frame data reloaded!");
-  }
+
+    public static YamlConfiguration get() {
+        return framesData;
+    }
+
+    public static void reload() throws IOException {
+        if (!FILE.exists()) {
+            FILE.getParentFile().mkdirs();
+
+            FILE.createNewFile();
+        }
+        framesData = YamlConfiguration.loadConfiguration(FILE);
+        AuroraKits.PLUGIN.getLogger().info("Frame data reloaded!");
+    }
 }

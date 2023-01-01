@@ -1,46 +1,41 @@
 package club.aurorapvp.config;
 
-import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.plugin;
+import club.aurorapvp.AuroraKits;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigHandler {
-  private static final HashMap<String, String> Defaults = new HashMap<>();
-  private static final File file = new File(DataFolder, "config.yml");
-  private static YamlConfiguration config;
+    private static final HashMap<String, String> DEFAULTS = new HashMap<>();
+    private static final File FILE = new File(AuroraKits.DATA_FOLDER, "config.yml");
+    private static YamlConfiguration config;
 
-  public static void generateConfigDefaults() throws IOException {
-    Defaults.put("doFirstFallDamage", "false");
-    Defaults.put("kits.lastUsedKit.enabled", "false");
-    Defaults.put("kits.lastUsedKit.defaultKit", "Default");
+    public static void generateDefaults() throws IOException {
+        DEFAULTS.put("doFirstFallDamage", "false");
+        DEFAULTS.put("kits.lastUsedKit.enabled", "false");
+        DEFAULTS.put("kits.lastUsedKit.defaultKit", "Default");
 
-    for (String path : Defaults.keySet()) {
-      if (!getConfig().contains(path) || getConfig().getString(path) == null) {
-        getConfig().set(path, Defaults.get(path));
-        getConfig().save(file);
-      }
+        for (String path : DEFAULTS.keySet()) {
+            if (!get().contains(path) || get().getString(path) == null) {
+                get().set(path, DEFAULTS.get(path));
+                get().save(FILE);
+            }
+        }
     }
-  }
 
-  public static void saveConfigFile() throws IOException {
-    getConfig().save(file);
-  }
-
-  public static YamlConfiguration getConfig() {
-    return config;
-  }
-
-  public static void reloadConfig() throws IOException {
-    if (!file.exists()) {
-      file.getParentFile().mkdirs();
-
-      file.createNewFile();
+    public static YamlConfiguration get() {
+        return config;
     }
-    config = YamlConfiguration.loadConfiguration(file);
-    plugin.getLogger().info("Config reloaded!");
-  }
+
+    public static void reload() throws IOException {
+        if (!FILE.exists()) {
+            FILE.getParentFile().mkdirs();
+
+            FILE.createNewFile();
+        }
+        config = YamlConfiguration.loadConfiguration(FILE);
+        AuroraKits.PLUGIN.getLogger().info("Config reloaded!");
+    }
 }
