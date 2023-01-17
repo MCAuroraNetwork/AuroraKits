@@ -1,7 +1,7 @@
 package club.aurorapvp.modules;
 
-import club.aurorapvp.config.LangHandler;
-import club.aurorapvp.datahandlers.ItemFrameDataHandler;
+import club.aurorapvp.config.Lang;
+import club.aurorapvp.datahandlers.ItemFrameData;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -12,12 +12,12 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.io.IOException;
 
-public class ItemFramesModule {
+public class ItemFrames {
 
     public static void onClicked(PlayerInteractEntityEvent event) {
-        if (ItemFrameDataHandler.get() == null) {
+        if (ItemFrameData.get() == null) {
             try {
-                ItemFrameDataHandler.reload();
+                ItemFrameData.reload();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -26,19 +26,19 @@ public class ItemFramesModule {
         final Entity clicked = event.getRightClicked();
         if (clicked instanceof ItemFrame) {
 
-            if (ItemFrameDataHandler.getFrame(clicked.getLocation()) != null) {
+            if (ItemFrameData.getFrame(clicked.getLocation()) != null) {
                 event.getPlayer().getInventory().addItem(
-                        ItemFrameDataHandler.get().getItemStack(
-                                "frames." + ItemFrameDataHandler.getFrame(clicked.getLocation()) + ".item"));
+                        ItemFrameData.get().getItemStack(
+                                "frames." + ItemFrameData.getFrame(clicked.getLocation()) + ".item"));
                 event.setCancelled(true);
             }
         }
     }
 
     public static void create(CommandSender sender, String frameName) {
-        if (ItemFrameDataHandler.get() == null) {
+        if (ItemFrameData.get() == null) {
             try {
-                ItemFrameDataHandler.reload();
+                ItemFrameData.reload();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -53,11 +53,11 @@ public class ItemFramesModule {
 
             frame.setItem(p.getInventory().getItemInMainHand());
 
-            ItemFrameDataHandler.create(p, frameName, frame);
+            ItemFrameData.create(p, frameName, frame);
 
-            sender.sendMessage(LangHandler.getComponent("frame-created"));
+            sender.sendMessage(Lang.getComponent("frame-created"));
         } else {
-            sender.sendMessage(LangHandler.getComponent("frame-invalid"));
+            sender.sendMessage(Lang.getComponent("frame-invalid"));
         }
     }
 

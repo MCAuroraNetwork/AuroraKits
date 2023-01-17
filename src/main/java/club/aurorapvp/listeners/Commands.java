@@ -1,12 +1,12 @@
 package club.aurorapvp.listeners;
 
-import club.aurorapvp.config.ConfigHandler;
-import club.aurorapvp.config.LangHandler;
-import club.aurorapvp.datahandlers.ItemFrameDataHandler;
-import club.aurorapvp.datahandlers.KitDataHandler;
-import club.aurorapvp.modules.GUIModule;
-import club.aurorapvp.modules.ItemFramesModule;
-import club.aurorapvp.modules.KitModule;
+import club.aurorapvp.config.Config;
+import club.aurorapvp.config.Lang;
+import club.aurorapvp.datahandlers.ItemFrameData;
+import club.aurorapvp.datahandlers.KitData;
+import club.aurorapvp.modules.GUI;
+import club.aurorapvp.modules.ItemFrames;
+import club.aurorapvp.modules.Kits;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Objects;
 
-public class CommandListener implements CommandExecutor {
+public class Commands implements CommandExecutor {
     private Player p;
 
     @Override
@@ -32,9 +32,9 @@ public class CommandListener implements CommandExecutor {
             case "aurorakits" -> {
                 if (Objects.equals(args[0], "reload")) {
                     try {
-                        ItemFrameDataHandler.reload();
-                        ConfigHandler.reload();
-                        LangHandler.reload();
+                        ItemFrameData.reload();
+                        Config.reload();
+                        Lang.reload();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -42,26 +42,26 @@ public class CommandListener implements CommandExecutor {
             }
             case "kit" -> {
                 if (args.length != 0) {
-                    KitModule.getKit(Bukkit.getPlayer(sender.getName()), args[0]);
+                    Kits.getKit(Bukkit.getPlayer(sender.getName()), args[0]);
                 } else {
-                    GUIModule.open(p);
+                    GUI.open(p);
                 }
             }
-            case "kits" -> GUIModule.open(p);
+            case "kits" -> GUI.open(p);
             case "createkit" -> {
                 if (args.length == 0) {
-                    KitModule.create(sender, null, String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
+                    Kits.create(sender, null, String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
                 } else {
-                    KitModule.create(sender, args[0],
+                    Kits.create(sender, args[0],
                             String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
                 }
             }
-            case "deletekit" -> KitDataHandler.delete(sender, args[0],
+            case "deletekit" -> KitData.delete(sender, args[0],
                     String.valueOf(Bukkit.getPlayer(sender.getName()).getUniqueId()));
-            case "createpublickit" -> KitModule.create(sender, args[0], "public");
-            case "deletepublickit" -> KitDataHandler.delete(sender, args[0], "public");
-            case "createframe" -> ItemFramesModule.create(sender, args[0]);
-            case "deleteframe" -> ItemFrameDataHandler.delete(sender, args[0]);
+            case "createpublickit" -> Kits.create(sender, args[0], "public");
+            case "deletepublickit" -> KitData.delete(sender, args[0], "public");
+            case "createframe" -> ItemFrames.create(sender, args[0]);
+            case "deleteframe" -> ItemFrameData.delete(sender, args[0]);
         }
         return true;
     }

@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class GUIDataHandler {
+public class GUIData {
     public static YamlConfiguration GUIFile;
 
     public static YamlConfiguration getFile() {

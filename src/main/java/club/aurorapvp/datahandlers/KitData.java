@@ -1,7 +1,7 @@
 package club.aurorapvp.datahandlers;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.LangHandler;
+import club.aurorapvp.config.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-public class KitDataHandler {
+public class KitData {
 
     private static YamlConfiguration kitFile;
 
@@ -33,13 +33,13 @@ public class KitDataHandler {
         if (get(kitLocation, kitName) != null) {
             new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml").delete();
             try {
-                GUIDataHandler.deleteEntry(kitLocation, kitName);
+                GUIData.deleteEntry(kitLocation, kitName);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            sender.sendMessage(LangHandler.getComponent("kit-deleted"));
+            sender.sendMessage(Lang.getComponent("kit-deleted"));
         } else {
-            sender.sendMessage(LangHandler.getComponent("kit-invalid-name"));
+            sender.sendMessage(Lang.getComponent("kit-invalid-name"));
         }
     }
 

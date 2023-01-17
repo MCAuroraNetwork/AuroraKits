@@ -1,7 +1,7 @@
 package club.aurorapvp.datahandlers;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.LangHandler;
+import club.aurorapvp.config.Lang;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 
-public class ItemFrameDataHandler {
+public class ItemFrameData {
     private static final File FILE = new File(AuroraKits.DATA_FOLDER, "/frames/data.yml");
     private static YamlConfiguration framesData;
 
@@ -29,9 +29,9 @@ public class ItemFrameDataHandler {
                 throw new RuntimeException(e);
             }
 
-            sender.sendMessage(LangHandler.getComponent("frame-deleted"));
+            sender.sendMessage(Lang.getComponent("frame-deleted"));
         } else {
-            sender.sendMessage(LangHandler.getComponent("frame-invalid"));
+            sender.sendMessage(Lang.getComponent("frame-invalid"));
         }
     }
 

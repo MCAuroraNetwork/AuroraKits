@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class LangHandler {
+public class Lang {
     private static final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
     private static final HashMap<String, String> DEFAULTS = new HashMap<>();
     private static final File FILE = new File(AuroraKits.DATA_FOLDER, "lang.yml");

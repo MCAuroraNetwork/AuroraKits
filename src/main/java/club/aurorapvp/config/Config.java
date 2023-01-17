@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class ConfigHandler {
+public class Config {
     private static final HashMap<String, String> DEFAULTS = new HashMap<>();
     private static final File FILE = new File(AuroraKits.DATA_FOLDER, "config.yml");
     private static YamlConfiguration config;

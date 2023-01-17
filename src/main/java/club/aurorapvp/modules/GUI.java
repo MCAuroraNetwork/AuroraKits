@@ -1,7 +1,7 @@
 package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.LangHandler;
+import club.aurorapvp.config.Lang;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.List;
 
-public class GUIModule {
+public class GUI {
     private static Inventory inv;
 
     public static void onInventoryClicked(InventoryClickEvent event) {
@@ -32,9 +32,9 @@ public class GUIModule {
             final Player p = (Player) event.getWhoClicked();
 
             if (event.getCurrentItem().getItemMeta().displayName() == null) {
-                p.sendMessage(LangHandler.getComponent("kit-invalid-name"));
+                p.sendMessage(Lang.getComponent("kit-invalid-name"));
             } else {
-                KitModule.getKit(p, AuroraKits.SERIALIZE_COMPONENT.serialize(event.getCurrentItem().getItemMeta().displayName()));
+                Kits.getKit(p, AuroraKits.SERIALIZE_COMPONENT.serialize(event.getCurrentItem().getItemMeta().displayName()));
             }
         }
     }
@@ -45,7 +45,7 @@ public class GUIModule {
     }
 
     public static void initialize(Player p) {
-        inv = Bukkit.createInventory(null, 54, LangHandler.getComponent("GUIName"));
+        inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
         YamlConfiguration GUIFile = YamlConfiguration.loadConfiguration(
                 new File(AuroraKits.DATA_FOLDER, "/GUIs/public.yml"));
 

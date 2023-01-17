@@ -1,10 +1,10 @@
 package club.aurorapvp;
 
-import club.aurorapvp.config.ConfigHandler;
-import club.aurorapvp.config.LangHandler;
-import club.aurorapvp.datahandlers.ItemFrameDataHandler;
-import club.aurorapvp.listeners.CommandListener;
-import club.aurorapvp.listeners.EventListener;
+import club.aurorapvp.config.Config;
+import club.aurorapvp.config.Lang;
+import club.aurorapvp.datahandlers.ItemFrameData;
+import club.aurorapvp.listeners.Commands;
+import club.aurorapvp.listeners.Events;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
@@ -33,26 +33,26 @@ public final class AuroraKits extends JavaPlugin {
 
         // Setup configs
         try {
-            LangHandler.reload();
-            ConfigHandler.reload();
-            ItemFrameDataHandler.reload();
+            Lang.reload();
+            Config.reload();
+            ItemFrameData.reload();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         // Generate default values
         try {
-            LangHandler.generateDefaults();
-            ConfigHandler.generateDefaults();
+            Lang.generateDefaults();
+            Config.generateDefaults();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         // Register Listeners
-        getServer().getPluginManager().registerEvents(new EventListener(), this);
+        getServer().getPluginManager().registerEvents(new Events(), this);
         List<Command> commandList = PluginCommandYamlParser.parse(PLUGIN);
         for (Command command : commandList) {
-            getCommand(command.getName()).setExecutor(new CommandListener());
+            getCommand(command.getName()).setExecutor(new Commands());
         }
 
         getLogger().info("Aurora Kits Loaded");
