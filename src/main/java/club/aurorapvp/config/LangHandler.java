@@ -1,83 +1,77 @@
 package club.aurorapvp.config;
 
-import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.deserializeComponent;
-import static club.aurorapvp.AuroraKits.plugin;
+import club.aurorapvp.AuroraKits;
+import net.kyori.adventure.text.Component;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class LangHandler {
-  private static final HashMap<String, String> placeholders = new HashMap<>();
-  private static final HashMap<String, String> Defaults = new HashMap<>();
-  private static final File file = new File(DataFolder, "lang.yml");
+    private static final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
+    private static final HashMap<String, String> DEFAULTS = new HashMap<>();
+    private static final File FILE = new File(AuroraKits.DATA_FOLDER, "lang.yml");
 
-  private static YamlConfiguration lang;
+    private static YamlConfiguration lang;
 
-  public static void generateLangDefaults() throws IOException {
-    for (Object path : getLangFile().getKeys(false).toArray()) {
-      if (getLangFile().getString((String) path).startsWith("~") &&
-          getLangFile().getString((String) path).endsWith("~")) {
-        placeholders.put((String) path, getLangFile().getString((String) path).replace("~", ""));
-      }
-    }
-
-    Defaults.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraKits ><reset>~");
-    Defaults.put("frame-created",
-        "prefix <gradient:#FFAA00:#FF55FF>Frame successfully created");
-    Defaults.put("frame-deleted", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully deleted");
-    Defaults.put("frame-invalid", "prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!");
-    Defaults.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
-    Defaults.put("kit-created",
-        "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully created! Use /kits to access it!");
-    Defaults.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully used!");
-    Defaults.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully deleted");
-    Defaults.put("kit-too-many", "prefix <gradient:#FFAA00:#FF55FF>You have too many kits!");
-    Defaults.put("kit-invalid-name", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit name!");
-    Defaults.put("kit-invalid-item", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit display item!");
-    Defaults.put("kit-not-found", "prefix <gradient:#FFAA00:#FF55FF>Kit not found!");
-
-    for (String path : Defaults.keySet()) {
-      if (!getLangFile().contains(path) || getLangFile().getString(path) == null) {
-        getLangFile().set(path, Defaults.get(path));
-        getLangFile().save(file);
-      }
-    }
-  }
-
-  public static Component getLangComponent(String path) {
-    if (getLangFile().contains(path)) {
-      String pathString = getLangFile().getString(path);
-      for (String placeholder : placeholders.keySet()) {
-        if (pathString.contains(placeholder)) {
-          pathString = pathString.replace(placeholder,
-              placeholders.get(placeholder));
+    public static void generateDefaults() throws IOException {
+        for (Object path : get().getKeys(false).toArray()) {
+            if (get().getString((String) path).startsWith("~") &&
+                    get().getString((String) path).endsWith("~")) {
+                PLACEHOLDERS.put((String) path, get().getString((String) path).replace("~", ""));
+            }
         }
-      }
-      return deserializeComponent.deserialize(pathString);
+
+        DEFAULTS.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraKits ><reset>~");
+        DEFAULTS.put("frame-created",
+                "prefix <gradient:#FFAA00:#FF55FF>Frame successfully created");
+        DEFAULTS.put("frame-deleted", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully deleted");
+        DEFAULTS.put("frame-invalid", "prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!");
+        DEFAULTS.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
+        DEFAULTS.put("kit-created",
+                "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully created! Use /kits to access it!");
+        DEFAULTS.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully used!");
+        DEFAULTS.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully deleted");
+        DEFAULTS.put("kit-too-many", "prefix <gradient:#FFAA00:#FF55FF>You have too many kits!");
+        DEFAULTS.put("kit-invalid-name", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit name!");
+        DEFAULTS.put("kit-invalid-item", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit display item!");
+        DEFAULTS.put("kit-not-found", "prefix <gradient:#FFAA00:#FF55FF>Kit not found!");
+
+        for (String path : DEFAULTS.keySet()) {
+            if (!get().contains(path) || get().getString(path) == null) {
+                get().set(path, DEFAULTS.get(path));
+                get().save(FILE);
+            }
+        }
     }
-    return null;
-  }
 
-  public static void saveLangFile() throws IOException {
-    getLangFile().save(file);
-  }
-
-  public static YamlConfiguration getLangFile() {
-    return lang;
-  }
-
-  public static void reloadLang() throws IOException {
-    if (!file.exists()) {
-      file.getParentFile().mkdirs();
-
-      file.createNewFile();
+    public static Component getComponent(String path) {
+        if (get().contains(path)) {
+            String pathString = get().getString(path);
+            for (String placeholder : PLACEHOLDERS.keySet()) {
+                if (pathString.contains(placeholder)) {
+                    pathString = pathString.replace(placeholder,
+                            PLACEHOLDERS.get(placeholder));
+                }
+            }
+            return AuroraKits.DESERIALIZE_COMPONENT.deserialize(pathString);
+        }
+        return null;
     }
 
-    lang = YamlConfiguration.loadConfiguration(file);
-    plugin.getLogger().info("Lang reloaded!");
-  }
+    public static YamlConfiguration get() {
+        return lang;
+    }
+
+    public static void reload() throws IOException {
+        if (!FILE.exists()) {
+            FILE.getParentFile().mkdirs();
+
+            FILE.createNewFile();
+        }
+
+        lang = YamlConfiguration.loadConfiguration(FILE);
+        AuroraKits.PLUGIN.getLogger().info("Lang reloaded!");
+    }
 }

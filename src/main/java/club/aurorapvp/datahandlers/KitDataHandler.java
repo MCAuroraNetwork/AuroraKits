@@ -1,92 +1,90 @@
 package club.aurorapvp.datahandlers;
 
-import static club.aurorapvp.AuroraKits.DataFolder;
-import static club.aurorapvp.AuroraKits.plugin;
-import static club.aurorapvp.config.LangHandler.getLangComponent;
-import static club.aurorapvp.datahandlers.GUIDataHandler.deleteGUIEntry;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
+import club.aurorapvp.AuroraKits;
+import club.aurorapvp.config.LangHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
 public class KitDataHandler {
 
-  private static YamlConfiguration kitFile;
+    private static YamlConfiguration kitFile;
 
-  public static void createKitData(Player p, String kitName, String kitLocation)
-      throws IOException {
-    setupKitFile(kitLocation, kitName);
+    public static void create(Player p, String kitName, String kitLocation)
+            throws IOException {
+        setup(kitLocation, kitName);
 
-    for (int i = 0; i < p.getInventory().getContents().length; i++) {
-      try {
-        kitFile.set("items." + i, p.getInventory().getContents()[i]);
-      } catch (Exception e) {
-        plugin.getLogger().severe("Unable to save kit");
-        e.printStackTrace();
-      }
+        for (int i = 0; i < p.getInventory().getContents().length; i++) {
+            try {
+                kitFile.set("items." + i, p.getInventory().getContents()[i]);
+            } catch (Exception e) {
+                AuroraKits.PLUGIN.getLogger().severe("Unable to save kit");
+                e.printStackTrace();
+            }
+        }
+        save(kitLocation, kitName);
     }
-    saveKitFile(kitLocation, kitName);
-  }
 
-  public static void deleteKitData(CommandSender sender, String kitName, String kitLocation) {
-    if (getKitFile(kitLocation, kitName) != null) {
-      new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml").delete();
-      try {
-        deleteGUIEntry(kitLocation, kitName);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-      sender.sendMessage(getLangComponent("kit-deleted"));
-    } else {
-      sender.sendMessage(getLangComponent("kit-invalid-name"));
+    public static void delete(CommandSender sender, String kitName, String kitLocation) {
+        if (get(kitLocation, kitName) != null) {
+            new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml").delete();
+            try {
+                GUIDataHandler.deleteEntry(kitLocation, kitName);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            sender.sendMessage(LangHandler.getComponent("kit-deleted"));
+        } else {
+            sender.sendMessage(LangHandler.getComponent("kit-invalid-name"));
+        }
     }
-  }
 
-  public static void setupKitFile(String kitLocation, String kitName) throws IOException {
-    File file = new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml");
-    if (!file.exists()) {
-      file.getParentFile().mkdirs();
+    public static void setup(String kitLocation, String kitName) throws IOException {
+        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml");
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
 
-      file.createNewFile();
-    }
-    kitFile = YamlConfiguration.loadConfiguration(file);
-  }
-
-  public static YamlConfiguration getKitFile(String kitLocation, String kitName) {
-    File file = new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml");
-    if (file.exists()) {
-      kitFile = YamlConfiguration.loadConfiguration(file);
-      return kitFile;
-    } else {
-      file = new File(DataFolder, "/kits/public/" + kitName + ".yml");
-      if (file.exists()) {
+            file.createNewFile();
+        }
         kitFile = YamlConfiguration.loadConfiguration(file);
-        return kitFile;
-      }
     }
-    return null;
-  }
 
-  public static void saveKitFile(String kitLocation, String kitName) throws IOException {
-    File file = new File(DataFolder, "/kits/" + kitLocation + "/" + kitName + ".yml");
-    if (!file.exists()) {
-      file.getParentFile().mkdirs();
-
-      file.createNewFile();
+    public static YamlConfiguration get(String kitLocation, String kitName) {
+        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml");
+        if (file.exists()) {
+            kitFile = YamlConfiguration.loadConfiguration(file);
+            return kitFile;
+        } else {
+            file = new File(AuroraKits.DATA_FOLDER, "/kits/public/" + kitName + ".yml");
+            if (file.exists()) {
+                kitFile = YamlConfiguration.loadConfiguration(file);
+                return kitFile;
+            }
+        }
+        return null;
     }
-    kitFile.save(file);
-  }
 
-  public static int getKitAmount(UUID playerUUID) {
-    File file = new File(DataFolder, "/kits/" + playerUUID + "/");
+    public static void save(String kitLocation, String kitName) throws IOException {
+        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml");
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
 
-    if (file.listFiles() == null) {
-      return new File(DataFolder, "/kits/public/").listFiles().length;
-    } else {
-      return file.listFiles().length + new File(DataFolder, "/kits/public/").listFiles().length;
+            file.createNewFile();
+        }
+        kitFile.save(file);
     }
-  }
+
+    public static int getAmount(UUID playerUUID) {
+        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + playerUUID + "/");
+
+        if (file.listFiles() == null) {
+            return new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
+        } else {
+            return file.listFiles().length + new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
+        }
+    }
 }
