@@ -22,15 +22,9 @@ import java.io.IOException;
 public class Events implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        FallDamage.checkFallDamage(event.getPlayer());
         if (Config.get().getBoolean("kits.lastUsedKit.enabled")) {
             Kits.giveLastUsedKit(event.getPlayer());
         }
-    }
-
-    @EventHandler
-    public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
-        FallDamage.checkFallDamage(event.getPlayer());
     }
 
     @EventHandler
@@ -48,12 +42,6 @@ public class Events implements Listener {
         if (Config.get().getBoolean("kits.lastUsedKit.enabled")) {
             Kits.giveLastUsedKit(event.getPlayer());
         }
-        FallDamage.checkFallDamage(event.getPlayer());
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerFall(EntityDamageEvent event) {
-        FallDamage.cancelFallDamage(event);
     }
 
     @EventHandler
