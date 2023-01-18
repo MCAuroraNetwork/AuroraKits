@@ -1,7 +1,7 @@
 package club.aurorapvp.modules;
 
 import club.aurorapvp.config.Lang;
-import club.aurorapvp.datahandlers.ItemFrameData;
+import club.aurorapvp.datahandlers.FrameData;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -12,12 +12,12 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.io.IOException;
 
-public class ItemFrames {
+public class Frame {
 
     public static void onClicked(PlayerInteractEntityEvent event) {
-        if (ItemFrameData.get() == null) {
+        if (FrameData.get() == null) {
             try {
-                ItemFrameData.reload();
+                FrameData.reload();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -26,19 +26,19 @@ public class ItemFrames {
         final Entity clicked = event.getRightClicked();
         if (clicked instanceof ItemFrame) {
 
-            if (ItemFrameData.getFrame(clicked.getLocation()) != null) {
+            if (FrameData.getFrame(clicked.getLocation()) != null) {
                 event.getPlayer().getInventory().addItem(
-                        ItemFrameData.get().getItemStack(
-                                "frames." + ItemFrameData.getFrame(clicked.getLocation()) + ".item"));
+                        FrameData.get().getItemStack(
+                                "frames." + FrameData.getFrame(clicked.getLocation()) + ".item"));
                 event.setCancelled(true);
             }
         }
     }
 
     public static void create(CommandSender sender, String frameName) {
-        if (ItemFrameData.get() == null) {
+        if (FrameData.get() == null) {
             try {
-                ItemFrameData.reload();
+                FrameData.reload();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -53,7 +53,7 @@ public class ItemFrames {
 
             frame.setItem(p.getInventory().getItemInMainHand());
 
-            ItemFrameData.create(p, frameName, frame);
+            FrameData.create(p, frameName, frame);
 
             sender.sendMessage(Lang.getComponent("frame-created"));
         } else {

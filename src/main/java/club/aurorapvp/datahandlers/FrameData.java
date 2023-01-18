@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 
-public class ItemFrameData {
+public class FrameData {
     private static final File FILE = new File(AuroraKits.DATA_FOLDER, "/frames/data.yml");
     private static YamlConfiguration framesData;
 
