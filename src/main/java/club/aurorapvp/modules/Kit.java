@@ -83,7 +83,7 @@ public class Kit {
 
   public void delete(Player p) {
     kitData.getFile().delete();
-    GUI.getGui(kitData.getOwner()).addEntry(this);
+    GUI.getGui(kitData.getOwner()).deleteEntry(this);
 
     if (p != null) {
       p.sendMessage(Lang.getComponent("kit-deleted"));
