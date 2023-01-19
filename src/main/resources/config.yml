@@ -1,4 +1,3 @@
-doFirstFallDamage: false
 kits:
   giveLastUsedKit:
     enabled: true

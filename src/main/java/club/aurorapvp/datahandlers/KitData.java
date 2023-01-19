@@ -1,90 +1,87 @@
 package club.aurorapvp.datahandlers;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.Lang;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-
+import club.aurorapvp.modules.Kit;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class KitData {
+  private final YamlConfiguration DATA_FILE;
+  private final File FILE;
+  private final Kit kit;
 
-    private static YamlConfiguration kitFile;
+  public KitData(Kit kit) {
+    this.kit = kit;
+    this.FILE =
+        new File(AuroraKits.DATA_FOLDER, "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
+    DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
 
-    public static void create(Player p, String kitName, String kitLocation)
-            throws IOException {
-        setup(kitLocation, kitName);
+    this.create();
+  }
 
-        for (int i = 0; i < p.getInventory().getContents().length; i++) {
-            try {
-                kitFile.set("items." + i, p.getInventory().getContents()[i]);
-            } catch (Exception e) {
-                AuroraKits.PLUGIN.getLogger().severe("Unable to save kit");
-                e.printStackTrace();
-            }
-        }
-        save(kitLocation, kitName);
+  public Player getOwner() {
+    return Bukkit.getPlayer(UUID.fromString(DATA_FILE.getString("owner")));
+  }
+
+  public File getFile() {
+    return FILE;
+  }
+
+  public YamlConfiguration getYaml() {
+    return DATA_FILE;
+  }
+
+  public Integer getType() {
+    return DATA_FILE.getInt("type");
+  }
+
+  public ItemStack[] getInventoryData() {
+    ConfigurationSection section = this.getYaml().getConfigurationSection("items");
+    ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
+    int i = 0;
+
+    for (String path : section.getKeys(false)) {
+      itemStacks[i] = this.getYaml().getItemStack("items." + path);
+      i++;
     }
+    return itemStacks;
+  }
 
-    public static void delete(CommandSender sender, String kitName, String kitLocation) {
-        if (get(kitLocation, kitName) != null) {
-            new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml").delete();
-            try {
-                GUIData.deleteEntry(kitLocation, kitName);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            sender.sendMessage(Lang.getComponent("kit-deleted"));
-        } else {
-            sender.sendMessage(Lang.getComponent("kit-invalid-name"));
-        }
+  public void create() {
+    if (!kit.exists()) {
+      DATA_FILE.set("type", kit.getType());
+      DATA_FILE.set("owner.", kit.getOwner().getUniqueId());
+      DATA_FILE.set("items.", kit.getInventoryData());
+      save();
     }
+  }
 
-    public static void setup(String kitLocation, String kitName) throws IOException {
-        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml");
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
+  public static int getAmount(Player p) {
+    File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + p.getUniqueId() + "/");
 
-            file.createNewFile();
-        }
-        kitFile = YamlConfiguration.loadConfiguration(file);
+    if (file.listFiles() == null) {
+      return new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
+    } else {
+      return file.listFiles().length +
+          new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
     }
+  }
 
-    public static YamlConfiguration get(String kitLocation, String kitName) {
-        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml");
-        if (file.exists()) {
-            kitFile = YamlConfiguration.loadConfiguration(file);
-            return kitFile;
-        } else {
-            file = new File(AuroraKits.DATA_FOLDER, "/kits/public/" + kitName + ".yml");
-            if (file.exists()) {
-                kitFile = YamlConfiguration.loadConfiguration(file);
-                return kitFile;
-            }
-        }
-        return null;
+  public void save() {
+    try {
+      if (!FILE.exists()) {
+        FILE.getParentFile().mkdirs();
+        FILE.createNewFile();
+      }
+      DATA_FILE.save(FILE);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-
-    public static void save(String kitLocation, String kitName) throws IOException {
-        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + kitLocation + "/" + kitName + ".yml");
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-
-            file.createNewFile();
-        }
-        kitFile.save(file);
-    }
-
-    public static int getAmount(UUID playerUUID) {
-        File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + playerUUID + "/");
-
-        if (file.listFiles() == null) {
-            return new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
-        } else {
-            return file.listFiles().length + new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
-        }
-    }
+  }
 }

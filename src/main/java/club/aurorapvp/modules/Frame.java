@@ -1,83 +1,143 @@
 package club.aurorapvp.modules;
 
+import club.aurorapvp.AuroraKits;
 import club.aurorapvp.config.Lang;
 import club.aurorapvp.datahandlers.FrameData;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-
-import java.io.IOException;
+import org.bukkit.inventory.ItemStack;
 
 public class Frame {
+  private static final List<Frame> frames = new ArrayList<>();
+  private Location location;
+  private final String frameName;
+  private FrameData frameData;
+  private ItemStack item;
 
-    public static void onClicked(PlayerInteractEntityEvent event) {
-        if (FrameData.get() == null) {
-            try {
-                FrameData.reload();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+  public Frame(String frameName) {
+    this.frameName = frameName;
+    new FrameData(this);
 
-        final Entity clicked = event.getRightClicked();
-        if (clicked instanceof ItemFrame) {
+    frames.add(this);
 
-            if (FrameData.getFrame(clicked.getLocation()) != null) {
-                event.getPlayer().getInventory().addItem(
-                        FrameData.get().getItemStack(
-                                "frames." + FrameData.getFrame(clicked.getLocation()) + ".item"));
-                event.setCancelled(true);
-            }
-        }
+    if (this.exists()) {
+      this.reload();
+    }
+  }
+
+  public boolean exists() {
+    return this.getData().getConfigSection() != null;
+  }
+
+  public FrameData getData() {
+    return frameData;
+  }
+
+  public ItemStack getItem() {
+    return item;
+  }
+
+  public String getName() {
+    return frameName;
+  }
+
+  public Location getLocation() {
+    return location;
+  }
+
+  public void create(Player p) {
+    if (frameName != null && p != null) {
+      Block block = p.getTargetBlock(4);
+      ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
+      frame.teleport(block.getRelative(getBlockFace(p)).getLocation());
+      frame.setFacingDirection(getBlockFace(p), true);
+
+      frame.setItem(p.getInventory().getItemInMainHand());
+      item = p.getInventory().getItemInMainHand();
+      location = frame.getLocation();
+
+      this.frameData = new FrameData(this);
+
+      p.sendMessage(Lang.getComponent("frame-created"));
+    } else if (p != null) {
+      p.sendMessage(Lang.getComponent("frame-invalid"));
+    }
+  }
+
+  public void delete(Player p) {
+    this.getData().delete();
+    if (p != null) {
+      p.sendMessage(Lang.getComponent("frame-deleted"));
+    }
+  }
+
+  public void reload() {
+    location = this.getData().getLocation();
+    item = this.getData().getItem();
+  }
+
+  public static void reloadAll() {
+    for (Frame frame : frames) {
+      frame.reload();
+    }
+  }
+
+  public static void setup() {
+    File file = new File(AuroraKits.DATA_FOLDER, "/frames.yml");
+    YamlConfiguration framesData = YamlConfiguration.loadConfiguration(file);
+    ConfigurationSection section = framesData.getConfigurationSection("frames");
+
+    for (String name : section.getKeys(false)) {
+      new Frame(name);
+    }
+  }
+
+  public static Frame getItemFrame(Location loc) {
+    for (Frame frame : frames) {
+      if (frame.getLocation() == loc) {
+        return frame;
+      }
+    }
+    return null;
+  }
+
+  public static Frame getItemFrame(String frameName) {
+    for (Frame frame : frames) {
+      if (Objects.equals(frame.getName(), frameName)) {
+        return frame;
+      }
+    }
+    return null;
+  }
+
+  public static void onClicked(PlayerInteractEntityEvent event) {
+    final Entity clicked = event.getRightClicked();
+    if (clicked instanceof ItemFrame) {
+      event.getPlayer().getInventory().addItem(Frame.getItemFrame(clicked.getLocation()).getItem());
+    }
+  }
+
+  public static BlockFace getBlockFace(Player player) {
+    List<Block> lastTwoTargetBlocks = player.getLastTwoTargetBlocks(null, 100);
+
+    if (lastTwoTargetBlocks.size() != 2 || !lastTwoTargetBlocks.get(1).getType().isOccluding()) {
+      return null;
     }
 
-    public static void create(CommandSender sender, String frameName) {
-        if (FrameData.get() == null) {
-            try {
-                FrameData.reload();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    Block targetBlock = lastTwoTargetBlocks.get(1);
+    Block adjacentBlock = lastTwoTargetBlocks.get(0);
 
-        if (frameName != null && sender instanceof Player p) {
-
-            Block b = p.getTargetBlock(4);
-            ItemFrame frame = p.getWorld().spawn(b.getLocation(), ItemFrame.class);
-            frame.teleport(b.getRelative(getFacingDirection(p)).getLocation());
-            frame.setFacingDirection(getFacingDirection(p), true);
-
-            frame.setItem(p.getInventory().getItemInMainHand());
-
-            FrameData.create(p, frameName, frame);
-
-            sender.sendMessage(Lang.getComponent("frame-created"));
-        } else {
-            sender.sendMessage(Lang.getComponent("frame-invalid"));
-        }
-    }
-
-    public static BlockFace getFacingDirection(Player p) {
-        double rotation = (p.getLocation().getYaw()) % 360;
-        if (rotation < 0) {
-            rotation += 360.0;
-        }
-        if (0 <= rotation && rotation < 56.25) {
-            return BlockFace.NORTH;
-        } else if (56.25 <= rotation && rotation < 135) {
-            return BlockFace.EAST;
-        } else if (135 <= rotation && rotation < 230.625) {
-            return BlockFace.SOUTH;
-        } else if (230.625 <= rotation && rotation < 303.75) {
-            return BlockFace.WEST;
-        } else if (303.75 <= rotation && rotation < 360.0) {
-            return BlockFace.NORTH;
-        } else {
-            return null;
-        }
-    }
+    return targetBlock.getFace(adjacentBlock);
+  }
 }

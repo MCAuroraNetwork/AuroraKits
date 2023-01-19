@@ -2,9 +2,10 @@ package club.aurorapvp;
 
 import club.aurorapvp.config.Config;
 import club.aurorapvp.config.Lang;
-import club.aurorapvp.datahandlers.ItemFrameData;
+import club.aurorapvp.datahandlers.FrameData;
 import club.aurorapvp.listeners.Commands;
 import club.aurorapvp.listeners.Events;
+import club.aurorapvp.modules.Frame;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
@@ -24,18 +25,17 @@ public final class AuroraKits extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         // Register important variables
         PLUGIN = this;
         DATA_FOLDER = this.getDataFolder();
         SERIALIZE_COMPONENT = PlainTextComponentSerializer.plainText();
         DESERIALIZE_COMPONENT = MiniMessage.miniMessage();
 
-        // Setup configs
+        // Setup classes
         try {
             Lang.reload();
             Config.reload();
-            ItemFrameData.reload();
+            Frame.setup();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

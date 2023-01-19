@@ -2,88 +2,103 @@ package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraKits;
 import club.aurorapvp.config.Lang;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
+import club.aurorapvp.datahandlers.GUIData;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.io.File;
-import java.util.List;
 
 public class GUI {
-    private static Inventory inv;
+  private static final List<GUI> GUIs = new ArrayList<>();
+  private final Player p;
+  private final GUIData guiData;
+  private Inventory inv;
 
-    public static void onInventoryClicked(InventoryClickEvent event) {
-        if (event.getInventory().equals(inv)) {
-            event.setCancelled(true);
+  public GUI(Player p) {
+    this.p = p;
+    this.guiData = new GUIData(this);
 
-            final ItemStack clickedItem = event.getCurrentItem();
+    GUIs.add(this);
 
-            if (clickedItem == null || clickedItem.getType().isAir()) {
-                return;
-            }
-
-            final Player p = (Player) event.getWhoClicked();
-
-            if (event.getCurrentItem().getItemMeta().displayName() == null) {
-                p.sendMessage(Lang.getComponent("kit-invalid-name"));
-            } else {
-                Kits.getKit(p, AuroraKits.SERIALIZE_COMPONENT.serialize(event.getCurrentItem().getItemMeta().displayName()));
-            }
-        }
+    if (this.exists()) {
+      this.reload();
     }
+  }
 
-    public static void open(Player p) {
-        initialize(p);
-        p.openInventory(inv);
+  public Player getPlayer() {
+    return p;
+  }
+
+  public GUIData getData() {
+    return guiData;
+  }
+
+  public static GUI getGui(Player p) {
+    for (GUI gui : GUIs) {
+      if (p == gui.getPlayer()) {
+        return gui;
+      }
     }
+    return null;
+  }
 
-    public static void initialize(Player p) {
-        inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
-        YamlConfiguration GUIFile = YamlConfiguration.loadConfiguration(
-                new File(AuroraKits.DATA_FOLDER, "/GUIs/public.yml"));
+  public Inventory asInventory() {
+    return inv;
+  }
 
-        for (int i = 0; i < 2; i++) {
-            if (GUIFile.getConfigurationSection("kits") != null) {
-                for (Object path : GUIFile.getConfigurationSection("kits").getKeys(false).toArray()) {
-                    inv.addItem(createItem(GUIFile.getItemStack("kits." + path + ".displayItem").getType(),
-                            (String) path, GUIFile.getString("kits." + path + ".creator"),
-                            GUIFile.getInt("kits." + path + ".type")));
-                }
-            }
-            GUIFile = YamlConfiguration.loadConfiguration(
-                    new File(AuroraKits.DATA_FOLDER, "/GUIs/" + p.getUniqueId() + ".yml"));
-        }
+  public boolean exists() {
+    return this.getData().getFile() != null;
+  }
+
+  public void addEntry(Kit kit) {
+    this.getData().addEntry(kit);
+    inv = this.getData().getInventory();
+  }
+
+  public void reload() {
+    inv = this.getData().getInventory();
+  }
+
+  public void deleteEntry(Kit kit) {
+    this.getData().deleteEntry(kit);
+  }
+
+  public static void inventoryClicked(InventoryClickEvent event) {
+    Player p = (Player) event.getWhoClicked();
+
+    if (event.getInventory().equals(GUI.getGui(p).asInventory())) {
+      event.setCancelled(true);
+
+      final ItemStack clickedItem = event.getCurrentItem();
+
+      if (clickedItem == null || clickedItem.getType().isAir()) {
+        return;
+      }
+
+      if (event.getCurrentItem().getItemMeta().displayName() == null) {
+        p.sendMessage(Lang.getComponent("kit-invalid-name"));
+      } else {
+        Kit.getKit(p, AuroraKits.SERIALIZE_COMPONENT.serialize(
+            event.getCurrentItem().getItemMeta().displayName())).giveKit(p);
+      }
     }
+  }
 
-    protected static ItemStack createItem(final Material material, final String name,
-                                          String creator, int type) {
-        final ItemStack item = new ItemStack(material, 1);
-        final ItemMeta meta = item.getItemMeta();
-
-        meta.displayName(
-                MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + name)
-                        .decoration(TextDecoration.ITALIC, false)
-                        .decoration(TextDecoration.BOLD, true));
-
-        switch (type) {
-            case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
-                    .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-                    .deserialize("This is a Public Kit")));
-            case 1 -> meta.lore(List.of(MiniMessage.miniMessage()
-                    .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-                    .deserialize("This is a Private Kit")));
-            default -> meta.lore();
-        }
-
-        item.setItemMeta(meta);
-
-        return item;
+  public static void onPlayerJoin(Player p) {
+    if (!GUI.getGui(p).exists()) {
+      new GUI(p);
     }
+  }
+
+  public static void onPlayerQuit(Player p) {
+    if (!GUI.getGui(p).exists()) {
+      new GUI(p);
+    }
+  }
+
+  public static void open(Player p) {
+    p.openInventory(getGui(p).asInventory());
+  }
 }

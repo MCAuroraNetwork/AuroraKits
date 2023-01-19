@@ -13,7 +13,6 @@ public class Config {
     private static YamlConfiguration config;
 
     public static void generateDefaults() throws IOException {
-        DEFAULTS.put("doFirstFallDamage", "false");
         DEFAULTS.put("kits.lastUsedKit.enabled", "false");
         DEFAULTS.put("kits.lastUsedKit.defaultKit", "Default");
 
