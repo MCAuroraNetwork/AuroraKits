@@ -44,6 +44,10 @@ public class GUI {
     return null;
   }
 
+  public static List<GUI> getGUIs() {
+    return GUIs;
+  }
+
   public Inventory asInventory() {
     return inv;
   }
@@ -59,6 +63,10 @@ public class GUI {
 
   public void reload() {
     inv = this.getData().getInventory();
+  }
+
+  public void addItem(Kit kit) {
+    this.getData().addItem(kit);
   }
 
   public void deleteEntry(Kit kit) {

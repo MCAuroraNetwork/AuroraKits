@@ -18,8 +18,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class GUIData {
-  private final YamlConfiguration PUBLIC_ENTRIES =
-      YamlConfiguration.loadConfiguration(new File(AuroraKits.DATA_FOLDER, "/GUIs/public.yml"));
+  private static final File PUBLIC_FILE = new File(AuroraKits.DATA_FOLDER, "/GUIs/public.yml");
+  private static final YamlConfiguration PUBLIC_ENTRIES =
+      YamlConfiguration.loadConfiguration(PUBLIC_FILE);
   private final Inventory inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
   private final YamlConfiguration GUI_ENTRIES;
   private final File FILE;
@@ -41,18 +42,28 @@ public class GUIData {
     return GUI_ENTRIES;
   }
 
-  public YamlConfiguration getPublicEntries() {
+  public static YamlConfiguration getPublicEntries() {
     return PUBLIC_ENTRIES;
   }
 
   public void create() {
-    for (int i = 0; i < 2; i++) {
-      for (Object path : getEntries().getConfigurationSection("kits").getKeys(false).toArray()) {
-        inv.addItem(createItem(getEntries().getItemStack("kits." + path + ".displayItem").getType(),
-            (String) path, getEntries().getString("kits." + path + ".creator"),
-            getEntries().getInt("kits." + path + ".type")));
-      }
+    for (Object path : getEntries().getConfigurationSection("kits").getKeys(false).toArray()) {
+      inv.addItem(createItem(getEntries().getItemStack("kits." + path + ".displayItem").getType(),
+          (String) path, getEntries().getString("kits." + path + ".creator"),
+          getEntries().getInt("kits." + path + ".type")));
     }
+
+    for (Object path : getPublicEntries().getConfigurationSection("kits").getKeys(false)
+        .toArray()) {
+      inv.addItem(
+          createItem(getPublicEntries().getItemStack("kits." + path + ".displayItem").getType(),
+              (String) path, getPublicEntries().getString("kits." + path + ".creator"),
+              getPublicEntries().getInt("kits." + path + ".type")));
+    }
+  }
+
+  public Inventory getInventory() {
+    return inv;
   }
 
   public void deleteEntry(Kit kit) {
@@ -60,12 +71,8 @@ public class GUIData {
     save();
   }
 
-  public Inventory getInventory() {
-    return inv;
-  }
-
-  protected ItemStack createItem(final Material material, final String name,
-                                 String creator, int type) {
+  protected static ItemStack createItem(final Material material, final String name,
+                                        String creator, int type) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
@@ -76,16 +83,42 @@ public class GUIData {
     switch (type) {
       case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
           .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Public Kit")));
+          .deserialize("This is a Private Kit")));
       case 1 -> meta.lore(List.of(MiniMessage.miniMessage()
           .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Private Kit")));
+          .deserialize("This is a Public Kit")));
       default -> meta.lore();
     }
 
     item.setItemMeta(meta);
 
     return item;
+  }
+
+  public static void addPublicEntry(Kit kit) {
+    String kitName = kit.getName();
+    Player p = kit.getOwner();
+    int kitType = kit.getType();
+
+    for (GUI gui : GUI.getGUIs()) {
+      gui.addItem(kit);
+    }
+
+    getPublicEntries().set("kits." + kitName + ".displayItem",
+        p.getInventory().getItemInMainHand());
+    getPublicEntries().set("kits." + kitName + ".creator",
+        AuroraKits.SERIALIZE_COMPONENT.serialize(p.displayName()));
+    getPublicEntries().get("kits." + kitName + ".type", kitType);
+    savePublic();
+  }
+
+  public void addItem(Kit kit) {
+    String kitName = kit.getName();
+    Player p = kit.getOwner();
+    int kitType = kit.getType();
+
+    inv.addItem(
+        createItem(p.getInventory().getItemInMainHand().getType(), kitName, p.getName(), kitType));
   }
 
   public void addEntry(Kit kit) {
@@ -106,6 +139,14 @@ public class GUIData {
   public void save() {
     try {
       getEntries().save(FILE);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void savePublic() {
+    try {
+      getPublicEntries().save(PUBLIC_FILE);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
