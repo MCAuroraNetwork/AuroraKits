@@ -19,11 +19,12 @@ public class Kit {
   private String kitName;
   private Player owner;
   private Integer kitType;
-  private String kitPath;
   private ItemStack[] inventoryData;
   private ItemStack displayItem;
+  private final String kitPath;
 
-  public Kit(String kitName) {
+  public Kit(String kitName, String kitPath) {
+    this.kitPath = kitPath;
     this.kitName = kitName;
     this.kitData = new KitData(this);
 
@@ -36,6 +37,10 @@ public class Kit {
 
   public ItemStack getDisplayItem() {
     return displayItem;
+  }
+
+  public String getPath() {
+    return kitPath;
   }
 
   public ItemStack[] getInventoryData() {
@@ -62,8 +67,7 @@ public class Kit {
     return this.getData().getFile().exists();
   }
 
-  public void create(Player p, int kitType) {
-    this.kitType = kitType;
+  public void create(Player p, Integer kitType) {
     this.owner = p;
     this.displayItem = p.getInventory().getItemInMainHand();
 
@@ -74,24 +78,18 @@ public class Kit {
 
       inventoryData = p.getInventory().getContents();
       kitData = new KitData(this);
-      if (kitType == 2) {
-        kitPath = "hidden";
-      } else if (kitType == 0) {
-        kitPath = String.valueOf(p.getUniqueId());
+      if (kitType == 0) {
         GUI.getGui(p).addKit(this);
-      } else {
+      } else if (kitType == 1) {
         for (GUI gui : GUI.getGuis()) {
           gui.addKit(this);
         }
       }
+
       p.sendMessage(Lang.getComponent("kit-created"));
     } else {
       p.sendMessage(Lang.getComponent("kit-invalid-item"));
     }
-  }
-
-  public String getPath() {
-    return kitPath;
   }
 
   public void delete(Player p) {
@@ -168,7 +166,7 @@ public class Kit {
     if (dir.exists()) {
       for (File file : dir.listFiles()) {
         String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName);
+        new Kit(kitName, p.getUniqueId().toString());
       }
     }
     new GUI(p).create();
@@ -180,7 +178,7 @@ public class Kit {
     if (dir.exists()) {
       for (File file : dir.listFiles()) {
         String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName);
+        new Kit(kitName, "public");
       }
     }
   }

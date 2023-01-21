@@ -22,7 +22,6 @@ public class KitData {
   private final YamlConfiguration DATA_FILE;
   private final File FILE;
   private final Inventory inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
-
   private final Kit kit;
 
   public KitData(Kit kit) {
