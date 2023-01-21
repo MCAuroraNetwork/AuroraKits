@@ -97,11 +97,14 @@ public class Kit {
       if (kitName == null) {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
+
       int i =0;
+      itemStacks = new ItemStack[p.getInventory().getContents().length];
       for (ItemStack item : p.getInventory().getContents()) {
         itemStacks[i] = item;
         i++;
       }
+
       kitData.create();
       if (kitType == 0) {
         GUI.getGui(p).addKit(this);
