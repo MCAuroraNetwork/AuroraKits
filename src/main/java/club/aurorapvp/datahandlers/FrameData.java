@@ -16,10 +16,6 @@ public class FrameData {
 
   public FrameData(Frame frame) {
     this.frame = frame;
-
-    if (getConfigSection() != null) {
-      this.create();
-    }
   }
 
   public ConfigurationSection getConfigSection() {
@@ -52,11 +48,9 @@ public class FrameData {
   }
 
   public void create() {
-    if (!frame.exists()) {
-      get().set("frames." + frame.getName() + ".item", frame.getItem());
-      get().set("frames." + frame.getName() + ".location", frame.getLocation());
-      save();
-    }
+    get().set("frames." + frame.getName() + ".item", frame.getItem());
+    get().set("frames." + frame.getName() + ".location", frame.getLocation());
+    save();
   }
 
   public static YamlConfiguration get() {

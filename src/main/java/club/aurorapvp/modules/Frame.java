@@ -22,7 +22,7 @@ public class Frame {
   private static final List<Frame> frames = new ArrayList<>();
   private Location location;
   private final String frameName;
-  private FrameData frameData;
+  private final FrameData frameData;
   private ItemStack item;
 
   public Frame(String frameName) {
@@ -67,7 +67,7 @@ public class Frame {
       item = p.getInventory().getItemInMainHand();
       location = frame.getLocation();
 
-      this.frameData = new FrameData(this);
+      this.frameData.create();
 
       p.sendMessage(Lang.getComponent("frame-created"));
     } else if (p != null) {
@@ -109,7 +109,7 @@ public class Frame {
 
   public static Frame getItemFrame(Location loc) {
     for (Frame frame : frames) {
-      if (frame.getLocation() == loc) {
+      if (frame.getLocation().equals(loc)) {
         return frame;
       }
     }
@@ -128,7 +128,11 @@ public class Frame {
   public static void onClicked(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
     if (clicked instanceof ItemFrame) {
-      event.getPlayer().getInventory().addItem(Frame.getItemFrame(clicked.getLocation()).getItem());
+      Frame frame = Frame.getItemFrame(clicked.getLocation());
+      if (frame != null) {
+        event.getPlayer().getInventory().addItem(frame.getItem());
+        event.setCancelled(true);
+      }
     }
   }
 
