@@ -16,7 +16,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitData {
   private final YamlConfiguration DATA_FILE;
@@ -29,10 +28,6 @@ public class KitData {
     this.FILE =
         new File(AuroraKits.DATA_FOLDER, "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
-
-    if (!FILE.exists()) {
-      this.create();
-    }
   }
 
   public Player getOwner() {

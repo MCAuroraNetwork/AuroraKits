@@ -77,7 +77,7 @@ public class Kit {
       }
 
       inventoryData = p.getInventory().getContents();
-      kitData = new KitData(this);
+      kitData.create();
       if (kitType == 0) {
         GUI.getGui(p).addKit(this);
       } else if (kitType == 1) {
