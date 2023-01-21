@@ -17,7 +17,7 @@ public class FrameData {
   public FrameData(Frame frame) {
     this.frame = frame;
 
-    if (!frame.exists()) {
+    if (getConfigSection() != null) {
       this.create();
     }
   }
