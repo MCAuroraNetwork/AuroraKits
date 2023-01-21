@@ -30,7 +30,9 @@ public class KitData {
         new File(AuroraKits.DATA_FOLDER, "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
 
-    this.create();
+    if (!kit.exists()) {
+      this.create();
+    }
   }
 
   public Player getOwner() {

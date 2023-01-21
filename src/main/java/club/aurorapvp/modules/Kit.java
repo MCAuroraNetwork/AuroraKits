@@ -116,9 +116,10 @@ public class Kit {
 
   public void reload() {
     this.owner = this.getData().getOwner();
-    this.inventoryData = kitData.getInventoryData();
-    this.owner = kitData.getOwner();
-    this.kitType = kitData.getType();
+    this.inventoryData = this.getData().getInventoryData();
+    this.kitType = this.getData().getType();
+    this.displayItem = this.getData().getDisplayItem();
+    this.kitType = this.getData().getType();
   }
 
   public static void reloadAll() {
@@ -141,7 +142,7 @@ public class Kit {
     Kit[] kitArray = new Kit[i];
     i = 0;
 
-    for (Kit kit : playerKits ) {
+    for (Kit kit : playerKits) {
       kitArray[i] = kit;
       i++;
     }
@@ -150,6 +151,7 @@ public class Kit {
   }
 
   public static Kit getKit(Player p, String kitName) {
+    AuroraKits.PLUGIN.getLogger().info(String.valueOf(kits.size()));
     for (Kit kit : kits) {
       if (kit.getOwner() == p || kit.getOwner() == null) {
         if (Objects.equals(kit.getName(), kitName)) {
@@ -165,9 +167,7 @@ public class Kit {
 
     for (File file : dir.listFiles()) {
       String kitName = file.getName().replace(".yml", "");
-      if (!Kit.getKit(p, kitName).exists()) {
-        new Kit(kitName);
-      }
+      new Kit(kitName);
     }
     new GUI(p).create();
   }
