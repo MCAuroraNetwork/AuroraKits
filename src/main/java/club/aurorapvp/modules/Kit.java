@@ -136,9 +136,9 @@ public class Kit {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
-    AuroraKits.DESERIALIZE_COMPONENT.deserialize("<gradient:#FFAA00:#FF55FF>" + name)
+    meta.displayName(AuroraKits.DESERIALIZE_COMPONENT.deserialize("<gradient:#FFAA00:#FF55FF>" + name)
         .decoration(TextDecoration.ITALIC, false)
-        .decoration(TextDecoration.BOLD, true);
+        .decoration(TextDecoration.BOLD, true));
 
     switch (type) {
       case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
