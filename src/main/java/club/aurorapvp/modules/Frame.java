@@ -77,6 +77,7 @@ public class Frame {
 
   public void delete(Player p) {
     this.getData().delete();
+    frames.remove(this);
     if (p != null) {
       p.sendMessage(Lang.getComponent("frame-deleted"));
     }
