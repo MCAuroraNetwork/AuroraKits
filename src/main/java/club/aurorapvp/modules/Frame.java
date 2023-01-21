@@ -27,7 +27,7 @@ public class Frame {
 
   public Frame(String frameName) {
     this.frameName = frameName;
-    new FrameData(this);
+    this.frameData = new FrameData(this);
 
     frames.add(this);
 
