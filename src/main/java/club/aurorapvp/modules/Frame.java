@@ -98,6 +98,10 @@ public class Frame {
     YamlConfiguration framesData = YamlConfiguration.loadConfiguration(file);
     ConfigurationSection section = framesData.getConfigurationSection("frames");
 
+    if (section == null) {
+      return;
+    }
+
     for (String name : section.getKeys(false)) {
       new Frame(name);
     }
