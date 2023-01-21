@@ -9,8 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kit {
   private static final HashMap<String, String> LAST_USED_KIT = new HashMap<>();
@@ -69,7 +73,10 @@ public class Kit {
 
   public void create(Player p, Integer kitType) {
     this.owner = p;
-    this.displayItem = p.getInventory().getItemInMainHand();
+
+    displayItem =
+        createDisplayItem(p.getInventory().getItemInMainHand().getType(), kitName, owner.getName(),
+            kitType);
 
     if (p.getInventory().getItemInMainHand().getItemMeta() != null && KitData.getAmount(p) < 54) {
       if (kitName == null) {
@@ -122,6 +129,30 @@ public class Kit {
     this.kitType = this.getData().getType();
     this.displayItem = this.getData().getDisplayItem();
     this.kitType = this.getData().getType();
+  }
+
+  protected static ItemStack createDisplayItem(final Material material, final String name,
+                                               String creator, int type) {
+    final ItemStack item = new ItemStack(material, 1);
+    final ItemMeta meta = item.getItemMeta();
+
+    AuroraKits.DESERIALIZE_COMPONENT.deserialize("<gradient:#FFAA00:#FF55FF>" + name)
+        .decoration(TextDecoration.ITALIC, false)
+        .decoration(TextDecoration.BOLD, true);
+
+    switch (type) {
+      case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
+          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
+          .deserialize("This is a Private Kit")));
+      case 1 -> meta.lore(List.of(MiniMessage.miniMessage()
+          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
+          .deserialize("This is a Public Kit")));
+      default -> meta.lore();
+    }
+
+    item.setItemMeta(meta);
+
+    return item;
   }
 
   public static void reloadAll() {

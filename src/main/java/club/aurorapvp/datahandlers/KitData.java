@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitData {
   private final YamlConfiguration DATA_FILE;
@@ -63,7 +64,7 @@ public class KitData {
   }
 
   public void create() {
-    DATA_FILE.set("type", kit.getType());
+DATA_FILE.set("type", kit.getType());
     DATA_FILE.set("owner", kit.getOwner().getUniqueId());
     DATA_FILE.set("items", kit.getInventoryData());
     DATA_FILE.set("displayItem", kit.getDisplayItem());
