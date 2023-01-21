@@ -83,8 +83,8 @@ public class Kit {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
 
-      inventoryData = p.getInventory().getContents();
       kitData.create();
+      inventoryData = this.getData().getInventoryData();
       if (kitType == 0) {
         GUI.getGui(p).addKit(this);
       } else if (kitType == 1) {
@@ -136,9 +136,10 @@ public class Kit {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
-    meta.displayName(AuroraKits.DESERIALIZE_COMPONENT.deserialize("<gradient:#FFAA00:#FF55FF>" + name)
-        .decoration(TextDecoration.ITALIC, false)
-        .decoration(TextDecoration.BOLD, true));
+    meta.displayName(
+        AuroraKits.DESERIALIZE_COMPONENT.deserialize("<gradient:#FFAA00:#FF55FF>" + name)
+            .decoration(TextDecoration.ITALIC, false)
+            .decoration(TextDecoration.BOLD, true));
 
     switch (type) {
       case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
@@ -184,7 +185,6 @@ public class Kit {
   }
 
   public static Kit getKit(Player p, String kitName) {
-    AuroraKits.PLUGIN.getLogger().info(String.valueOf(kits.size()));
     for (Kit kit : kits) {
       if (kit.getOwner() == p || kit.getOwner() == null) {
         if (Objects.equals(kit.getName(), kitName)) {
