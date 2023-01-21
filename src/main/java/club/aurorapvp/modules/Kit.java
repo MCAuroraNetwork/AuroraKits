@@ -165,11 +165,24 @@ public class Kit {
   public static void onPlayerJoin(Player p) {
     File dir = new File(AuroraKits.DATA_FOLDER, "/kits/" + p.getUniqueId());
 
-    for (File file : dir.listFiles()) {
-      String kitName = file.getName().replace(".yml", "");
-      new Kit(kitName);
+    if (dir.exists()) {
+      for (File file : dir.listFiles()) {
+        String kitName = file.getName().replace(".yml", "");
+        new Kit(kitName);
+      }
     }
     new GUI(p).create();
+  }
+
+  public static void setup() {
+    File dir = new File(AuroraKits.DATA_FOLDER, "/kits/public/");
+
+    if (dir.exists()) {
+      for (File file : dir.listFiles()) {
+        String kitName = file.getName().replace(".yml", "");
+        new Kit(kitName);
+      }
+    }
   }
 
   public static void onPlayerQuit(Player p) {
@@ -177,7 +190,6 @@ public class Kit {
 
     for (File file : dir.listFiles()) {
       String kitName = file.getName().replace(".yml", "");
-
       kits.remove(getKit(p, kitName));
     }
     GUI.onPlayerQuit(p);

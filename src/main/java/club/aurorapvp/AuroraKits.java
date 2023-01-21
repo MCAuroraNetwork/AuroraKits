@@ -5,6 +5,7 @@ import club.aurorapvp.config.Lang;
 import club.aurorapvp.listeners.Commands;
 import club.aurorapvp.listeners.Events;
 import club.aurorapvp.modules.Frame;
+import club.aurorapvp.modules.Kit;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +35,7 @@ public final class AuroraKits extends JavaPlugin {
       Lang.reload();
       Config.reload();
       Frame.setup();
+      Kit.setup();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
