@@ -96,6 +96,8 @@ public class Kit {
 
   public void delete(Player p) {
     kitData.getFile().delete();
+    GUI.getGui(p).removeKit(this);
+    kits.remove(this);
 
     if (p != null) {
       p.sendMessage(Lang.getComponent("kit-deleted"));
