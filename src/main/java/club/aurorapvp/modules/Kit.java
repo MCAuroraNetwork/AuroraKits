@@ -24,7 +24,7 @@ public class Kit {
   private String kitName;
   private Player owner;
   private Integer kitType;
-  private Inventory inventoryData;
+  private ItemStack[] itemStacks;
   private ItemStack displayItem;
   private final String kitPath;
 
@@ -48,8 +48,8 @@ public class Kit {
     return kitPath;
   }
 
-  public Inventory getInventory() {
-    return inventoryData;
+  public ItemStack[] getItemStacks() {
+    return itemStacks;
   }
 
   public KitData getData() {
@@ -85,6 +85,7 @@ public class Kit {
     }
 
     this.owner = p;
+    this.kitType = kitType;
 
     displayItem =
         createDisplayItem(p.getInventory().getItemInMainHand().getType(), kitName, owner.getName(),
@@ -94,8 +95,11 @@ public class Kit {
       if (kitName == null) {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
-
-      inventoryData = p.getInventory();
+      int i =0;
+      for (ItemStack item : p.getInventory().getContents()) {
+        itemStacks[i] = item;
+        i++;
+      }
       kitData.create();
       if (kitType == 0) {
         GUI.getGui(p).addKit(this);
@@ -104,9 +108,6 @@ public class Kit {
           gui.addKit(this);
         }
       }
-
-      // TODO figure out why this is needed
-      this.reload();
       p.sendMessage(Lang.getComponent("kit-created"));
     } else {
       p.sendMessage(Lang.getComponent("kit-invalid-item"));
@@ -129,7 +130,7 @@ public class Kit {
 
   public void giveKit(Player p) {
     if (this.exists()) {
-      p.getInventory().setContents(inventoryData.getContents());
+      p.getInventory().setContents(itemStacks);
       p.sendMessage(Lang.getComponent("kit-used"));
       LAST_USED_KIT.put(p.getName(), kitName);
     } else {
@@ -139,7 +140,7 @@ public class Kit {
 
   public void reload() {
     this.owner = this.getData().getOwner();
-    this.inventoryData.setContents(this.getData().getInventoryData());
+    this.itemStacks = this.getData().getInventoryData();
     this.kitType = this.getData().getType();
     this.displayItem = this.getData().getDisplayItem();
     this.kitType = this.getData().getType();
