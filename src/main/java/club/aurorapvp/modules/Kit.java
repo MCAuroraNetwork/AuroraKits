@@ -71,7 +71,7 @@ public class Kit {
     this.owner = p;
     this.displayItem = p.getInventory().getItemInMainHand();
 
-    if (p.getInventory().getItemInMainHand().getItemMeta() == null && KitData.getAmount(p) < 54) {
+    if (p.getInventory().getItemInMainHand().getItemMeta() != null && KitData.getAmount(p) < 54) {
       if (kitName == null) {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
