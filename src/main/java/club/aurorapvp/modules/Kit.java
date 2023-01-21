@@ -77,7 +77,7 @@ public class Kit {
     this.kitType = kitType;
 
     for (Kit kit : kits) {
-      if (kit != null) {
+      if (kit != null && !kit.equals(this)) {
         if (Objects.equals(kit.getName(), this.getName())) {
           if (kit.getType() == 1 && kitType != 1) {
             p.sendMessage(Lang.getComponent("kit-already-exists"));
