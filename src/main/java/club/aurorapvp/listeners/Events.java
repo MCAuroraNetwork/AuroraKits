@@ -21,7 +21,7 @@ public class Events implements Listener {
     }
 
     Kit.onPlayerJoin(event.getPlayer());
-    GUI.onPlayerJoin(event.getPlayer());
+    new GUI(event.getPlayer()).create();
   }
 
   @EventHandler

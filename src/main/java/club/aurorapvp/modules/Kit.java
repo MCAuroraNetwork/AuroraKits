@@ -18,9 +18,10 @@ public class Kit {
   private KitData kitData;
   private String kitName;
   private Player owner;
-  private String kitPath;
   private Integer kitType;
+  private String kitPath;
   private ItemStack[] inventoryData;
+  private ItemStack displayItem;
 
   public Kit(String kitName) {
     this.kitName = kitName;
@@ -31,6 +32,10 @@ public class Kit {
     if (this.exists()) {
       this.reload();
     }
+  }
+
+  public ItemStack getDisplayItem() {
+    return displayItem;
   }
 
   public ItemStack[] getInventoryData() {
@@ -49,10 +54,6 @@ public class Kit {
     return kitName;
   }
 
-  public String getPath() {
-    return kitPath;
-  }
-
   public Integer getType() {
     return kitType;
   }
@@ -64,26 +65,37 @@ public class Kit {
   public void create(Player p, int kitType) {
     this.kitType = kitType;
     this.owner = p;
+    this.displayItem = p.getInventory().getItemInMainHand();
 
-    if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
+    if (p.getInventory().getItemInMainHand().getItemMeta() == null && KitData.getAmount(p) < 54) {
       if (kitName == null) {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
 
       inventoryData = p.getInventory().getContents();
       kitData = new KitData(this);
-      if (!(kitType == 2)) {
-        GUI.getGui(p).addEntry(this);
-        p.sendMessage(Lang.getComponent("kit-created"));
+      if (kitType == 2) {
+        kitPath = "hidden";
+      } else if (kitType == 0) {
+        kitPath = String.valueOf(p.getUniqueId());
+        GUI.getGui(p).addKit(this);
+      } else {
+        for (GUI gui : GUI.getGuis()) {
+          gui.addKit(this);
+        }
       }
+      p.sendMessage(Lang.getComponent("kit-created"));
     } else {
       p.sendMessage(Lang.getComponent("kit-invalid-item"));
     }
   }
 
+  public String getPath() {
+    return kitPath;
+  }
+
   public void delete(Player p) {
     kitData.getFile().delete();
-    GUI.getGui(kitData.getOwner()).deleteEntry(this);
 
     if (p != null) {
       p.sendMessage(Lang.getComponent("kit-deleted"));
@@ -113,6 +125,28 @@ public class Kit {
     }
   }
 
+  public static Kit[] getKits(Player p) {
+    List<Kit> playerKits = new ArrayList<>();
+    int i = 0;
+
+    for (Kit kit : kits) {
+      if (kit.getOwner() == p || kit.getOwner() == null) {
+        playerKits.add(kit);
+        i++;
+      }
+    }
+
+    Kit[] kitArray = new Kit[i];
+    i = 0;
+
+    for (Kit kit : playerKits ) {
+      kitArray[i] = kit;
+      i++;
+    }
+
+    return kitArray;
+  }
+
   public static Kit getKit(Player p, String kitName) {
     for (Kit kit : kits) {
       if (kit.getOwner() == p || kit.getOwner() == null) {
@@ -129,7 +163,9 @@ public class Kit {
 
     for (File file : dir.listFiles()) {
       String kitName = file.getName().replace(".yml", "");
-      new Kit(kitName);
+      if (!Kit.getKit(p, kitName).exists()) {
+        new Kit(kitName);
+      }
     }
   }
 

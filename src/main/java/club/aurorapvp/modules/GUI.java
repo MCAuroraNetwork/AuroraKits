@@ -2,81 +2,68 @@ package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraKits;
 import club.aurorapvp.config.Lang;
-import club.aurorapvp.datahandlers.GUIData;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class GUI {
-  private static final List<GUI> GUIs = new ArrayList<>();
-  private final Player p;
-  private final GUIData guiData;
-  private Inventory inv;
+  private static final List<GUI> guis = new ArrayList<>();
+  private final Player owner;
+  private final Inventory inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
 
   public GUI(Player p) {
-    this.p = p;
-    this.guiData = new GUIData(this);
+    this.owner = p;
 
-    GUIs.add(this);
-
-    if (this.exists()) {
-      this.reload();
-    }
+    guis.add(this);
   }
 
-  public Player getPlayer() {
-    return p;
+  public Player getOwner() {
+    return owner;
   }
 
-  public GUIData getData() {
-    return guiData;
-  }
-
-  public static GUI getGui(Player p) {
-    for (GUI gui : GUIs) {
-      if (p == gui.getPlayer()) {
-        return gui;
-      }
-    }
-    return null;
-  }
-
-  public static List<GUI> getGUIs() {
-    return GUIs;
-  }
-
-  public Inventory asInventory() {
+  public Inventory getInventory() {
     return inv;
   }
 
-  public boolean exists() {
-    return this.getData().getFile() != null;
+  public void addKit(Kit kit) {
+    inv.addItem(kit.getDisplayItem());
   }
 
-  public void addEntry(Kit kit) {
-    this.getData().addEntry(kit);
-    inv = this.getData().getInventory();
+  public void removeKit(Kit kit) {
+    inv.remove(kit.getDisplayItem());
   }
 
-  public void reload() {
-    inv = this.getData().getInventory();
+  public void create() {
+    for (Kit kit : Kit.getKits(this.getOwner())) {
+      inv.addItem(kit.getDisplayItem());
+    }
   }
 
-  public void addItem(Kit kit) {
-    this.getData().addItem(kit);
+  public static GUI[] getGuis() {
+    GUI[] guiArray = new GUI[guis.size()];
+    int i = 0;
+
+    for (GUI gui : guis) {
+      guiArray[i] = gui;
+      i++;
+    }
+
+    return guiArray;
   }
 
-  public void deleteEntry(Kit kit) {
-    this.getData().deleteEntry(kit);
+  public static void onPlayerQuit(Player p) {
+    guis.removeIf(gui -> gui.getOwner() == p);
   }
 
   public static void inventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (event.getInventory().equals(GUI.getGui(p).asInventory())) {
+    if (event.getInventory().equals(GUI.getGui(p).getInventory())) {
       event.setCancelled(true);
 
       final ItemStack clickedItem = event.getCurrentItem();
@@ -94,19 +81,18 @@ public class GUI {
     }
   }
 
-  public static void onPlayerJoin(Player p) {
-    if (!GUI.getGui(p).exists()) {
-      new GUI(p);
-    }
-  }
 
-  public static void onPlayerQuit(Player p) {
-    if (!GUI.getGui(p).exists()) {
-      new GUI(p);
+
+  public static GUI getGui(Player p) {
+    for (GUI gui : guis) {
+      if (gui.getOwner() == p) {
+        return gui;
+      }
     }
+    return null;
   }
 
   public static void open(Player p) {
-    p.openInventory(getGui(p).asInventory());
+    p.openInventory(GUI.getGui(p).getInventory());
   }
 }
