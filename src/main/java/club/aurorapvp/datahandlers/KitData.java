@@ -1,7 +1,6 @@
 package club.aurorapvp.datahandlers;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.Lang;
 import club.aurorapvp.modules.Kit;
 import java.io.File;
 import java.io.IOException;
@@ -10,13 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class KitData {
   private final YamlConfiguration DATA_FILE;
   private final File FILE;
-  private final Inventory inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
   private final Kit kit;
 
   public KitData(Kit kit) {

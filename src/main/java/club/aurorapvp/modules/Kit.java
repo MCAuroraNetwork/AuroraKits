@@ -72,6 +72,17 @@ public class Kit {
   }
 
   public void create(Player p, Integer kitType) {
+    for (Kit kit : kits) {
+      if (Objects.equals(kit.kitName, this.getName())) {
+        if (kit.getType() == 1 && kitType != 1) {
+          p.sendMessage(Lang.getComponent("kit-already-exists"));
+          return;
+        } else {
+          kit.delete(p, kitType);
+        }
+      }
+    }
+
     this.owner = p;
 
     displayItem =

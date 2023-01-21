@@ -30,7 +30,6 @@ public class Config {
   public static void reload() throws IOException {
     if (!FILE.exists()) {
       FILE.getParentFile().mkdirs();
-
       FILE.createNewFile();
     }
     config = YamlConfiguration.loadConfiguration(FILE);
