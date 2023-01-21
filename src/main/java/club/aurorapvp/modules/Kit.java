@@ -59,7 +59,7 @@ public class Kit {
   }
 
   public boolean exists() {
-    return getData().getFile().exists();
+    return this.getData().getFile().exists();
   }
 
   public void create(Player p, int kitType) {
