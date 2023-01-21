@@ -83,8 +83,8 @@ public class Kit {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
 
+      inventoryData = p.getInventory().getContents();
       kitData.create();
-      inventoryData = this.getData().getInventoryData();
       if (kitType == 0) {
         GUI.getGui(p).addKit(this);
       } else if (kitType == 1) {
@@ -93,6 +93,8 @@ public class Kit {
         }
       }
 
+      // TODO figure out why this is needed
+      this.reload();
       p.sendMessage(Lang.getComponent("kit-created"));
     } else {
       p.sendMessage(Lang.getComponent("kit-invalid-item"));
