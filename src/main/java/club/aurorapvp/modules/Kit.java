@@ -13,17 +13,18 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kit {
   private static final HashMap<String, String> LAST_USED_KIT = new HashMap<>();
   private static final List<Kit> kits = new ArrayList<>();
-  private KitData kitData;
+  private final KitData kitData;
   private String kitName;
   private Player owner;
   private Integer kitType;
-  private ItemStack[] inventoryData;
+  private Inventory inventoryData;
   private ItemStack displayItem;
   private final String kitPath;
 
@@ -47,7 +48,7 @@ public class Kit {
     return kitPath;
   }
 
-  public ItemStack[] getInventoryData() {
+  public Inventory getInventory() {
     return inventoryData;
   }
 
@@ -94,7 +95,7 @@ public class Kit {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
 
-      inventoryData = p.getInventory().getContents();
+      inventoryData = p.getInventory();
       kitData.create();
       if (kitType == 0) {
         GUI.getGui(p).addKit(this);
@@ -128,7 +129,7 @@ public class Kit {
 
   public void giveKit(Player p) {
     if (this.exists()) {
-      p.getInventory().setContents(inventoryData);
+      p.getInventory().setContents(inventoryData.getContents());
       p.sendMessage(Lang.getComponent("kit-used"));
       LAST_USED_KIT.put(p.getName(), kitName);
     } else {
@@ -138,7 +139,7 @@ public class Kit {
 
   public void reload() {
     this.owner = this.getData().getOwner();
-    this.inventoryData = this.getData().getInventoryData();
+    this.inventoryData.setContents(this.getData().getInventoryData());
     this.kitType = this.getData().getType();
     this.displayItem = this.getData().getDisplayItem();
     this.kitType = this.getData().getType();

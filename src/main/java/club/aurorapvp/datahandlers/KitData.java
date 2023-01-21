@@ -60,8 +60,8 @@ public class KitData {
     DATA_FILE.set("owner", String.valueOf(kit.getOwner().getUniqueId()));
     DATA_FILE.set("displayItem", kit.getDisplayItem());
 
-    for (int i = 0; i < kit.getInventoryData().length; i++) {
-      DATA_FILE.set("items." + i, kit.getInventoryData()[i]);
+    for (int i = 0; i < kit.getInventory().getContents().length; i++) {
+      DATA_FILE.set("items." + i, kit.getInventory().getContents()[i]);
     }
 
     save();
