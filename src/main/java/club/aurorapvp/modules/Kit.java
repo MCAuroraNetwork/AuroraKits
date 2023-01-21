@@ -6,6 +6,7 @@ import club.aurorapvp.config.Lang;
 import club.aurorapvp.datahandlers.KitData;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +14,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -32,6 +32,7 @@ public class Kit {
     this.kitPath = kitPath;
     this.kitName = kitName;
     this.kitData = new KitData(this);
+    itemStacks = new ItemStack[0];
 
     kits.add(this);
 
@@ -98,11 +99,9 @@ public class Kit {
         kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
       }
 
-      int i =0;
       itemStacks = new ItemStack[p.getInventory().getContents().length];
-      for (ItemStack item : p.getInventory().getContents()) {
-        itemStacks[i] = item;
-        i++;
+      for (int i = 0; i < p.getInventory().getContents().length; i++) {
+        itemStacks[i] = p.getInventory().getContents()[i] == null ? null : p.getInventory().getContents()[i].clone();
       }
 
       kitData.create();
@@ -134,8 +133,10 @@ public class Kit {
   }
 
   public void giveKit(Player p) {
+    AuroraKits.PLUGIN.getLogger().info((Arrays.toString(this.getItemStacks())));
+    AuroraKits.PLUGIN.getLogger().info((Arrays.toString(p.getInventory().getContents())));
     if (this.exists()) {
-      p.getInventory().setContents(itemStacks);
+      p.getInventory().setContents(this.getItemStacks());
       p.sendMessage(Lang.getComponent("kit-used"));
       LAST_USED_KIT.put(p.getName(), kitName);
     } else {
@@ -145,7 +146,7 @@ public class Kit {
 
   public void reload() {
     this.owner = this.getData().getOwner();
-    this.itemStacks = this.getData().getInventoryData();
+    this.itemStacks = this.getData().getItemStacks();
     this.kitType = this.getData().getType();
     this.displayItem = this.getData().getDisplayItem();
     this.kitType = this.getData().getType();

@@ -43,7 +43,7 @@ public class KitData {
     return DATA_FILE.getInt("type");
   }
 
-  public ItemStack[] getInventoryData() {
+  public ItemStack[] getItemStacks() {
     ConfigurationSection section = this.getYaml().getConfigurationSection("items");
     ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
     int i = 0;
