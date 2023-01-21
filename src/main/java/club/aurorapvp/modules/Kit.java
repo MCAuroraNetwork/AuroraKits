@@ -116,7 +116,13 @@ public class Kit {
       return;
     }
     kitData.getFile().delete();
-    GUI.getGui(p).removeKit(this);
+    if (kitType == 0) {
+      GUI.getGui(p).removeKit(this);
+    } else if (kitType == 1) {
+      for (GUI gui : GUI.getGuis()) {
+        gui.removeKit(this);
+      }
+    }
     kits.remove(this);
 
     if (p != null) {
