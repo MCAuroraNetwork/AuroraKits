@@ -21,13 +21,11 @@ public class Events implements Listener {
     }
 
     Kit.onPlayerJoin(event.getPlayer());
-    new GUI(event.getPlayer()).create();
   }
 
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
     Kit.onPlayerQuit(event.getPlayer());
-    GUI.onPlayerQuit(event.getPlayer());
   }
 
   @EventHandler

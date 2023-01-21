@@ -169,6 +169,7 @@ public class Kit {
         new Kit(kitName);
       }
     }
+    new GUI(p).create();
   }
 
   public static void onPlayerQuit(Player p) {
@@ -179,6 +180,7 @@ public class Kit {
 
       kits.remove(getKit(p, kitName));
     }
+    GUI.onPlayerQuit(p);
   }
 
   public static void giveLastUsedKit(Player p) {
