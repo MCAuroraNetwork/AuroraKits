@@ -52,8 +52,22 @@ public class Commands implements CommandExecutor {
           new Kit(args[0], p.getUniqueId().toString()).create(p, 0);
         }
       }
-      case "deletekit" -> Kit.getKit(p, args[0]).delete(p, 0);
-      case "deletepublickit" -> Kit.getKit(p, args[0]).delete(p, 1);
+      case "deletekit" -> {
+        Kit kit = Kit.getKit(p, args[0]);
+        if (kit != null) {
+          kit.delete(p, 0);
+        } else {
+          p.sendMessage(Lang.getComponent("kit-invalid-name"));
+        }
+      }
+      case "deletepublickit" -> {
+        Kit kit = Kit.getKit(p, args[0]);
+        if (kit != null) {
+          kit.delete(p, 1);
+        } else {
+          p.sendMessage(Lang.getComponent("kit-invalid-name"));
+        }
+      }
       case "createpublickit" -> new Kit(args[0], "public").create(p, 1);
       case "createframe" -> new Frame(args[0]).create(p);
       case "deleteframe" -> Frame.getItemFrame(args[0]).delete(p);
