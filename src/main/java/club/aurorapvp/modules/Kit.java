@@ -92,7 +92,11 @@ public class Kit {
     }
   }
 
-  public void delete(Player p) {
+  public void delete(Player p, Integer kitType) {
+    if (!Objects.equals(this.kitType, kitType)) {
+      p.sendMessage(Lang.getComponent("kit-not-found"));
+      return;
+    }
     kitData.getFile().delete();
     GUI.getGui(p).removeKit(this);
     kits.remove(this);

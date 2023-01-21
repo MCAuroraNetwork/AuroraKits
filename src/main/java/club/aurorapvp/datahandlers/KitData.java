@@ -64,8 +64,8 @@ public class KitData {
 
   public void create() {
     DATA_FILE.set("type", kit.getType());
-    DATA_FILE.set("owner.", kit.getOwner().getUniqueId());
-    DATA_FILE.set("items.", kit.getInventoryData());
+    DATA_FILE.set("owner", kit.getOwner().getUniqueId());
+    DATA_FILE.set("items", kit.getInventoryData());
     DATA_FILE.set("displayItem", kit.getDisplayItem());
     save();
   }
