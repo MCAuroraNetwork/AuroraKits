@@ -73,19 +73,21 @@ public class Kit {
   }
 
   public void create(Player p, Integer kitType) {
+    this.owner = p;
+    this.kitType = kitType;
+
     for (Kit kit : kits) {
-      if (Objects.equals(kit.kitName, this.getName())) {
-        if (kit.getType() == 1 && kitType != 1) {
-          p.sendMessage(Lang.getComponent("kit-already-exists"));
-          return;
-        } else {
-          kit.delete(p, kitType);
+      if (kit != null) {
+        if (Objects.equals(kit.getName(), this.getName())) {
+          if (kit.getType() == 1 && kitType != 1) {
+            p.sendMessage(Lang.getComponent("kit-already-exists"));
+            return;
+          } else {
+            kit.delete(p, kitType);
+          }
         }
       }
     }
-
-    this.owner = p;
-    this.kitType = kitType;
 
     displayItem =
         createDisplayItem(p.getInventory().getItemInMainHand().getType(), kitName, owner.getName(),
@@ -115,7 +117,7 @@ public class Kit {
   }
 
   public void delete(Player p, Integer kitType) {
-    if (!Objects.equals(this.kitType, kitType)) {
+    if (!Objects.equals(this.getType(), kitType)) {
       p.sendMessage(Lang.getComponent("kit-not-found"));
       return;
     }
