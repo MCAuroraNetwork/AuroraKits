@@ -47,7 +47,7 @@ public class Commands implements CommandExecutor {
       case "kits" -> GUI.open(p);
       case "createkit" -> {
         if (args.length == 0) {
-          new Kit(null, p.getUniqueId().toString()).create(p, 0);
+          new Kit(null, String.valueOf(p.getUniqueId())).create(p, 0);
         } else {
           new Kit(args[0], p.getUniqueId().toString()).create(p, 0);
         }

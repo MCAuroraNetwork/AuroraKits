@@ -5,18 +5,13 @@ import club.aurorapvp.config.Lang;
 import club.aurorapvp.modules.Kit;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitData {
   private final YamlConfiguration DATA_FILE;
@@ -64,10 +59,14 @@ public class KitData {
   }
 
   public void create() {
-DATA_FILE.set("type", kit.getType());
-    DATA_FILE.set("owner", kit.getOwner().getUniqueId());
-    DATA_FILE.set("items", kit.getInventoryData());
+    DATA_FILE.set("type", kit.getType());
+    DATA_FILE.set("owner", String.valueOf(kit.getOwner().getUniqueId()));
     DATA_FILE.set("displayItem", kit.getDisplayItem());
+
+    for (int i = 0; i < kit.getInventoryData().length; i++) {
+      DATA_FILE.set("items." + i, kit.getInventoryData()[i]);
+    }
+
     save();
   }
 
