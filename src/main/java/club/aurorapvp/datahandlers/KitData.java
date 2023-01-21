@@ -21,7 +21,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class KitData {
   private final YamlConfiguration DATA_FILE;
   private final File FILE;
-  private final Inventory inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));;
+  private final Inventory inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
+
   private final Kit kit;
 
   public KitData(Kit kit) {
@@ -30,7 +31,7 @@ public class KitData {
         new File(AuroraKits.DATA_FOLDER, "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
 
-    if (!kit.exists()) {
+    if (!FILE.exists()) {
       this.create();
     }
   }
@@ -68,13 +69,11 @@ public class KitData {
   }
 
   public void create() {
-    if (!kit.exists()) {
-      DATA_FILE.set("type", kit.getType());
-      DATA_FILE.set("owner.", kit.getOwner().getUniqueId());
-      DATA_FILE.set("items.", kit.getInventoryData());
-      DATA_FILE.set("displayItem", kit.getDisplayItem());
-      save();
-    }
+    DATA_FILE.set("type", kit.getType());
+    DATA_FILE.set("owner.", kit.getOwner().getUniqueId());
+    DATA_FILE.set("items.", kit.getInventoryData());
+    DATA_FILE.set("displayItem", kit.getDisplayItem());
+    save();
   }
 
   // TODO this sucks ass
@@ -87,30 +86,6 @@ public class KitData {
       return file.listFiles().length +
           new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
     }
-  }
-
-  protected static ItemStack createItem(final Material material, final String name,
-                                        String creator, int type) {
-    final ItemStack item = new ItemStack(material, 1);
-    final ItemMeta meta = item.getItemMeta();
-
-    AuroraKits.DESERIALIZE_COMPONENT.deserialize("<gradient:#FFAA00:#FF55FF>" + name)
-        .decoration(TextDecoration.ITALIC, false)
-        .decoration(TextDecoration.BOLD, true);
-
-    switch (type) {
-      case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
-          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Private Kit")));
-      case 1 -> meta.lore(List.of(MiniMessage.miniMessage()
-          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Public Kit")));
-      default -> meta.lore();
-    }
-
-    item.setItemMeta(meta);
-
-    return item;
   }
 
   public void save() {
