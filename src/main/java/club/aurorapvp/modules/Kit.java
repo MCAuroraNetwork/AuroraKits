@@ -77,17 +77,9 @@ public class Kit {
     this.owner = p;
     this.kitType = kitType;
 
-    for (Kit kit : kits) {
-      if (kit != null && !kit.equals(this)) {
-        if (Objects.equals(kit.getName(), this.getName())) {
-          if (kit.getType() == 1 && kitType != 1) {
-            p.sendMessage(Lang.getComponent("kit-already-exists"));
-            return;
-          } else {
-            kit.delete(p, kitType);
-          }
-        }
-      }
+    if (this.exists()) {
+      p.sendMessage(Lang.getComponent("kit-already-exists"));
+      return;
     }
 
     displayItem =
@@ -133,8 +125,6 @@ public class Kit {
   }
 
   public void giveKit(Player p) {
-    AuroraKits.PLUGIN.getLogger().info((Arrays.toString(this.getItemStacks())));
-    AuroraKits.PLUGIN.getLogger().info((Arrays.toString(p.getInventory().getContents())));
     if (this.exists()) {
       p.getInventory().setContents(this.getItemStacks());
       p.sendMessage(Lang.getComponent("kit-used"));
