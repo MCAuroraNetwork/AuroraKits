@@ -40,7 +40,7 @@ public class KitData {
   }
 
   public ItemStack getDisplayItem() {
-    return DATA_FILE.getItemStack("displayIte");
+    return DATA_FILE.getItemStack("displayItem");
   }
 
   public File getFile() {
