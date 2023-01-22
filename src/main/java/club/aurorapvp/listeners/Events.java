@@ -5,8 +5,10 @@ import club.aurorapvp.modules.Frame;
 import club.aurorapvp.modules.GUI;
 import club.aurorapvp.modules.Kit;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,6 +27,16 @@ public class Events implements Listener {
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
     Kit.onPlayerQuit(event.getPlayer());
+  }
+
+  @EventHandler
+  public void onEntityDeath(EntityDamageEvent event) {
+    if (event.getEntity() instanceof Item) {
+      if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||
+          event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+        event.setCancelled(true);
+      }
+    }
   }
 
   @EventHandler

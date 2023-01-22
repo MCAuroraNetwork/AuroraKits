@@ -1,1 +1,5 @@
 rootProject.name = 'AuroraKits'
+include 'src:main:AuroraKits-API'
+findProject(':src:main:AuroraKits-API')?.name = 'AuroraKits-API'
+include 'AuroraKits-API'
+

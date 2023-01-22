@@ -114,7 +114,9 @@ public class Kit {
 
   public void delete(Player p, Integer kitType) {
     if (!Objects.equals(this.getType(), kitType)) {
-      p.sendMessage(Lang.getComponent("kit-not-found"));
+      if (p != null) {
+        p.sendMessage(Lang.getComponent("kit-not-found"));
+      }
       return;
     }
 
@@ -219,6 +221,28 @@ public class Kit {
     return kitArray;
   }
 
+  public static Kit[] getHidden() {
+    List<Kit> hiddenKits = new ArrayList<>();
+    int i = 0;
+
+    for (Kit kit : kits) {
+      if (kit.getType() == 2) {
+        hiddenKits.add(kit);
+        i++;
+      }
+    }
+
+    Kit[] kitArray = new Kit[i];
+    i = 0;
+
+    for (Kit kit : hiddenKits) {
+      kitArray[i] = kit;
+      i++;
+    }
+
+    return kitArray;
+  }
+
   public static Kit getKit(Player p, String kitName) {
     for (Kit kit : kits) {
       if (kit.getOwner() == p || kit.getType() == 1) {
@@ -249,6 +273,15 @@ public class Kit {
       for (File file : dir.listFiles()) {
         String kitName = file.getName().replace(".yml", "");
         new Kit(kitName, "public");
+      }
+    }
+
+    dir = new File(AuroraKits.DATA_FOLDER, "/kits/hidden/");
+
+    if (dir.exists()) {
+      for (File file : dir.listFiles()) {
+        String kitName = file.getName().replace(".yml", "");
+        new Kit(kitName, "hidden");
       }
     }
   }
