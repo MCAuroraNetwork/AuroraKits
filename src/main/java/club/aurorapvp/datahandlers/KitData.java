@@ -67,18 +67,6 @@ public class KitData {
     save();
   }
 
-  // TODO this sucks ass
-  public static int getAmount(Player p) {
-    File file = new File(AuroraKits.DATA_FOLDER, "/kits/" + p.getUniqueId() + "/");
-
-    if (file.listFiles() == null) {
-      return new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
-    } else {
-      return file.listFiles().length +
-          new File(AuroraKits.DATA_FOLDER, "/kits/public/").listFiles().length;
-    }
-  }
-
   public void save() {
     try {
       if (!FILE.exists()) {

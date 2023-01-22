@@ -86,9 +86,9 @@ public class Kit {
         createDisplayItem(p.getInventory().getItemInMainHand().getType(), kitName, owner.getName(),
             kitType);
 
-    if (p.getInventory().getItemInMainHand().getItemMeta() != null && KitData.getAmount(p) < 54) {
+    if (p.getInventory().getItemInMainHand().getItemMeta() != null && getAmount(p) < 54) {
       if (kitName == null) {
-        kitName = "Kit" + Math.addExact(KitData.getAmount(p), 1);
+        kitName = "Kit" + Math.addExact(getAmount(p), 1);
       }
 
       itemStacks = new ItemStack[p.getInventory().getContents().length];
@@ -172,6 +172,10 @@ public class Kit {
     item.setItemMeta(meta);
 
     return item;
+  }
+
+  public static int getAmount(Player p) {
+    return getKits(p).length;
   }
 
   public static void reloadAll() {
