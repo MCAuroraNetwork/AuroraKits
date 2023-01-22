@@ -6,7 +6,6 @@ import club.aurorapvp.config.Lang;
 import club.aurorapvp.datahandlers.KitData;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -93,7 +92,8 @@ public class Kit {
 
       itemStacks = new ItemStack[p.getInventory().getContents().length];
       for (int i = 0; i < p.getInventory().getContents().length; i++) {
-        itemStacks[i] = p.getInventory().getContents()[i] == null ? null : p.getInventory().getContents()[i].clone();
+        itemStacks[i] = p.getInventory().getContents()[i] == null ? null :
+            p.getInventory().getContents()[i].clone();
       }
 
       kitData.create();
@@ -184,7 +184,7 @@ public class Kit {
     int i = 0;
 
     for (Kit kit : kits) {
-      if (kit.getOwner() == p || kit.getOwner() == null) {
+      if (kit.getOwner() == p || kit.getType() == 1) {
         playerKits.add(kit);
         i++;
       }
@@ -203,7 +203,7 @@ public class Kit {
 
   public static Kit getKit(Player p, String kitName) {
     for (Kit kit : kits) {
-      if (kit.getOwner() == p || kit.getOwner() == null) {
+      if (kit.getOwner() == p || kit.getType() == 1) {
         if (Objects.equals(kit.getName(), kitName)) {
           return kit;
         }
@@ -218,7 +218,7 @@ public class Kit {
     if (dir.exists()) {
       for (File file : dir.listFiles()) {
         String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName, p.getUniqueId().toString());
+        new Kit(kitName, String.valueOf(p.getUniqueId()));
       }
     }
     new GUI(p).create();

@@ -23,8 +23,7 @@ public class Lang {
     }
 
     DEFAULTS.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraKits ><reset>~");
-    DEFAULTS.put("frame-created",
-        "prefix <gradient:#FFAA00:#FF55FF>Frame successfully created");
+    DEFAULTS.put("frame-created", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully created");
     DEFAULTS.put("frame-deleted", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully deleted");
     DEFAULTS.put("frame-invalid", "prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!");
     DEFAULTS.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
@@ -51,8 +50,7 @@ public class Lang {
       String pathString = get().getString(path);
       for (String placeholder : PLACEHOLDERS.keySet()) {
         if (pathString.contains(placeholder)) {
-          pathString = pathString.replace(placeholder,
-              PLACEHOLDERS.get(placeholder));
+          pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
         }
       }
       return AuroraKits.DESERIALIZE_COMPONENT.deserialize(pathString);
