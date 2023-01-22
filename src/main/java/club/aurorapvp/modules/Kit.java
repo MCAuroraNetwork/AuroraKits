@@ -177,6 +177,8 @@ public class Kit {
   public static void reloadAll() {
     kits.clear();
 
+    setup();
+
     for (Player p : Bukkit.getOnlinePlayers()) {
       setupPlayer(p);
     }
@@ -184,6 +186,7 @@ public class Kit {
     for (Kit kit : kits) {
       kit.reload();
     }
+    AuroraKits.PLUGIN.getLogger().info("Kits Reloaded!");
   }
 
   public static Kit[] getKits(Player p) {

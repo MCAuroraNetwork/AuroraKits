@@ -38,6 +38,8 @@ public class GUI {
   }
 
   public void reload() {
+    inv.clear();
+
     for (Kit kit : Kit.getKits(this.getOwner())) {
       inv.addItem(kit.getDisplayItem());
     }
@@ -47,6 +49,7 @@ public class GUI {
     for (GUI gui : guis) {
       gui.reload();
     }
+    AuroraKits.PLUGIN.getLogger().info("GUIs Reloaded!");
   }
 
   public static GUI[] getGuis() {
