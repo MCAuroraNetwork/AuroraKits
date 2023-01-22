@@ -31,6 +31,7 @@ public class Commands implements CommandExecutor {
             Frame.reloadAll();
             Kit.reloadAll();
             Config.reload();
+            GUI.reloadAll();
             Lang.reload();
           } catch (IOException e) {
             throw new RuntimeException(e);
@@ -42,6 +43,8 @@ public class Commands implements CommandExecutor {
           Kit kit = Kit.getKit(p, args[0]);
           if (kit != null) {
             kit.giveKit(p);
+          } else {
+            p.sendMessage(Lang.getComponent("kit-not-found"));
           }
         } else {
           GUI.open(p);

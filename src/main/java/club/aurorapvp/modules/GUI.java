@@ -37,9 +37,15 @@ public class GUI {
     inv.remove(kit.getDisplayItem());
   }
 
-  public void create() {
+  public void reload() {
     for (Kit kit : Kit.getKits(this.getOwner())) {
       inv.addItem(kit.getDisplayItem());
+    }
+  }
+
+  public static void reloadAll() {
+    for (GUI gui : guis) {
+      gui.reload();
     }
   }
 

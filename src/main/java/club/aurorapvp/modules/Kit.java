@@ -221,7 +221,7 @@ public class Kit {
         new Kit(kitName, String.valueOf(p.getUniqueId()));
       }
     }
-    new GUI(p).create();
+    new GUI(p).reload();
   }
 
   public static void setup() {
