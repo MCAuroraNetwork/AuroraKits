@@ -38,7 +38,7 @@ public class FrameData {
       }
       get().save(FILE);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      AuroraKits.PLUGIN.getLogger().severe("Failed to save frame data");
     }
   }
 

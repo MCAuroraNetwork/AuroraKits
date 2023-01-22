@@ -11,14 +11,19 @@ public class Config {
   private static final File FILE = new File(AuroraKits.DATA_FOLDER, "config.yml");
   private static YamlConfiguration config;
 
-  public static void generateDefaults() throws IOException {
+  public static void generateDefaults() {
     DEFAULTS.put("kits.lastUsedKit.enabled", "false");
     DEFAULTS.put("kits.lastUsedKit.defaultKit", "Default");
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().contains(path) || get().getString(path) == null) {
         get().set(path, DEFAULTS.get(path));
-        get().save(FILE);
+
+        try {
+          get().save(FILE);
+        } catch (IOException e) {
+          AuroraKits.PLUGIN.getLogger().severe("Unable to save config file");
+        }
       }
     }
   }
@@ -27,10 +32,14 @@ public class Config {
     return config;
   }
 
-  public static void reload() throws IOException {
+  public static void reload() {
     if (!FILE.exists()) {
-      FILE.getParentFile().mkdirs();
-      FILE.createNewFile();
+      try {
+        FILE.getParentFile().mkdirs();
+        FILE.createNewFile();
+      } catch (IOException e) {
+        AuroraKits.PLUGIN.getLogger().severe("Failed to generate config files");
+      }
     }
     config = YamlConfiguration.loadConfiguration(FILE);
     AuroraKits.PLUGIN.getLogger().info("Config reloaded!");

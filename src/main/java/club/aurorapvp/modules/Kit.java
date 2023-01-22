@@ -105,6 +105,7 @@ public class Kit {
           gui.addKit(this);
         }
       }
+
       p.sendMessage(Lang.getComponent("kit-created"));
     } else {
       p.sendMessage(Lang.getComponent("kit-invalid-item"));
@@ -116,7 +117,9 @@ public class Kit {
       p.sendMessage(Lang.getComponent("kit-not-found"));
       return;
     }
+
     kitData.getFile().delete();
+
     if (kitType == 0) {
       GUI.getGui(p).removeKit(this);
     } else if (kitType == 1) {
@@ -124,6 +127,7 @@ public class Kit {
         gui.removeKit(this);
       }
     }
+
     kits.remove(this);
 
     if (p != null) {

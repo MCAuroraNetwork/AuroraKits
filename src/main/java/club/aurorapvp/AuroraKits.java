@@ -7,7 +7,6 @@ import club.aurorapvp.listeners.Events;
 import club.aurorapvp.modules.Frame;
 import club.aurorapvp.modules.Kit;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -31,22 +30,14 @@ public final class AuroraKits extends JavaPlugin {
     DESERIALIZE_COMPONENT = MiniMessage.miniMessage();
 
     // Setup classes
-    try {
-      Lang.reload();
-      Config.reload();
-      Frame.setup();
-      Kit.setup();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    Frame.setup();
+    Kit.setup();
 
-    // Generate default values
-    try {
-      Lang.generateDefaults();
-      Config.generateDefaults();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    // Setup configs
+    Lang.reload();
+    Config.reload();
+    Lang.generateDefaults();
+    Config.generateDefaults();
 
     // Register Listeners
     getServer().getPluginManager().registerEvents(new Events(), this);

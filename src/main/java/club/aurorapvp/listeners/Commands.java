@@ -5,7 +5,6 @@ import club.aurorapvp.config.Lang;
 import club.aurorapvp.modules.Frame;
 import club.aurorapvp.modules.GUI;
 import club.aurorapvp.modules.Kit;
-import java.io.IOException;
 import java.util.Objects;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,15 +26,11 @@ public class Commands implements CommandExecutor {
     switch (command.getName()) {
       case "aurorakits" -> {
         if (Objects.equals(args[0], "reload")) {
-          try {
-            Frame.reloadAll();
-            Kit.reloadAll();
-            Config.reload();
-            GUI.reloadAll();
-            Lang.reload();
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
+          Frame.reloadAll();
+          Kit.reloadAll();
+          Config.reload();
+          GUI.reloadAll();
+          Lang.reload();
         }
       }
       case "kit" -> {
