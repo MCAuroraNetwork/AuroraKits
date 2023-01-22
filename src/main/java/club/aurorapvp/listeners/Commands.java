@@ -39,7 +39,10 @@ public class Commands implements CommandExecutor {
       }
       case "kit" -> {
         if (args.length != 0) {
-          Kit.getKit(p, args[0]).giveKit(p);
+          Kit kit = Kit.getKit(p, args[0]);
+          if (kit != null) {
+            kit.giveKit(p);
+          }
         } else {
           GUI.open(p);
         }
