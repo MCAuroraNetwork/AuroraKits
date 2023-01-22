@@ -19,7 +19,7 @@ public class Events implements Listener {
     if (Config.get().getBoolean("kits.lastUsedKit.enabled")) {
       Kit.giveLastUsedKit(event.getPlayer());
     }
-    Kit.onPlayerJoin(event.getPlayer());
+    Kit.setupPlayer(event.getPlayer());
   }
 
   @EventHandler

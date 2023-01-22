@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -174,6 +175,12 @@ public class Kit {
   }
 
   public static void reloadAll() {
+    kits.clear();
+
+    for (Player p : Bukkit.getOnlinePlayers()) {
+      setupPlayer(p);
+    }
+
     for (Kit kit : kits) {
       kit.reload();
     }
@@ -212,7 +219,7 @@ public class Kit {
     return null;
   }
 
-  public static void onPlayerJoin(Player p) {
+  public static void setupPlayer(Player p) {
     File dir = new File(AuroraKits.DATA_FOLDER, "/kits/" + p.getUniqueId());
 
     if (dir.exists()) {
