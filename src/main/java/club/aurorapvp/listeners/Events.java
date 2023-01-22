@@ -30,16 +30,6 @@ public class Events implements Listener {
   }
 
   @EventHandler
-  public void onEntityDeath(EntityDamageEvent event) {
-    if (event.getEntity() instanceof Item) {
-      if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||
-          event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
-        event.setCancelled(true);
-      }
-    }
-  }
-
-  @EventHandler
   public void onPlayerInteract(PlayerInteractEntityEvent event) {
     Frame.onClicked(event);
   }
