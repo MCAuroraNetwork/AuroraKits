@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kit {
-  private static final HashMap<String, String> LAST_USED_KIT = new HashMap<>();
+  private static final HashMap<String, Kit> LAST_USED_KIT = new HashMap<>();
   private static final List<Kit> kits = new ArrayList<>();
   private final KitData kitData;
   private String kitName;
@@ -141,7 +141,7 @@ public class Kit {
     if (this.exists()) {
       p.getInventory().setContents(this.getItemStacks());
       p.sendMessage(Lang.getComponent("kit-used"));
-      LAST_USED_KIT.put(p.getName(), kitName);
+      LAST_USED_KIT.put(p.getName(), this);
     } else {
       p.sendMessage(Lang.getComponent("kit-not-found"));
     }
@@ -279,7 +279,7 @@ public class Kit {
     if (!LAST_USED_KIT.containsKey(p.getName())) {
       getKit(p, Config.get().getString("kits.lastUsedKit.defaultKit")).giveKit(p);
     } else {
-      getKit(p, LAST_USED_KIT.get(p.getName())).giveKit(p);
+      LAST_USED_KIT.get(p.getName()).giveKit(p);
     }
   }
 }
