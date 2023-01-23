@@ -52,15 +52,15 @@ public class Commands implements CommandExecutor {
       case "kits" -> GUI.open(p);
       case "createkit" -> {
         if (args.length == 0) {
-          new Kit(null, String.valueOf(p.getUniqueId())).create(p, 0);
+          new Kit(null, String.valueOf(p.getUniqueId())).create(p, false);
         } else {
-          new Kit(args[0], p.getUniqueId().toString()).create(p, 0);
+          new Kit(args[0], p.getUniqueId().toString()).create(p, false);
         }
       }
       case "deletekit" -> {
         Kit kit = Kit.getKit(p, args[0]);
         if (kit != null) {
-          kit.delete(p, 0);
+          kit.delete(p, false);
         } else {
           p.sendMessage(Lang.getComponent("kit-invalid-name"));
         }
@@ -68,12 +68,12 @@ public class Commands implements CommandExecutor {
       case "deletepublickit" -> {
         Kit kit = Kit.getKit(p, args[0]);
         if (kit != null) {
-          kit.delete(p, 1);
+          kit.delete(p, true);
         } else {
           p.sendMessage(Lang.getComponent("kit-invalid-name"));
         }
       }
-      case "createpublickit" -> new Kit(args[0], "public").create(p, 1);
+      case "createpublickit" -> new Kit(args[0], "public").create(p, true);
       case "createframe" -> new Frame(args[0]).create(p);
       case "deleteframe" -> Frame.getItemFrame(args[0]).delete(p);
     }

@@ -92,6 +92,7 @@ public class Frame {
     for (Frame frame : frames) {
       frame.reload();
     }
+    AuroraKits.PLUGIN.getLogger().info("All frames reloaded!");
   }
 
   public static void setup() {
@@ -106,6 +107,7 @@ public class Frame {
     for (String name : section.getKeys(false)) {
       new Frame(name);
     }
+    AuroraKits.PLUGIN.getLogger().info("All frames loaded!");
   }
 
   public static Frame getItemFrame(Location loc) {

@@ -39,8 +39,8 @@ public class KitData {
     return DATA_FILE;
   }
 
-  public Integer getType() {
-    return DATA_FILE.getInt("type");
+  public boolean isPublic() {
+    return DATA_FILE.getBoolean("isPublic");
   }
 
   public ItemStack[] getItemStacks() {
@@ -56,7 +56,7 @@ public class KitData {
   }
 
   public void create() {
-    DATA_FILE.set("type", kit.getType());
+    DATA_FILE.set("isPublic", kit.isPublic());
     DATA_FILE.set("owner", String.valueOf(kit.getOwner().getUniqueId()));
     DATA_FILE.set("displayItem", kit.getDisplayItem());
 

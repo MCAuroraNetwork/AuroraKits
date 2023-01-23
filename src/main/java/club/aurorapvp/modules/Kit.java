@@ -23,7 +23,7 @@ public class Kit {
   private final KitData kitData;
   private String kitName;
   private Player owner;
-  private Integer kitType;
+  private boolean isPublic;
   private ItemStack[] itemStacks;
   private ItemStack displayItem;
   private final String kitPath;
@@ -65,17 +65,17 @@ public class Kit {
     return kitName;
   }
 
-  public Integer getType() {
-    return kitType;
+  public boolean isPublic() {
+    return isPublic;
   }
 
   public boolean exists() {
     return this.getData().getFile().exists();
   }
 
-  public void create(Player p, Integer kitType) {
+  public void create(Player p, boolean isPublic) {
     this.owner = p;
-    this.kitType = kitType;
+    this.isPublic = isPublic;
 
     if (this.exists()) {
       p.sendMessage(Lang.getComponent("kit-already-exists"));
@@ -84,7 +84,7 @@ public class Kit {
 
     displayItem =
         createDisplayItem(p.getInventory().getItemInMainHand().getType(), kitName, owner.getName(),
-            kitType);
+            isPublic);
 
     if (p.getInventory().getItemInMainHand().getItemMeta() != null && getAmount(p) < 54) {
       if (kitName == null) {
@@ -98,12 +98,12 @@ public class Kit {
       }
 
       kitData.create();
-      if (kitType == 0) {
-        GUI.getGui(p).addKit(this);
-      } else if (kitType == 1) {
+      if (isPublic) {
         for (GUI gui : GUI.getGuis()) {
           gui.addKit(this);
         }
+      } else {
+        GUI.getGui(p).addKit(this);
       }
 
       p.sendMessage(Lang.getComponent("kit-created"));
@@ -112,8 +112,8 @@ public class Kit {
     }
   }
 
-  public void delete(Player p, Integer kitType) {
-    if (!Objects.equals(this.getType(), kitType)) {
+  public void delete(Player p, boolean isPublic) {
+    if (!Objects.equals(this.isPublic(), isPublic)) {
       if (p != null) {
         p.sendMessage(Lang.getComponent("kit-not-found"));
       }
@@ -122,12 +122,12 @@ public class Kit {
 
     kitData.getFile().delete();
 
-    if (kitType == 0) {
-      GUI.getGui(p).removeKit(this);
-    } else if (kitType == 1) {
+    if (isPublic) {
       for (GUI gui : GUI.getGuis()) {
         gui.removeKit(this);
       }
+    } else {
+      GUI.getGui(p).removeKit(this);
     }
 
     kits.remove(this);
@@ -150,13 +150,12 @@ public class Kit {
   public void reload() {
     this.owner = this.getData().getOwner();
     this.itemStacks = this.getData().getItemStacks();
-    this.kitType = this.getData().getType();
+    this.isPublic = this.getData().isPublic();
     this.displayItem = this.getData().getDisplayItem();
-    this.kitType = this.getData().getType();
   }
 
   protected static ItemStack createDisplayItem(final Material material, final String name,
-                                               String creator, int type) {
+                                               String creator, boolean isPublic) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
@@ -165,14 +164,14 @@ public class Kit {
             .decoration(TextDecoration.ITALIC, false)
             .decoration(TextDecoration.BOLD, true));
 
-    switch (type) {
-      case 0 -> meta.lore(List.of(MiniMessage.miniMessage()
+    if (isPublic) {
+      meta.lore(List.of(MiniMessage.miniMessage()
           .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
           .deserialize("This is a Private Kit")));
-      case 1 -> meta.lore(List.of(MiniMessage.miniMessage()
+    } else {
+      meta.lore(List.of(MiniMessage.miniMessage()
           .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
           .deserialize("This is a Public Kit")));
-      default -> meta.lore();
     }
 
     item.setItemMeta(meta);
@@ -196,7 +195,7 @@ public class Kit {
     for (Kit kit : kits) {
       kit.reload();
     }
-    AuroraKits.PLUGIN.getLogger().info("Kits Reloaded!");
+    AuroraKits.PLUGIN.getLogger().info("All kits reloaded!");
   }
 
   public static Kit[] getKits(Player p) {
@@ -204,7 +203,7 @@ public class Kit {
     int i = 0;
 
     for (Kit kit : kits) {
-      if (kit.getOwner() == p || kit.getType() == 1) {
+      if (kit.getOwner() == p || kit.isPublic()) {
         playerKits.add(kit);
         i++;
       }
@@ -221,31 +220,9 @@ public class Kit {
     return kitArray;
   }
 
-  public static Kit[] getHidden() {
-    List<Kit> hiddenKits = new ArrayList<>();
-    int i = 0;
-
-    for (Kit kit : kits) {
-      if (kit.getType() == 2) {
-        hiddenKits.add(kit);
-        i++;
-      }
-    }
-
-    Kit[] kitArray = new Kit[i];
-    i = 0;
-
-    for (Kit kit : hiddenKits) {
-      kitArray[i] = kit;
-      i++;
-    }
-
-    return kitArray;
-  }
-
   public static Kit getKit(Player p, String kitName) {
     for (Kit kit : kits) {
-      if (kit.getOwner() == p || kit.getType() == 1) {
+      if (kit.getOwner() == p || kit.isPublic) {
         if (Objects.equals(kit.getName(), kitName)) {
           return kit;
         }
@@ -284,6 +261,8 @@ public class Kit {
         new Kit(kitName, "hidden");
       }
     }
+
+    AuroraKits.PLUGIN.getLogger().info("All kits loaded!");
   }
 
   public static void onPlayerQuit(Player p) {
