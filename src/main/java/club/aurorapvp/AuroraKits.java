@@ -23,6 +23,8 @@ public final class AuroraKits extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    long startTime = System.currentTimeMillis();
+
     // Register important variables
     PLUGIN = this;
     DATA_FOLDER = this.getDataFolder();
@@ -46,7 +48,7 @@ public final class AuroraKits extends JavaPlugin {
       getCommand(command.getName()).setExecutor(new Commands());
     }
 
-    getLogger().info("Aurora Kits Loaded");
+    getLogger().info("Aurora Kits Loaded in " + Math.subtractExact(System.currentTimeMillis(), startTime) + "ms");
   }
 
   @Override

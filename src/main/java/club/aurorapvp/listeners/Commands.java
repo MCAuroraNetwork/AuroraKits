@@ -1,5 +1,6 @@
 package club.aurorapvp.listeners;
 
+import club.aurorapvp.AuroraKits;
 import club.aurorapvp.config.Config;
 import club.aurorapvp.config.Lang;
 import club.aurorapvp.modules.Frame;
@@ -26,11 +27,14 @@ public class Commands implements CommandExecutor {
     switch (command.getName()) {
       case "aurorakits" -> {
         if (Objects.equals(args[0], "reload")) {
+          long startTime = System.currentTimeMillis();
           Frame.reloadAll();
           Kit.reloadAll();
           Config.reload();
           GUI.reloadAll();
           Lang.reload();
+          AuroraKits.PLUGIN.getLogger()
+              .info("All reloaded in " + Math.subtractExact(System.currentTimeMillis(), startTime) + "ms");
         }
       }
       case "kit" -> {
