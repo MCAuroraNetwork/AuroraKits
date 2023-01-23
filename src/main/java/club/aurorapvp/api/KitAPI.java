@@ -1,9 +1,10 @@
+package club.aurorapvp.api;
+
 import club.aurorapvp.modules.Kit;
 import java.util.Objects;
 import org.bukkit.entity.Player;
 
-public class AuroraKitsAPI {
-
+public class KitAPI {
   /**
    * Creates a kit object and saves it
    * @param name The name of the kit
