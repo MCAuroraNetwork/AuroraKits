@@ -226,12 +226,12 @@ public class Kit {
   }
 
   public static void onPlayerQuit(Player p) {
-    File dir = new File(AuroraKits.DATA_FOLDER, "/kits/" + p.getUniqueId());
-
-    for (File file : dir.listFiles()) {
-      String kitName = file.getName().replace(".yml", "");
-      kits.remove(getKit(p, kitName));
+    for (Kit kit : getKits(p)) {
+      if (!kit.isPublicKit()) {
+        kits.remove(kit);
+      }
     }
+
     GUI.onPlayerQuit(p);
   }
 
