@@ -20,8 +20,12 @@ repositories {
 
 dependencies {
     implementation 'org.bstats:bstats-bukkit:3.0.0'
+    implementation 'org.projectlombok:lombok:1.18.24'
 
     compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
 }
 
 build {

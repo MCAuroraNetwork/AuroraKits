@@ -4,6 +4,7 @@ import club.aurorapvp.AuroraKits;
 import club.aurorapvp.config.Lang;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class GUI {
   private static final List<GUI> guis = new ArrayList<>();
-  private final Player owner;
-  private final Inventory inv = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
+  @Getter private final Player owner;
+  @Getter private final Inventory inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
 
   public GUI(Player p) {
     this.owner = p;
@@ -21,27 +22,19 @@ public class GUI {
     guis.add(this);
   }
 
-  public Player getOwner() {
-    return owner;
-  }
-
-  public Inventory getInventory() {
-    return inv;
-  }
-
   public void addKit(Kit kit) {
-    inv.addItem(kit.getDisplayItem());
+    inventory.addItem(kit.getDisplayItem());
   }
 
   public void removeKit(Kit kit) {
-    inv.remove(kit.getDisplayItem());
+    inventory.remove(kit.getDisplayItem());
   }
 
   public void reload() {
-    inv.clear();
+    inventory.clear();
 
     for (Kit kit : Kit.getKits(this.getOwner())) {
-      inv.addItem(kit.getDisplayItem());
+      inventory.addItem(kit.getDisplayItem());
     }
   }
 

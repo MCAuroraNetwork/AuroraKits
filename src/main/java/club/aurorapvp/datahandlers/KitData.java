@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -23,8 +24,8 @@ public class KitData {
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
   }
 
-  public Player getOwner() {
-    return Bukkit.getPlayer(UUID.fromString(DATA_FILE.getString("owner")));
+  public OfflinePlayer getOwner() {
+    return Bukkit.getOfflinePlayer(UUID.fromString(DATA_FILE.getString("owner")));
   }
 
   public ItemStack getDisplayItem() {
@@ -56,7 +57,7 @@ public class KitData {
   }
 
   public void create() {
-    DATA_FILE.set("isPublic", kit.isPublic());
+    DATA_FILE.set("isPublic", kit.isPublicKit());
     DATA_FILE.set("owner", String.valueOf(kit.getOwner().getUniqueId()));
     DATA_FILE.set("displayItem", kit.getDisplayItem());
 

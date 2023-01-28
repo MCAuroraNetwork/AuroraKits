@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,18 +22,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class Kit {
   private static final HashMap<String, Kit> LAST_USED_KIT = new HashMap<>();
   private static final List<Kit> kits = new ArrayList<>();
-  private final KitData kitData;
-  private String kitName;
-  private Player owner;
-  private boolean isPublic;
-  private ItemStack[] itemStacks;
-  private ItemStack displayItem;
-  private final String kitPath;
+  @Getter private final KitData data;
+  @Getter private String name;
+  @Getter private OfflinePlayer owner;
+  @Getter private boolean publicKit;
+  @Getter private ItemStack[] itemStacks;
+  @Getter private ItemStack displayItem;
+  @Getter private final String path;
 
   public Kit(String kitName, String kitPath) {
-    this.kitPath = kitPath;
-    this.kitName = kitName;
-    this.kitData = new KitData(this);
+    this.path = kitPath;
+    this.name = kitName;
+    this.data = new KitData(this);
 
     kits.add(this);
 
@@ -40,41 +42,13 @@ public class Kit {
     }
   }
 
-  public ItemStack getDisplayItem() {
-    return displayItem;
-  }
-
-  public String getPath() {
-    return kitPath;
-  }
-
-  public ItemStack[] getItemStacks() {
-    return itemStacks;
-  }
-
-  public KitData getData() {
-    return kitData;
-  }
-
-  public Player getOwner() {
-    return owner;
-  }
-
-  public String getName() {
-    return kitName;
-  }
-
-  public boolean isPublic() {
-    return isPublic;
-  }
-
   public boolean exists() {
     return this.getData().getFile().exists();
   }
 
   public void create(Player p, boolean isPublic) {
     this.owner = p;
-    this.isPublic = isPublic;
+    this.publicKit = isPublic;
 
     if (this.exists()) {
       p.sendMessage(Lang.getComponent("kit-already-exists"));
@@ -82,12 +56,12 @@ public class Kit {
     }
 
     displayItem =
-        createDisplayItem(p.getInventory().getItemInMainHand().getType(), kitName, owner.getName(),
+        createDisplayItem(p.getInventory().getItemInMainHand().getType(), name, owner.getName(),
             isPublic);
 
     if (p.getInventory().getItemInMainHand().getItemMeta() != null && getAmount(p) < 54) {
-      if (kitName == null) {
-        kitName = "Kit" + Math.addExact(getAmount(p), 1);
+      if (name == null) {
+        name = "Kit" + Math.addExact(getAmount(p), 1);
       }
 
       itemStacks = new ItemStack[p.getInventory().getContents().length];
@@ -96,7 +70,7 @@ public class Kit {
             p.getInventory().getContents()[i].clone();
       }
 
-      kitData.create();
+      data.create();
       if (isPublic) {
         for (GUI gui : GUI.getGuis()) {
           gui.addKit(this);
@@ -112,14 +86,14 @@ public class Kit {
   }
 
   public void delete(Player p, boolean isPublic) {
-    if (!Objects.equals(this.isPublic(), isPublic)) {
+    if (!Objects.equals(this.isPublicKit(), isPublic)) {
       if (p != null) {
         p.sendMessage(Lang.getComponent("kit-not-found"));
       }
       return;
     }
 
-    kitData.getFile().delete();
+    data.getFile().delete();
 
     if (isPublic) {
       for (GUI gui : GUI.getGuis()) {
@@ -149,7 +123,7 @@ public class Kit {
   public void reload() {
     this.owner = this.getData().getOwner();
     this.itemStacks = this.getData().getItemStacks();
-    this.isPublic = this.getData().isPublic();
+    this.publicKit = this.getData().isPublic();
     this.displayItem = this.getData().getDisplayItem();
   }
 
@@ -201,7 +175,7 @@ public class Kit {
     List<Kit> playerKits = new ArrayList<>();
 
     for (Kit kit : kits) {
-      if (kit.getOwner().getUniqueId() == p.getUniqueId() || kit.isPublic()) {
+      if (kit.getOwner().getPlayer() == p || kit.isPublicKit()) {
         playerKits.add(kit);
       }
     }
@@ -217,7 +191,7 @@ public class Kit {
 
   public static Kit getKit(Player p, String kitName) {
     for (Kit kit : kits) {
-      if (kit.getOwner().getUniqueId() == p.getUniqueId() || kit.isPublic) {
+      if (kit.getOwner().getPlayer() == p || kit.publicKit) {
         if (Objects.equals(kit.getName(), kitName)) {
           return kit;
         }

@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,14 +21,14 @@ import org.bukkit.inventory.ItemStack;
 
 public class Frame {
   private static final List<Frame> frames = new ArrayList<>();
-  private Location location;
-  private final String frameName;
-  private final FrameData frameData;
-  private ItemStack item;
+  @Getter private Location location;
+  @Getter private final String name;
+  @Getter private final FrameData data;
+  @Getter private ItemStack item;
 
   public Frame(String frameName) {
-    this.frameName = frameName;
-    this.frameData = new FrameData(this);
+    this.name = frameName;
+    this.data = new FrameData(this);
 
     frames.add(this);
 
@@ -40,24 +41,8 @@ public class Frame {
     return this.getData().getConfigSection() != null;
   }
 
-  public FrameData getData() {
-    return frameData;
-  }
-
-  public ItemStack getItem() {
-    return item;
-  }
-
-  public String getName() {
-    return frameName;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
   public void create(Player p) {
-    if (frameName != null && p != null) {
+    if (name != null && p != null) {
       Block block = p.getTargetBlock(4);
       ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
       frame.teleport(block.getRelative(getBlockFace(p)).getLocation());
@@ -67,7 +52,7 @@ public class Frame {
       item = p.getInventory().getItemInMainHand();
       location = frame.getLocation();
 
-      this.frameData.create();
+      this.data.create();
 
       p.sendMessage(Lang.getComponent("frame-created"));
     } else if (p != null) {
