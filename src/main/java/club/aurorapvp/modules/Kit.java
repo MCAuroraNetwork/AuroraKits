@@ -32,7 +32,6 @@ public class Kit {
     this.kitPath = kitPath;
     this.kitName = kitName;
     this.kitData = new KitData(this);
-    itemStacks = new ItemStack[0];
 
     kits.add(this);
 
@@ -200,21 +199,17 @@ public class Kit {
 
   public static Kit[] getKits(Player p) {
     List<Kit> playerKits = new ArrayList<>();
-    int i = 0;
 
     for (Kit kit : kits) {
-      if (kit.getOwner() == p || kit.isPublic()) {
+      if (kit.getOwner().getUniqueId() == p.getUniqueId() || kit.isPublic()) {
         playerKits.add(kit);
-        i++;
       }
     }
 
-    Kit[] kitArray = new Kit[i];
-    i = 0;
+    Kit[] kitArray = new Kit[playerKits.size()];
 
-    for (Kit kit : playerKits) {
-      kitArray[i] = kit;
-      i++;
+    for (int i = 0; i < playerKits.size(); i++) {
+      kitArray[i] = playerKits.get(i);
     }
 
     return kitArray;
@@ -222,7 +217,7 @@ public class Kit {
 
   public static Kit getKit(Player p, String kitName) {
     for (Kit kit : kits) {
-      if (kit.getOwner() == p || kit.isPublic) {
+      if (kit.getOwner().getUniqueId() == p.getUniqueId() || kit.isPublic) {
         if (Objects.equals(kit.getName(), kitName)) {
           return kit;
         }
@@ -250,15 +245,6 @@ public class Kit {
       for (File file : dir.listFiles()) {
         String kitName = file.getName().replace(".yml", "");
         new Kit(kitName, "public");
-      }
-    }
-
-    dir = new File(AuroraKits.DATA_FOLDER, "/kits/hidden/");
-
-    if (dir.exists()) {
-      for (File file : dir.listFiles()) {
-        String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName, "hidden");
       }
     }
 
