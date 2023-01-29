@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class KitData {
@@ -76,7 +75,7 @@ public class KitData {
       }
       DATA_FILE.save(FILE);
     } catch (IOException e) {
-      AuroraKits.PLUGIN.getLogger().severe("Failed to save kit data");
+      AuroraKits.INSTANCE.getLogger().severe("Failed to save kit data");
     }
   }
 }

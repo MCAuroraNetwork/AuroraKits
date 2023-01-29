@@ -1,7 +1,7 @@
 package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.Lang;
+import club.aurorapvp.configs.Lang;
 import club.aurorapvp.datahandlers.FrameData;
 import java.io.File;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class Frame {
     for (Frame frame : frames) {
       frame.reload();
     }
-    AuroraKits.PLUGIN.getLogger().info("All frames reloaded!");
+    AuroraKits.INSTANCE.getLogger().info("All frames reloaded!");
   }
 
   public static void setup() {
@@ -92,7 +92,7 @@ public class Frame {
     for (String name : section.getKeys(false)) {
       new Frame(name);
     }
-    AuroraKits.PLUGIN.getLogger().info("All frames loaded!");
+    AuroraKits.INSTANCE.getLogger().info("All frames loaded!");
   }
 
   public static Frame getItemFrame(Location loc) {

@@ -1,4 +1,4 @@
-package club.aurorapvp.config;
+package club.aurorapvp.configs;
 
 import club.aurorapvp.AuroraKits;
 import java.io.File;
@@ -11,7 +11,6 @@ public class Lang {
   private static final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
   private static final HashMap<String, String> DEFAULTS = new HashMap<>();
   private static final File FILE = new File(AuroraKits.DATA_FOLDER, "lang.yml");
-
   private static YamlConfiguration lang;
 
   public static void generateDefaults() {
@@ -36,6 +35,7 @@ public class Lang {
     DEFAULTS.put("kit-invalid-item", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit display item!");
     DEFAULTS.put("kit-not-found", "prefix <gradient:#FFAA00:#FF55FF>Kit not found!");
     DEFAULTS.put("kit-already-exists", "prefix <gradient:#FFAA00:#FF55FF>Kit already exists!");
+    DEFAULTS.put("next-page", "<gradient:#FFAA00:#FF55FF>Click to see the next page!");
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().contains(path) || get().getString(path) == null) {
@@ -44,7 +44,7 @@ public class Lang {
         try {
           get().save(FILE);
         } catch (IOException e) {
-          AuroraKits.PLUGIN.getLogger().severe("Unable to save lang file");
+          AuroraKits.INSTANCE.getLogger().severe("Unable to save lang file");
         }
       }
     }
@@ -73,10 +73,10 @@ public class Lang {
         FILE.getParentFile().mkdirs();
         FILE.createNewFile();
       } catch (IOException e) {
-        AuroraKits.PLUGIN.getLogger().severe("Failed to generate lang files");
+        AuroraKits.INSTANCE.getLogger().severe("Failed to generate lang files");
       }
     }
     lang = YamlConfiguration.loadConfiguration(FILE);
-    AuroraKits.PLUGIN.getLogger().info("Lang reloaded!");
+    AuroraKits.INSTANCE.getLogger().info("Lang reloaded!");
   }
 }

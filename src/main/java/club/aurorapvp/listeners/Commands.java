@@ -1,8 +1,8 @@
 package club.aurorapvp.listeners;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.Config;
-import club.aurorapvp.config.Lang;
+import club.aurorapvp.configs.Config;
+import club.aurorapvp.configs.Lang;
 import club.aurorapvp.modules.Frame;
 import club.aurorapvp.modules.GUI;
 import club.aurorapvp.modules.Kit;
@@ -15,9 +15,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.TabCompleteEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class Commands implements CommandExecutor, TabCompleter {
@@ -41,7 +38,7 @@ public class Commands implements CommandExecutor, TabCompleter {
           Config.reload();
           GUI.reloadAll();
           Lang.reload();
-          AuroraKits.PLUGIN.getLogger()
+          AuroraKits.INSTANCE.getLogger()
               .info("All reloaded in " + Math.subtractExact(System.currentTimeMillis(), startTime) + "ms");
         }
       }
@@ -60,7 +57,7 @@ public class Commands implements CommandExecutor, TabCompleter {
       case "kits" -> GUI.open(p);
       case "createkit" -> {
         if (args.length == 0) {
-          new Kit(null, String.valueOf(p.getUniqueId())).create(p, false);
+          new Kit("Kit" + Math.addExact(Kit.getAmount(p), 1), String.valueOf(p.getUniqueId())).create(p, false);
         } else {
           new Kit(args[0], p.getUniqueId().toString()).create(p, false);
         }

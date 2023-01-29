@@ -1,15 +1,13 @@
 package club.aurorapvp.listeners;
 
-import club.aurorapvp.config.Config;
+import club.aurorapvp.AuroraKits;
+import club.aurorapvp.configs.Config;
 import club.aurorapvp.modules.Frame;
 import club.aurorapvp.modules.GUI;
 import club.aurorapvp.modules.Kit;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;

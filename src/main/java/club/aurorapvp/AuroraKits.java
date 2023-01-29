@@ -1,7 +1,7 @@
 package club.aurorapvp;
 
-import club.aurorapvp.config.Config;
-import club.aurorapvp.config.Lang;
+import club.aurorapvp.configs.Config;
+import club.aurorapvp.configs.Lang;
 import club.aurorapvp.listeners.Commands;
 import club.aurorapvp.listeners.Events;
 import club.aurorapvp.modules.Frame;
@@ -16,7 +16,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuroraKits extends JavaPlugin {
-  public static Plugin PLUGIN;
+  public static Plugin INSTANCE;
   public static File DATA_FOLDER;
   public static PlainTextComponentSerializer SERIALIZE_COMPONENT;
   public static MiniMessage DESERIALIZE_COMPONENT;
@@ -26,14 +26,10 @@ public final class AuroraKits extends JavaPlugin {
     long startTime = System.currentTimeMillis();
 
     // Register important variables
-    PLUGIN = this;
+    INSTANCE = this;
     DATA_FOLDER = this.getDataFolder();
     SERIALIZE_COMPONENT = PlainTextComponentSerializer.plainText();
     DESERIALIZE_COMPONENT = MiniMessage.miniMessage();
-
-    // Setup classes
-    Frame.setup();
-    Kit.setup();
 
     // Setup configs
     Lang.reload();
@@ -41,9 +37,13 @@ public final class AuroraKits extends JavaPlugin {
     Lang.generateDefaults();
     Config.generateDefaults();
 
+    // Setup classes
+    Frame.setup();
+    Kit.setup();
+
     // Register Listeners
     getServer().getPluginManager().registerEvents(new Events(), this);
-    List<Command> commandList = PluginCommandYamlParser.parse(PLUGIN);
+    List<Command> commandList = PluginCommandYamlParser.parse(INSTANCE);
     for (Command command : commandList) {
       getCommand(command.getName()).setExecutor(new Commands());
     }

@@ -1,8 +1,8 @@
 package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.config.Config;
-import club.aurorapvp.config.Lang;
+import club.aurorapvp.configs.Config;
+import club.aurorapvp.configs.Lang;
 import club.aurorapvp.datahandlers.KitData;
 import java.io.File;
 import java.util.ArrayList;
@@ -60,10 +60,6 @@ public class Kit {
             isPublic);
 
     if (p.getInventory().getItemInMainHand().getItemMeta() != null && getAmount(p) < 54) {
-      if (name == null) {
-        name = "Kit" + Math.addExact(getAmount(p), 1);
-      }
-
       itemStacks = new ItemStack[p.getInventory().getContents().length];
       for (int i = 0; i < p.getInventory().getContents().length; i++) {
         itemStacks[i] = p.getInventory().getContents()[i] == null ? null :
@@ -127,7 +123,7 @@ public class Kit {
     this.displayItem = this.getData().getDisplayItem();
   }
 
-  protected static ItemStack createDisplayItem(final Material material, final String name,
+  private static ItemStack createDisplayItem(final Material material, final String name,
                                                String creator, boolean isPublic) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
@@ -140,11 +136,11 @@ public class Kit {
     if (isPublic) {
       meta.lore(List.of(MiniMessage.miniMessage()
           .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Private Kit")));
+          .deserialize("This is a Public Kit")));
     } else {
       meta.lore(List.of(MiniMessage.miniMessage()
           .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Public Kit")));
+          .deserialize("This is a Private Kit")));
     }
 
     item.setItemMeta(meta);
@@ -168,7 +164,7 @@ public class Kit {
     for (Kit kit : kits) {
       kit.reload();
     }
-    AuroraKits.PLUGIN.getLogger().info("All kits reloaded!");
+    AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
   }
 
   public static Kit[] getKits(Player p) {
@@ -222,7 +218,7 @@ public class Kit {
       }
     }
 
-    AuroraKits.PLUGIN.getLogger().info("All kits loaded!");
+    AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
   }
 
   public static void onPlayerQuit(Player p) {
