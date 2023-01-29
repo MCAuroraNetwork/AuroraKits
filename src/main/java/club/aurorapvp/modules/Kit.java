@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kit {
-  private static final HashMap<String, Kit> LAST_USED_KIT = new HashMap<>();
+  private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private static final List<Kit> kits = new ArrayList<>();
   @Getter private final KitData data;
   @Getter private String name;
@@ -114,7 +114,7 @@ public class Kit {
     if (this.exists()) {
       p.getInventory().setContents(this.getItemStacks());
       p.sendMessage(Lang.getComponent("kit-used"));
-      LAST_USED_KIT.put(p.getName(), this);
+      LAST_USED_KIT.put(p, this);
     } else {
       p.sendMessage(Lang.getComponent("kit-not-found"));
     }
@@ -235,11 +235,19 @@ public class Kit {
     GUI.onPlayerQuit(p);
   }
 
+  public static Kit getLastUsedKit(Player p) {
+    if (!LAST_USED_KIT.containsKey(p)) {
+      return getKit(p, Config.get().getString("kits.lastUsedKit.defaultKit"));
+    } else {
+      return LAST_USED_KIT.get(p);
+    }
+  }
+
   public static void giveLastUsedKit(Player p) {
-    if (!LAST_USED_KIT.containsKey(p.getName())) {
+    if (!LAST_USED_KIT.containsKey(p)) {
       getKit(p, Config.get().getString("kits.lastUsedKit.defaultKit")).giveKit(p);
     } else {
-      LAST_USED_KIT.get(p.getName()).giveKit(p);
+      LAST_USED_KIT.get(p).giveKit(p);
     }
   }
 }

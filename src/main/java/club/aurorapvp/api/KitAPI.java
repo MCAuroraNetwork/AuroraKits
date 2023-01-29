@@ -47,6 +47,15 @@ public class KitAPI {
   }
 
   /**
+   * Gets the last used kit by a player
+   * @param p the player who to get the last kit from
+   * @return Returns the last kit, the default kit to give, or null if there is no last kit or default kit
+   */
+  public static Kit getLastKit(Player p) {
+    return Kit.getLastUsedKit(p);
+  }
+
+  /**
    * Gets an array of all public or hidden kits
    * @return Returns an array of kits that are public or hidden
    */
