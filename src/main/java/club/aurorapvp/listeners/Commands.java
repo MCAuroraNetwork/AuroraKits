@@ -6,22 +6,27 @@ import club.aurorapvp.config.Lang;
 import club.aurorapvp.modules.Frame;
 import club.aurorapvp.modules.GUI;
 import club.aurorapvp.modules.Kit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class Commands implements CommandExecutor, Listener {
-  private Player p;
+public class Commands implements CommandExecutor, TabCompleter {
 
   @Override
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                            @NotNull String label, String[] args) {
+
+    Player p = null;
 
     if (sender instanceof Player) {
       p = (Player) sender;
@@ -83,8 +88,30 @@ public class Commands implements CommandExecutor, Listener {
     return true;
   }
 
-  @EventHandler
-  public void onTabComplete(TabCompleteEvent event) {
+  private final static List<String> results = new ArrayList<>();
 
+  @Override
+  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd,
+                                    @NotNull String alias, String[] args) {
+    Player p = null;
+    results.clear();
+
+    if (sender instanceof Player) {
+      p = (Player) sender;
+    }
+
+    if (args.length == 1) {
+      switch (cmd.getLabel()) {
+        case "deletekit", "kit" -> {
+          for (Kit kit : Kit.getKits(p)) {
+            results.add(kit.getName());
+          }
+        }
+        case "aurorakits" -> results.add("reload");
+      }
+    }
+
+    Collections.sort(results);
+    return results;
   }
 }
