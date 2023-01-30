@@ -1,10 +1,10 @@
 package club.aurorapvp.api;
 
 import club.aurorapvp.modules.Kit;
-import java.util.Objects;
 import org.bukkit.entity.Player;
 
-public class KitAPI {
+public class Kits {
+
   /**
    * Creates a kit object and saves it
    * @param name The name of the kit
@@ -12,12 +12,7 @@ public class KitAPI {
    * @return Returns the created kit
    */
   public static Kit createKit(String name, Player p) {
-    Kit kit;
-
-    kit = new Kit(name, "public");
-    kit.create(p, true);
-
-    return kit;
+    throw new UnsupportedOperationException("This is an API jar for AuroraKits, used for development purposes only");
   }
 
   /**
@@ -25,11 +20,7 @@ public class KitAPI {
    * @param name The name of the kit to delete
    */
   public static void deleteKit(String name) {
-    for (Kit kit : getKits()) {
-      if (Objects.equals(kit.getName(), name)) {
-        kit.delete(null, true);
-      }
-    }
+    throw new UnsupportedOperationException("This is an API jar for AuroraKits, used for development purposes only");
   }
 
   /**
@@ -38,12 +29,7 @@ public class KitAPI {
    * @return Returns the kit found, or null if not found
    */
   public static Kit getKit(String name) {
-    for (Kit kit : getKits()) {
-      if (Objects.equals(kit.getName(), name)) {
-        return kit;
-      }
-    }
-    return null;
+    throw new UnsupportedOperationException("This is an API jar for AuroraKits, used for development purposes only");
   }
 
   /**
@@ -52,7 +38,7 @@ public class KitAPI {
    * @return Returns the last kit, the default kit to give, or null if there is no last kit or default kit
    */
   public static Kit getLastKit(Player p) {
-    return Kit.getLastUsedKit(p);
+    throw new UnsupportedOperationException("This is an API jar for AuroraKits, used for development purposes only");
   }
 
   /**
@@ -60,7 +46,7 @@ public class KitAPI {
    * @return Returns an array of kits that are public or hidden
    */
   public static Kit[] getKits() {
-    return Kit.getKits(null);
+    throw new UnsupportedOperationException("This is an API jar for AuroraKits, used for development purposes only");
   }
 
   /**
@@ -69,6 +55,6 @@ public class KitAPI {
    * @param p The player that will receive the kit
    */
   public static void giveKit(Kit kit, Player p) {
-    kit.giveKit(p);
+    throw new UnsupportedOperationException("This is an API jar for AuroraKits, used for development purposes only");
   }
 }
