@@ -59,7 +59,7 @@ public class Kit {
         createDisplayItem(p.getInventory().getItemInMainHand().getType(), name, owner.getName(),
             isPublic);
 
-    if (p.getInventory().getItemInMainHand().getItemMeta() != null && getAmount(p) < 54) {
+    if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
       itemStacks = new ItemStack[p.getInventory().getContents().length];
       for (int i = 0; i < p.getInventory().getContents().length; i++) {
         itemStacks[i] = p.getInventory().getContents()[i] == null ? null :
