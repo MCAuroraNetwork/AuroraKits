@@ -53,10 +53,17 @@ public class GUI {
     Inventory inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
     inventory.addItem(kit.getDisplayItem());
 
+    ItemMeta meta;
+
     ItemStack nextPage = new ItemStack(Material.PAPER);
-    ItemMeta meta = nextPage.getItemMeta();
+    meta = nextPage.getItemMeta();
     meta.displayName(Lang.getComponent("next-page"));
     nextPage.setItemMeta(meta);
+
+    ItemStack previousPage = new ItemStack(Material.PAPER);
+    meta = previousPage.getItemMeta();
+    meta.displayName(Lang.getComponent("previous-page"));
+    previousPage.setItemMeta(meta);
 
     inventory.setItem(45, nextPage);
     inventory.setItem(53, nextPage);
@@ -114,10 +121,17 @@ public class GUI {
         inventory.addItem(Kit.getKits(this.getOwner())[j].getDisplayItem());
       }
 
+      ItemMeta meta;
+
       ItemStack nextPage = new ItemStack(Material.PAPER);
-      ItemMeta meta = nextPage.getItemMeta();
+      meta = nextPage.getItemMeta();
       meta.displayName(Lang.getComponent("next-page"));
       nextPage.setItemMeta(meta);
+
+      ItemStack previousPage = new ItemStack(Material.PAPER);
+      meta = previousPage.getItemMeta();
+      meta.displayName(Lang.getComponent("previous-page"));
+      previousPage.setItemMeta(meta);
 
       inventory.setItem(45, nextPage);
       inventory.setItem(53, nextPage);
