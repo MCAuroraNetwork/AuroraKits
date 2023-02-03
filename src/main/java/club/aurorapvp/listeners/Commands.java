@@ -57,7 +57,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 
         case "createkit" -> {
           if (args.length == 0) {
-            new Kit("Kit" + Math.addExact(Kit.getAmount(p), 1),
+            new Kit("Kit" + Math.addExact(Kit.getAmount(p, false), 1),
                 String.valueOf(p.getUniqueId())).create(p, false);
           } else {
             new Kit(args[0], p.getUniqueId().toString()).create(p, false);
@@ -105,7 +105,7 @@ public class Commands implements CommandExecutor, TabCompleter {
     if (args.length == 1) {
       switch (cmd.getLabel()) {
         case "deletekit", "kit" -> {
-          for (Kit kit : Kit.getKits(p)) {
+          for (Kit kit : Kit.getKits(p, true)) {
             results.add(kit.getName());
           }
         }

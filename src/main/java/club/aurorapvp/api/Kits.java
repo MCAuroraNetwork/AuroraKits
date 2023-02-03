@@ -37,7 +37,7 @@ public class Kits {
   }
 
   public static Kit[] getKits() {
-    return Kit.getKits(null);
+    return Kit.getKits(null, true);
   }
 
   public static void giveKit(Kit kit, Player p) {

@@ -22,13 +22,20 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class Kit {
   private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private static final List<Kit> kits = new ArrayList<>();
-  @Getter private final KitData data;
-  @Getter private String name;
-  @Getter private OfflinePlayer owner;
-  @Getter private boolean publicKit;
-  @Getter private ItemStack[] itemStacks;
-  @Getter private ItemStack displayItem;
-  @Getter private final String path;
+  @Getter
+  private final KitData data;
+  @Getter
+  private final String name;
+  @Getter
+  private OfflinePlayer owner;
+  @Getter
+  private boolean publicKit;
+  @Getter
+  private ItemStack[] itemStacks;
+  @Getter
+  private ItemStack displayItem;
+  @Getter
+  private final String path;
 
   public Kit(String kitName, String kitPath) {
     this.path = kitPath;
@@ -124,7 +131,7 @@ public class Kit {
   }
 
   private static ItemStack createDisplayItem(final Material material, final String name,
-                                               String creator, boolean isPublic) {
+                                             String creator, boolean isPublic) {
     final ItemStack item = new ItemStack(material, 1);
     final ItemMeta meta = item.getItemMeta();
 
@@ -148,8 +155,8 @@ public class Kit {
     return item;
   }
 
-  public static int getAmount(Player p) {
-    return getKits(p).length;
+  public static int getAmount(Player p, boolean includePublic) {
+    return getKits(p, includePublic).length;
   }
 
   public static void reloadAll() {
@@ -167,11 +174,11 @@ public class Kit {
     AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
   }
 
-  public static Kit[] getKits(Player p) {
+  public static Kit[] getKits(Player p, boolean includePublic) {
     List<Kit> playerKits = new ArrayList<>();
 
     for (Kit kit : kits) {
-      if (kit.getOwner().getPlayer() == p || kit.isPublicKit()) {
+      if (kit.getOwner().getPlayer() == p || (kit.isPublicKit() && includePublic)) {
         playerKits.add(kit);
       }
     }
@@ -222,7 +229,7 @@ public class Kit {
   }
 
   public static void onPlayerQuit(Player p) {
-    for (Kit kit : getKits(p)) {
+    for (Kit kit : getKits(p, true)) {
       if (!kit.isPublicKit()) {
         kits.remove(kit);
       }
