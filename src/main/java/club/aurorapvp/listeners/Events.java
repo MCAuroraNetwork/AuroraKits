@@ -17,10 +17,10 @@ import org.bukkit.event.world.WorldLoadEvent;
 public class Events implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
+    Kit.setupPlayer(event.getPlayer());
     if (Config.get().getBoolean("kits.lastUsedKit.enabled")) {
       Kit.giveLastUsedKit(event.getPlayer());
     }
-    Kit.setupPlayer(event.getPlayer());
   }
 
   @EventHandler
