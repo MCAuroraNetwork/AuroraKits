@@ -179,7 +179,7 @@ public class Kit {
   public static void reloadAll() {
     kits.clear();
 
-    setup();
+    new Kit();
 
     for (Player p : Bukkit.getOnlinePlayers()) {
       setupPlayer(p);
