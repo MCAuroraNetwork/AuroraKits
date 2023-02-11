@@ -49,6 +49,23 @@ public class Kit {
     }
   }
 
+  public Kit() {
+    this.path = null;
+    this.data = null;
+    this.name = null;
+
+    File dir = new File(AuroraKits.DATA_FOLDER, "/kits/public/");
+
+    if (dir.exists()) {
+      for (File file : dir.listFiles()) {
+        String kitName = file.getName().replace(".yml", "");
+        new Kit(kitName, "public");
+      }
+    }
+
+    AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
+  }
+
   public boolean exists() {
     return this.getData().getFile().exists();
   }
@@ -213,19 +230,6 @@ public class Kit {
       }
     }
     new GUI(p).reload();
-  }
-
-  public static void setup() {
-    File dir = new File(AuroraKits.DATA_FOLDER, "/kits/public/");
-
-    if (dir.exists()) {
-      for (File file : dir.listFiles()) {
-        String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName, "public");
-      }
-    }
-
-    AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
   }
 
   public static void onPlayerQuit(Player p) {

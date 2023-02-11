@@ -38,8 +38,8 @@ public final class AuroraKits extends JavaPlugin {
     Config.generateDefaults();
 
     // Setup classes
-    Frame.setup();
-    Kit.setup();
+    new Frame();
+    new Kit();
 
     // Register Listeners
     getServer().getPluginManager().registerEvents(new Events(), this);

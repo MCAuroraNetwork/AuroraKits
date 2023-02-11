@@ -37,6 +37,24 @@ public class Frame {
     }
   }
 
+  public Frame() {
+    this.data = null;
+    this.name = null;
+
+    File file = new File(AuroraKits.DATA_FOLDER, "/frames.yml");
+    YamlConfiguration framesData = YamlConfiguration.loadConfiguration(file);
+    ConfigurationSection section = framesData.getConfigurationSection("frames");
+
+    if (section == null) {
+      return;
+    }
+
+    for (String name : section.getKeys(false)) {
+      new Frame(name);
+    }
+    AuroraKits.INSTANCE.getLogger().info("All frames loaded!");
+  }
+
   public boolean exists() {
     return this.getData().getConfigSection() != null;
   }
@@ -78,21 +96,6 @@ public class Frame {
       frame.reload();
     }
     AuroraKits.INSTANCE.getLogger().info("All frames reloaded!");
-  }
-
-  public static void setup() {
-    File file = new File(AuroraKits.DATA_FOLDER, "/frames.yml");
-    YamlConfiguration framesData = YamlConfiguration.loadConfiguration(file);
-    ConfigurationSection section = framesData.getConfigurationSection("frames");
-
-    if (section == null) {
-      return;
-    }
-
-    for (String name : section.getKeys(false)) {
-      new Frame(name);
-    }
-    AuroraKits.INSTANCE.getLogger().info("All frames loaded!");
   }
 
   public static Frame getItemFrame(Location loc) {
