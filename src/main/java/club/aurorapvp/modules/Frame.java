@@ -52,7 +52,7 @@ public class Frame {
     for (String name : section.getKeys(false)) {
       new Frame(name);
     }
-    AuroraKits.INSTANCE.getLogger().info("All frames loaded!");
+    AuroraKits.LOGGER.info("All frames loaded!");
   }
 
   public boolean exists() {
@@ -95,7 +95,7 @@ public class Frame {
     for (Frame frame : frames) {
       frame.reload();
     }
-    AuroraKits.INSTANCE.getLogger().info("All frames reloaded!");
+    AuroraKits.LOGGER.info("All frames reloaded!");
   }
 
   public static Frame getItemFrame(Location loc) {

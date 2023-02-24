@@ -37,10 +37,9 @@ public class Commands implements CommandExecutor, TabCompleter {
           Config.reload();
           GUI.reloadAll();
           Lang.reload();
-          AuroraKits.INSTANCE.getLogger()
-              .info(
-                  "All reloaded in " + Math.subtractExact(System.currentTimeMillis(), startTime) +
-                      "ms");
+          AuroraKits.LOGGER.info(
+              "All reloaded in " + Math.subtractExact(System.currentTimeMillis(), startTime) +
+                  "ms");
         }
       }
 

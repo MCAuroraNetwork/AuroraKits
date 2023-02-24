@@ -45,7 +45,7 @@ public class Lang {
         try {
           get().save(FILE);
         } catch (IOException e) {
-          AuroraKits.INSTANCE.getLogger().severe("Unable to save lang file");
+          AuroraKits.LOGGER.severe("Unable to save lang file");
         }
       }
     }
@@ -74,10 +74,10 @@ public class Lang {
         FILE.getParentFile().mkdirs();
         FILE.createNewFile();
       } catch (IOException e) {
-        AuroraKits.INSTANCE.getLogger().severe("Failed to generate lang files");
+        AuroraKits.LOGGER.severe("Failed to generate lang files");
       }
     }
     lang = YamlConfiguration.loadConfiguration(FILE);
-    AuroraKits.INSTANCE.getLogger().info("Lang reloaded!");
+    AuroraKits.LOGGER.info("Lang reloaded!");
   }
 }

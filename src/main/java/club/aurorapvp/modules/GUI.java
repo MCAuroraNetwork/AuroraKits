@@ -155,7 +155,7 @@ public class GUI {
     for (GUI gui : guis) {
       gui.reload();
     }
-    AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
+    AuroraKits.LOGGER.info("GUIs Reloaded!");
   }
 
   public static GUI[] getGuis() {

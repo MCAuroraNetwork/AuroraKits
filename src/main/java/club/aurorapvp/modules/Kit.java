@@ -63,7 +63,7 @@ public class Kit {
       }
     }
 
-    AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
+    AuroraKits.LOGGER.info("All kits loaded!");
   }
 
   public boolean exists() {
@@ -188,7 +188,7 @@ public class Kit {
     for (Kit kit : kits) {
       kit.reload();
     }
-    AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
+    AuroraKits.LOGGER.info("All kits reloaded!");
   }
 
   public static Kit[] getKits(Player p, boolean includePublic) {

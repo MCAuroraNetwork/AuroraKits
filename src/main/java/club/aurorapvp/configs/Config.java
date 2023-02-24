@@ -22,7 +22,7 @@ public class Config {
         try {
           get().save(FILE);
         } catch (IOException e) {
-          AuroraKits.INSTANCE.getLogger().severe("Unable to save config file");
+          AuroraKits.LOGGER.severe("Unable to save config file");
         }
       }
     }
@@ -38,10 +38,10 @@ public class Config {
         FILE.getParentFile().mkdirs();
         FILE.createNewFile();
       } catch (IOException e) {
-        AuroraKits.INSTANCE.getLogger().severe("Failed to generate config files");
+        AuroraKits.LOGGER.severe("Failed to generate config files");
       }
     }
     config = YamlConfiguration.loadConfiguration(FILE);
-    AuroraKits.INSTANCE.getLogger().info("Config reloaded!");
+    AuroraKits.LOGGER.info("Config reloaded!");
   }
 }
