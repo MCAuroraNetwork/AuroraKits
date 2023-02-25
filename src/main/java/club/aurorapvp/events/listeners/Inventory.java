@@ -1,0 +1,13 @@
+package club.aurorapvp.events.listeners;
+
+import club.aurorapvp.modules.GUI;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+
+public class Inventory implements Listener {
+  @EventHandler
+  public static void onInventoryClicked(InventoryClickEvent event) {
+    GUI.inventoryClicked(event);
+  }
+}

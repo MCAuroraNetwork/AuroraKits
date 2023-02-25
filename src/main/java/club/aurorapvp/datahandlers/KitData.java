@@ -56,7 +56,7 @@ public class KitData {
   }
 
   public void create() {
-    DATA_FILE.set("isPublic", kit.isPublicKit());
+    DATA_FILE.set("isPublic", kit.isPublic());
     DATA_FILE.set("owner", String.valueOf(kit.getOwner().getUniqueId()));
     DATA_FILE.set("displayItem", kit.getDisplayItem());
 

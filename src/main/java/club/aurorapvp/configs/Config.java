@@ -11,6 +11,11 @@ public class Config {
   private static final File FILE = new File(AuroraKits.DATA_FOLDER, "config.yml");
   private static YamlConfiguration config;
 
+  public Config() {
+    reload();
+    generateDefaults();
+  }
+
   public static void generateDefaults() {
     DEFAULTS.put("kits.give-last-kit.enabled", false);
     DEFAULTS.put("kits.give-last-kit.defaultKit", "Default");

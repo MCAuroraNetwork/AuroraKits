@@ -4,10 +4,10 @@ import club.aurorapvp.AuroraKits;
 import club.aurorapvp.configs.Lang;
 import club.aurorapvp.datahandlers.FrameData;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import lombok.Getter;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,11 +20,11 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Frame {
-  private static final List<Frame> frames = new ArrayList<>();
-  @Getter private Location location;
-  @Getter private final String name;
-  @Getter private final FrameData data;
-  @Getter private ItemStack item;
+  private static final Set<Frame> frames = new HashSet<>();
+  private Location location;
+  private final String name;
+  private final FrameData data;
+  private ItemStack item;
 
   public Frame(String frameName) {
     this.name = frameName;
@@ -53,6 +53,22 @@ public class Frame {
       new Frame(name);
     }
     AuroraKits.LOGGER.info("All frames loaded!");
+  }
+
+  public ItemStack getItem() {
+    return item;
+  }
+
+  public FrameData getData() {
+    return data;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Location getLocation() {
+    return location;
   }
 
   public boolean exists() {
@@ -98,7 +114,7 @@ public class Frame {
     AuroraKits.LOGGER.info("All frames reloaded!");
   }
 
-  public static Frame getItemFrame(Location loc) {
+  public static Frame getFrame(Location loc) {
     for (Frame frame : frames) {
       if (frame.getLocation().equals(loc)) {
         return frame;
@@ -107,7 +123,7 @@ public class Frame {
     return null;
   }
 
-  public static Frame getItemFrame(String frameName) {
+  public static Frame getFrame(String frameName) {
     for (Frame frame : frames) {
       if (Objects.equals(frame.getName(), frameName)) {
         return frame;
@@ -119,7 +135,7 @@ public class Frame {
   public static void onClicked(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
     if (clicked instanceof ItemFrame) {
-      Frame frame = Frame.getItemFrame(clicked.getLocation());
+      Frame frame = Frame.getFrame(clicked.getLocation());
       if (frame != null) {
         event.getPlayer().getInventory().addItem(frame.getItem());
         event.setCancelled(true);

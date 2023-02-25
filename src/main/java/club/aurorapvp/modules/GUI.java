@@ -3,10 +3,12 @@ package club.aurorapvp.modules;
 import club.aurorapvp.AuroraKits;
 import club.aurorapvp.configs.Lang;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import lombok.Getter;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -14,8 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class GUI {
-  private static final List<GUI> guis = new ArrayList<>();
-  @Getter
+  private static final Set<GUI> guis = new HashSet<>();
   private final Player owner;
   private Inventory[] inventories;
   private int currentPage = 0;
@@ -25,6 +26,10 @@ public class GUI {
     this.owner = p;
 
     guis.add(this);
+  }
+
+  public Player getOwner() {
+    return owner;
   }
 
   public void addKit(Kit kit) {
