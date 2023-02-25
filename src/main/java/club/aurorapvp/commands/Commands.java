@@ -7,6 +7,7 @@ import club.aurorapvp.commands.kits.CreateKit;
 import club.aurorapvp.commands.kits.CreatePublicKit;
 import club.aurorapvp.commands.kits.DeleteKit;
 import club.aurorapvp.commands.kits.DeletePublicKit;
+import club.aurorapvp.commands.kits.GiveKit;
 import club.aurorapvp.commands.kits.KitsGUI;
 import club.aurorapvp.commands.plugin.Reload;
 import club.aurorapvp.configs.Lang;
@@ -31,6 +32,7 @@ public class Commands {
     AuroraKits.INSTANCE.getCommand("createpublickit").setExecutor(new CreatePublicKit());
     AuroraKits.INSTANCE.getCommand("deletekit").setExecutor(new DeleteKit());
     AuroraKits.INSTANCE.getCommand("deletepublickit").setExecutor(new DeletePublicKit());
+    AuroraKits.INSTANCE.getCommand("kit").setExecutor(new GiveKit());
     AuroraKits.INSTANCE.getCommand("kits").setExecutor(new KitsGUI());
     AuroraKits.INSTANCE.getCommand("aurorakits").setExecutor(new Reload());
   }
