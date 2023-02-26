@@ -17,6 +17,6 @@ public class CreateFrame implements CommandExecutor {
 
     new Frame(args[0]).create(p);
 
-    return false;
+    return true;
   }
 }

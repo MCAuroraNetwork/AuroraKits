@@ -28,6 +28,6 @@ public class GiveKit implements CommandExecutor {
       GUI.open(p);
     }
 
-    return false;
+    return true;
   }
 }

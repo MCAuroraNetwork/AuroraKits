@@ -17,6 +17,6 @@ public class CreatePublicKit implements CommandExecutor {
 
     new Kit(args[0], "public").create(p, true);
 
-    return false;
+    return true;
   }
 }

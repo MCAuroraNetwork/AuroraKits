@@ -23,6 +23,6 @@ public class DeleteKit implements CommandExecutor {
       p.sendMessage(Lang.getComponent("kit-invalid-name"));
     }
 
-    return false;
+    return true;
   }
 }

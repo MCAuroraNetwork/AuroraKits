@@ -22,6 +22,6 @@ public class CreateKit implements CommandExecutor {
       new Kit(args[0], p.getUniqueId().toString()).create(p, false);
     }
 
-    return false;
+    return true;
   }
 }

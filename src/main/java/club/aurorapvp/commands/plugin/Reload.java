@@ -30,6 +30,6 @@ public class Reload implements CommandExecutor {
               "ms");
     }
 
-    return false;
+    return true;
   }
 }
