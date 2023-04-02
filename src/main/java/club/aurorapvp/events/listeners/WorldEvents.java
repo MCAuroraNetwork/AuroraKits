@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
 
-public class World implements Listener {
+public class WorldEvents implements Listener {
   @EventHandler
   public void onWorldLoad(WorldLoadEvent event) {
     Frame.reloadAll();

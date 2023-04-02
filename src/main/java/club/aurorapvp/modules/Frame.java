@@ -37,10 +37,7 @@ public class Frame {
     }
   }
 
-  public Frame() {
-    this.data = null;
-    this.name = null;
-
+  public static void init() {
     File file = new File(AuroraKits.DATA_FOLDER, "/frames.yml");
     YamlConfiguration framesData = YamlConfiguration.loadConfiguration(file);
     ConfigurationSection section = framesData.getConfigurationSection("frames");

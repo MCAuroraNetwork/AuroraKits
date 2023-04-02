@@ -31,12 +31,12 @@ public final class AuroraKits extends JavaPlugin {
     DESERIALIZE_COMPONENT = MiniMessage.miniMessage();
 
     // Setup classes
-    new Lang();
-    new Config();
-    new Frame();
-    new Kit();
-    new Commands();
-    new Events();
+    Config.init();
+    Lang.init();
+    Events.init();
+    Frame.init();
+    Kit.init();
+    Commands.init();
 
     getLogger().info(
         "AuroraKits loaded in " + (System.currentTimeMillis() - startTime) +

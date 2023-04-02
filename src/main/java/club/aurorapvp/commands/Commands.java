@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class Commands {
-  public Commands() {
+  public static void init() {
     AuroraKits.INSTANCE.getCommand("createframe").setExecutor(new CreateFrame());
     AuroraKits.INSTANCE.getCommand("deleteframe").setExecutor(new DeleteFrame());
     AuroraKits.INSTANCE.getCommand("createkit").setExecutor(new CreateKit());

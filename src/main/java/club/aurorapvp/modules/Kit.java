@@ -43,11 +43,7 @@ public class Kit {
     }
   }
 
-  public Kit() {
-    this.path = null;
-    this.data = null;
-    this.name = null;
-
+  public static void init() {
     File dir = new File(AuroraKits.DATA_FOLDER, "/kits/public/");
 
     if (dir.exists()) {
@@ -239,7 +235,7 @@ public class Kit {
   public static void reloadAll() {
     kits.clear();
 
-    new Kit();
+    Kit.init();
 
     for (Player p : Bukkit.getOnlinePlayers()) {
       setupPlayer(p);

@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class Player implements Listener {
+public class PlayerEvents implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.setupPlayer(event.getPlayer());
