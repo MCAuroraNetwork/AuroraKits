@@ -129,6 +129,17 @@ public class Frame {
     return null;
   }
 
+  public static Frame[] getFrames() {
+    Frame[] framesArray = new Frame[frames.size()];
+
+    int i = 0;
+    for (Frame frame : frames) {
+      framesArray[i++] = frame;
+    }
+
+    return framesArray;
+  }
+
   public static void onClicked(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
     if (clicked instanceof ItemFrame) {

@@ -1,6 +1,5 @@
 package club.aurorapvp;
 
-import club.aurorapvp.commands.Commands;
 import club.aurorapvp.configs.Config;
 import club.aurorapvp.configs.Lang;
 import club.aurorapvp.events.Events;
@@ -31,12 +30,13 @@ public final class AuroraKits extends JavaPlugin {
     DESERIALIZE_COMPONENT = MiniMessage.miniMessage();
 
     // Setup classes
+    Commands.init();
+    Commands.registerCompletions();
     Config.init();
     Lang.init();
     Events.init();
     Frame.init();
     Kit.init();
-    Commands.init();
 
     getLogger().info(
         "AuroraKits loaded in " + (System.currentTimeMillis() - startTime) +
