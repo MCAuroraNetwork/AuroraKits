@@ -74,7 +74,7 @@ public class Frame {
 
   public void create(Player p) {
     if (name != null && p != null) {
-      Block block = p.getTargetBlock(4);
+      Block block = p.getTargetBlockExact(4);
       ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
       frame.teleport(block.getRelative(getBlockFace(p)).getLocation());
       frame.setFacingDirection(getBlockFace(p), true);
