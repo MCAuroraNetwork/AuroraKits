@@ -146,10 +146,13 @@ public class GUI {
     inventories = new Inventory[pages + 1];
 
     for (int i = 0; i < pages + 1; i++) {
-      Kit[] kits = new Kit[Kit.getKits(this.getOwner(), true).length - i * 45];
+      int numKits = Kit.getKits(this.getOwner(), true).length - i * 45;
+      Kit[] kits = new Kit[Math.max(numKits, 0)];
 
       for (int j = i * 45; j < Kit.getKits(this.getOwner(), true).length; j++) {
-        kits[j] = Kit.getKits(this.getOwner(), true)[j];
+        if (j - i * 45 < kits.length) {
+          kits[j - i * 45] = Kit.getKits(this.getOwner(), true)[j];
+        }
       }
 
       createPage(kits);
