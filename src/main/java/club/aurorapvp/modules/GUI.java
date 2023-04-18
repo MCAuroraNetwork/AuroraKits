@@ -2,13 +2,10 @@ package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraKits;
 import club.aurorapvp.configs.Lang;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -33,7 +30,7 @@ public class GUI {
   }
 
   public void addKit(Kit kit) {
-    Inventory lastPage = inventories[pages];
+    Inventory lastPage = inventories[pages - 1];
 
     if (lastPage.getContents()[44] != null) {
       createPage(kit);
@@ -73,7 +70,7 @@ public class GUI {
     inventory.setItem(45, nextPage);
     inventory.setItem(53, nextPage);
 
-    inventories[pages] = inventory;
+    inventories[pages - 1] = inventory;
     pages++;
   }
 
@@ -99,7 +96,7 @@ public class GUI {
     inventory.setItem(45, nextPage);
     inventory.setItem(53, nextPage);
 
-    inventories[pages] = inventory;
+    inventories[pages - 1] = inventory;
     pages++;
   }
 
@@ -135,7 +132,7 @@ public class GUI {
   }
 
   public void reload() {
-    pages = 0;
+    pages = 1;
 
     for (int i = 0; i < Kit.getKits(this.getOwner(), true).length; i++) {
       if (i % 44 == 0 && i != 0) {
@@ -143,9 +140,11 @@ public class GUI {
       }
     }
 
-    inventories = new Inventory[pages + 1];
+    inventories = new Inventory[pages];
 
-    for (int i = 0; i < pages + 1; i++) {
+    int currentPages = pages;
+
+    for (int i = 0; i < currentPages; i++) {
       int numKits = Kit.getKits(this.getOwner(), true).length - i * 45;
       Kit[] kits = new Kit[Math.max(numKits, 0)];
 
