@@ -1,5 +1,7 @@
 package club.aurorapvp;
 
+import club.aurorapvp.commands.FrameCommands;
+import club.aurorapvp.commands.KitCommands;
 import club.aurorapvp.commands.PluginCommands;
 import club.aurorapvp.modules.Frame;
 import club.aurorapvp.modules.Kit;
@@ -17,6 +19,8 @@ public class Commands {
     MANAGER = new PaperCommandManager(AuroraKits.INSTANCE);
 
     MANAGER.registerCommand(new PluginCommands());
+    MANAGER.registerCommand(new KitCommands());
+    MANAGER.registerCommand(new FrameCommands());
   }
 
   public static void registerCompletions() {
