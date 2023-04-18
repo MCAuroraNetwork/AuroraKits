@@ -40,11 +40,14 @@ public class GUI {
   }
 
   public void removeKit(Kit kit) {
-    ItemStack displayItem = kit.getDisplayItem();
-
     for (Inventory inventory : inventories) {
       for (ItemStack itemStack : inventory.getContents()) {
-        if (itemStack == displayItem) {
+
+        if (itemStack == null) {
+          continue;
+        }
+
+        if (itemStack.isSimilar(kit.getDisplayItem())) {
           inventory.remove(itemStack);
         }
       }
