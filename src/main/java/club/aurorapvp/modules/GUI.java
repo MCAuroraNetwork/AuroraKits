@@ -96,7 +96,7 @@ public class GUI {
     inventory.setItem(45, nextPage);
     inventory.setItem(53, nextPage);
 
-    inventories[pages - 1] = inventory;
+    inventories[pages] = inventory;
     pages++;
   }
 
@@ -132,7 +132,7 @@ public class GUI {
   }
 
   public void reload() {
-    pages = 1;
+    pages = 0;
 
     for (int i = 0; i < Kit.getKits(this.getOwner(), true).length; i++) {
       if (i % 44 == 0 && i != 0) {
@@ -140,9 +140,9 @@ public class GUI {
       }
     }
 
-    inventories = new Inventory[pages];
+    inventories = new Inventory[pages + 1];
 
-    int currentPages = pages;
+    int currentPages = pages + 1;
 
     for (int i = 0; i < currentPages; i++) {
       int numKits = Kit.getKits(this.getOwner(), true).length - i * 45;
