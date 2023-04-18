@@ -135,9 +135,10 @@ public class GUI {
   }
 
   public void reload() {
-    pages = 0;
+    int numKits = Kit.getKits(this.getOwner(), true).length;
+    pages = numKits < 44 ? 1 : 0;
 
-    for (int i = 0; i < Kit.getKits(this.getOwner(), true).length; i++) {
+    for (int i = 0; i < numKits; i++) {
       if (i % 44 == 0 && i != 0) {
         pages++;
       }
@@ -146,18 +147,16 @@ public class GUI {
     inventories = new Inventory[pages + 1];
 
     for (int i = 0; i < pages + 1; i++) {
-      int numKits = Kit.getKits(this.getOwner(), true).length - i * 45;
-      Kit[] kits = new Kit[Math.max(numKits, 0)];
+      Kit[] kits = new Kit[Math.min(45, numKits - i * 45)];
 
-      for (int j = i * 45; j < Kit.getKits(this.getOwner(), true).length; j++) {
-        if (j - i * 45 < kits.length) {
-          kits[j - i * 45] = Kit.getKits(this.getOwner(), true)[j];
-        }
+      for (int j = i * 45; j < Math.min(numKits, (i + 1) * 45); j++) {
+        kits[j - i * 45] = Kit.getKits(this.getOwner(), true)[j];
       }
 
       createPage(kits);
     }
   }
+
 
   public static void reloadAll() {
     for (GUI gui : guis) {
