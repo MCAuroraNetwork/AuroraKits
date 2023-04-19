@@ -58,7 +58,7 @@ public class KitCommands extends BaseCommand {
     new Kit(name, "public").create(p, true);
   }
 
-  @Subcommand("deletekit")
+  @Subcommand("delete")
   @CommandCompletion("@kits")
   @Syntax("[name]")
   @Description("Deletes a private kit")
@@ -71,7 +71,7 @@ public class KitCommands extends BaseCommand {
     }
   }
 
-  @Subcommand("deletepublickit")
+  @Subcommand("deletepublic")
   @CommandCompletion("@kits")
   @Syntax("[name]")
   @Description("Deletes a public kit")
