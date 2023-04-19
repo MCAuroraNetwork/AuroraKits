@@ -15,7 +15,7 @@ public class PlayerEvents implements Listener {
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.setupPlayer(event.getPlayer());
     if (Config.get().getBoolean("kits.lastUsedKit.enabled")) {
-      Kit.giveLastUsedKit(event.getPlayer());
+      Kit.getLastUsedKit(event.getPlayer()).giveKit(event.getPlayer());
     }
   }
 
@@ -32,7 +32,7 @@ public class PlayerEvents implements Listener {
   @EventHandler
   public void onPlayerRespawn(PlayerPostRespawnEvent event) {
     if (Config.get().getBoolean("kits.lastUsedKit.enabled")) {
-      Kit.giveLastUsedKit(event.getPlayer());
+      Kit.getLastUsedKit(event.getPlayer()).giveKit(event.getPlayer());
     }
   }
 }
