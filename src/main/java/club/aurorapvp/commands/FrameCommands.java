@@ -12,7 +12,7 @@ import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandAlias("frame")
+@CommandAlias("frames")
 public class FrameCommands extends BaseCommand {
   @Subcommand("create")
   @CommandPermission("aurorakits.admin")
