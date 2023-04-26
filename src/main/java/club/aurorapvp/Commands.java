@@ -16,8 +16,6 @@ public class Commands {
   public static PaperCommandManager MANAGER = new PaperCommandManager(AuroraKits.INSTANCE);
 
   public static void init() {
-    MANAGER = new PaperCommandManager(AuroraKits.INSTANCE);
-
     MANAGER.registerCommand(new PluginCommands());
     MANAGER.registerCommand(new KitCommands());
     MANAGER.registerCommand(new FrameCommands());
