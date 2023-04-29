@@ -129,15 +129,8 @@ public class Frame {
     return null;
   }
 
-  public static Frame[] getFrames() {
-    Frame[] framesArray = new Frame[frames.size()];
-
-    int i = 0;
-    for (Frame frame : frames) {
-      framesArray[i++] = frame;
-    }
-
-    return framesArray;
+  public static Set<Frame> getFrames() {
+    return frames;
   }
 
   public static void onClicked(PlayerInteractEntityEvent event) {

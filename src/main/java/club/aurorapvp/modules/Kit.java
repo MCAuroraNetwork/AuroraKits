@@ -6,7 +6,6 @@ import club.aurorapvp.configs.Lang;
 import club.aurorapvp.datahandlers.KitData;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -197,7 +196,7 @@ public class Kit {
   }
 
   public static int getAmount(Player p, boolean includePublic) {
-    return getKits(p, includePublic).length;
+    return getKits(p, includePublic).size();
   }
 
   public static Kit createKit(String name, Player p) {
@@ -230,7 +229,7 @@ public class Kit {
     return Kit.getLastUsedKit(p);
   }
 
-  public static Kit[] getKits() {
+  public static Set<Kit> getKits() {
     return Kit.getKits(null, true);
   }
 
@@ -253,22 +252,16 @@ public class Kit {
     AuroraKits.LOGGER.info("All kits reloaded!");
   }
 
-  public static Kit[] getKits(Player p, boolean includePublic) {
-    List<Kit> playerKits = new ArrayList<>();
+  public static Set<Kit> getKits(Player p, boolean includePublic) {
+    Set<Kit> playerKits = new HashSet<>();
 
     for (Kit kit : kits) {
-      if (kit.getOwner().getPlayer() == p || (kit.isPublic() && includePublic)) {
+      if (kit.getOwner() == p || (kit.isPublic() && includePublic)) {
         playerKits.add(kit);
       }
     }
 
-    Kit[] kitArray = new Kit[playerKits.size()];
-
-    for (int i = 0; i < playerKits.size(); i++) {
-      kitArray[i] = playerKits.get(i);
-    }
-
-    return kitArray;
+    return playerKits;
   }
 
   public static Kit getKit(Player p, String kitName) {

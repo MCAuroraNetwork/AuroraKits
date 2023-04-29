@@ -3,6 +3,7 @@ package club.aurorapvp.modules;
 import club.aurorapvp.AuroraKits;
 import club.aurorapvp.configs.Lang;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -135,9 +136,9 @@ public class GUI {
   }
 
   public void reload() {
-    pages = 0;
+    Set<Kit> kitSet = Kit.getKits(this.getOwner(), true);
 
-    for (int i = 0; i < Kit.getKits(this.getOwner(), true).length; i++) {
+    for (int i = 0; i < kitSet.size(); i++) {
       if (i % 44 == 0 && i != 0) {
         pages++;
       }
@@ -148,13 +149,26 @@ public class GUI {
     int currentPages = pages + 1;
 
     for (int i = 0; i < currentPages; i++) {
-      int numKits = Kit.getKits(this.getOwner(), true).length - i * 45;
+      int numKits = kitSet.size() - i * 45;
       Kit[] kits = new Kit[Math.max(numKits, 0)];
 
-      for (int j = i * 45; j < Kit.getKits(this.getOwner(), true).length; j++) {
-        if (j - i * 45 < kits.length) {
-          kits[j - i * 45] = Kit.getKits(this.getOwner(), true)[j];
+      Iterator<Kit> iterator = kitSet.iterator();
+
+      int counter = 0;
+
+      while (iterator.hasNext()) {
+        if (counter < i * 45) {
+          iterator.next();
+          counter++;
+          continue;
         }
+
+        if (counter - i * 45 >= kits.length) {
+          break;
+        }
+
+        kits[counter - i * 45] = iterator.next();
+        counter++;
       }
 
       createPage(kits);
@@ -168,16 +182,8 @@ public class GUI {
     AuroraKits.LOGGER.info("GUIs Reloaded!");
   }
 
-  public static GUI[] getGuis() {
-    GUI[] guiArray = new GUI[guis.size()];
-    int i = 0;
-
-    for (GUI gui : guis) {
-      guiArray[i] = gui;
-      i++;
-    }
-
-    return guiArray;
+  public static Set<GUI> getGuis() {
+    return guis;
   }
 
   public static void onPlayerQuit(Player p) {
