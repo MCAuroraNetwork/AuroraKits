@@ -19,9 +19,7 @@ public class Commands {
     MANAGER.registerCommand(new PluginCommands());
     MANAGER.registerCommand(new KitCommands());
     MANAGER.registerCommand(new FrameCommands());
-  }
 
-  public static void registerCompletions() {
     CommandCompletions<BukkitCommandCompletionContext> commandCompletions =
         MANAGER.getCommandCompletions();
 

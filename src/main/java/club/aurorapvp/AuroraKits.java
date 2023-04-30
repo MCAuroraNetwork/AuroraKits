@@ -19,7 +19,6 @@ public final class AuroraKits extends JavaPlugin {
 
     // Setup classes
     Commands.init();
-    Commands.registerCompletions();
     Config.init();
     Lang.init();
     Events.init();
