@@ -46,7 +46,7 @@ public class Kit {
   }
 
   public static void init() {
-    File dir = new File(AuroraKits.DATA_FOLDER, "/kits/public/");
+    File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/public/");
 
     if (dir.exists()) {
       for (File file : dir.listFiles()) {
@@ -55,7 +55,7 @@ public class Kit {
       }
     }
 
-    AuroraKits.LOGGER.info("All kits loaded!");
+    AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
   }
 
   public String getPath() {
@@ -176,7 +176,7 @@ public class Kit {
     final ItemMeta meta = item.getItemMeta();
 
     meta.displayName(
-        AuroraKits.DESERIALIZE_COMPONENT.deserialize("<gradient:#FFAA00:#FF55FF>" + name)
+        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + name)
             .decoration(TextDecoration.ITALIC, false)
             .decoration(TextDecoration.BOLD, true));
 
@@ -249,7 +249,7 @@ public class Kit {
     for (Kit kit : kits) {
       kit.reload();
     }
-    AuroraKits.LOGGER.info("All kits reloaded!");
+    AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
   }
 
   public static Set<Kit> getKits(Player p, boolean includePublic) {
@@ -276,7 +276,7 @@ public class Kit {
   }
 
   public static void setupPlayer(Player p) {
-    File dir = new File(AuroraKits.DATA_FOLDER, "/kits/" + p.getUniqueId());
+    File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/" + p.getUniqueId());
 
     if (dir.exists()) {
       for (File file : dir.listFiles()) {

@@ -29,7 +29,7 @@ public class PluginCommands extends BaseCommand {
     GUI.reloadAll();
     Lang.reload();
 
-    AuroraKits.LOGGER.info(
+    AuroraKits.INSTANCE.getLogger().info(
         "AuroraKits reloaded in " + (System.currentTimeMillis() - startTime) +
             "ms");
   }

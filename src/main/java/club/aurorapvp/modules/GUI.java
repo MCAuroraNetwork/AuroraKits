@@ -5,6 +5,7 @@ import club.aurorapvp.configs.Lang;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -179,7 +180,7 @@ public class GUI {
     for (GUI gui : guis) {
       gui.reload();
     }
-    AuroraKits.LOGGER.info("GUIs Reloaded!");
+    AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
   }
 
   public static Set<GUI> getGuis() {
@@ -213,7 +214,7 @@ public class GUI {
       if (event.getCurrentItem().getItemMeta().displayName() == null) {
         p.sendMessage(Lang.getComponent("kit-invalid-name"));
       } else {
-        Kit.getKit(p, AuroraKits.SERIALIZE_COMPONENT.serialize(
+        Kit.getKit(p, MiniMessage.miniMessage().serialize(
             event.getCurrentItem().getItemMeta().displayName())).giveKit(p);
       }
     }

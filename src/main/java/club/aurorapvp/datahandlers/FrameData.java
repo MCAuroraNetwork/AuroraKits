@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class FrameData {
-  private static final File FILE = new File(AuroraKits.DATA_FOLDER, "/frames.yml");
+  private static final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "/frames.yml");
   private static final YamlConfiguration framesData = YamlConfiguration.loadConfiguration(FILE);
   private final Frame frame;
 
@@ -38,7 +38,7 @@ public class FrameData {
       }
       get().save(FILE);
     } catch (IOException e) {
-      AuroraKits.LOGGER.severe("Failed to save frame data");
+      AuroraKits.INSTANCE.getLogger().severe("Failed to save frame data");
     }
   }
 

@@ -38,7 +38,7 @@ public class Frame {
   }
 
   public static void init() {
-    File file = new File(AuroraKits.DATA_FOLDER, "/frames.yml");
+    File file = new File(AuroraKits.INSTANCE.getDataFolder(), "/frames.yml");
     YamlConfiguration framesData = YamlConfiguration.loadConfiguration(file);
     ConfigurationSection section = framesData.getConfigurationSection("frames");
 
@@ -49,7 +49,7 @@ public class Frame {
     for (String name : section.getKeys(false)) {
       new Frame(name);
     }
-    AuroraKits.LOGGER.info("All frames loaded!");
+    AuroraKits.INSTANCE.getLogger().info("All frames loaded!");
   }
 
   public ItemStack getItem() {
@@ -108,7 +108,7 @@ public class Frame {
     for (Frame frame : frames) {
       frame.reload();
     }
-    AuroraKits.LOGGER.info("All frames reloaded!");
+    AuroraKits.INSTANCE.getLogger().info("All frames reloaded!");
   }
 
   public static Frame getFrame(Location loc) {
