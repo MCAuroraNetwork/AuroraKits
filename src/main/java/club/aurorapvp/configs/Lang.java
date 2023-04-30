@@ -4,13 +4,14 @@ import club.aurorapvp.AuroraKits;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Lang {
   private static final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
-  private static final HashMap<String, String> DEFAULTS = new HashMap<>();
-  private static final File FILE = new File(AuroraKits.DATA_FOLDER, "lang.yml");
+  private static final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "lang.yml");
   private static YamlConfiguration lang;
 
   public static void init() {
@@ -19,6 +20,8 @@ public class Lang {
   }
 
   public static void generateDefaults() {
+    final HashMap<String, String> DEFAULTS = new HashMap<>();
+
     for (Object path : get().getKeys(false).toArray()) {
       if (get().getString((String) path).startsWith("~") &&
           get().getString((String) path).endsWith("~")) {
@@ -46,27 +49,62 @@ public class Lang {
     for (String path : DEFAULTS.keySet()) {
       if (!get().contains(path) || get().getString(path) == null) {
         get().set(path, DEFAULTS.get(path));
+      }
+    }
 
-        try {
-          get().save(FILE);
-        } catch (IOException e) {
-          AuroraKits.LOGGER.severe("Unable to save lang file");
-        }
+    try {
+      get().save(FILE);
+    } catch (IOException e) {
+      AuroraKits.INSTANCE.getLogger().severe("Failed to save lang file");
+    }
+
+    for (Object path : get().getKeys(false).toArray()) {
+      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~") &&
+          Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
+        PLACEHOLDERS.put((String) path, Objects.requireNonNull(get().getString((String) path))
+            .replace("~", ""));
       }
     }
   }
 
-  public static Component getComponent(String path) {
-    if (get().contains(path)) {
-      String pathString = get().getString(path);
-      for (String placeholder : PLACEHOLDERS.keySet()) {
-        if (pathString.contains(placeholder)) {
-          pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
-        }
+  public static String getString(String message) {
+    String pathString = get().getString(message);
+    for (String placeholder : PLACEHOLDERS.keySet()) {
+      assert pathString != null;
+      if (pathString.contains(placeholder)) {
+        pathString = pathString.replace(placeholder,
+            PLACEHOLDERS.get(placeholder));
       }
-      return AuroraKits.DESERIALIZE_COMPONENT.deserialize(pathString);
     }
-    return null;
+    return pathString;
+  }
+
+  public static Component formatComponent(String message, Object... args) {
+    String pathString = get().getString(message);
+    assert pathString != null;
+    for (String placeholder : PLACEHOLDERS.keySet()) {
+      if (pathString.contains(placeholder)) {
+        pathString = pathString.replace(placeholder,
+            PLACEHOLDERS.get(placeholder));
+      }
+    }
+
+    pathString = String.format(pathString, args);
+
+    return MiniMessage.miniMessage().deserialize(pathString);
+  }
+
+  public static Component getComponent(String message) {
+    String pathString = get().getString(message);
+    assert pathString != null;
+
+    for (String placeholder : PLACEHOLDERS.keySet()) {
+      if (pathString.contains(placeholder)) {
+        pathString = pathString.replace(placeholder,
+            PLACEHOLDERS.get(placeholder));
+      }
+    }
+    return MiniMessage.miniMessage().deserialize(pathString);
   }
 
   public static YamlConfiguration get() {
@@ -79,10 +117,10 @@ public class Lang {
         FILE.getParentFile().mkdirs();
         FILE.createNewFile();
       } catch (IOException e) {
-        AuroraKits.LOGGER.severe("Failed to generate lang files");
+        AuroraKits.INSTANCE.getLogger().severe("Failed to generate lang file");
       }
     }
     lang = YamlConfiguration.loadConfiguration(FILE);
-    AuroraKits.LOGGER.info("Lang reloaded!");
+    AuroraKits.INSTANCE.getLogger().info("Lang reloaded!");
   }
 }
