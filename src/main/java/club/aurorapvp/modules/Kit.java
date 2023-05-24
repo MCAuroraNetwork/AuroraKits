@@ -1,11 +1,10 @@
 package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraKits;
-import club.aurorapvp.configs.Config;
 import club.aurorapvp.configs.Lang;
 import club.aurorapvp.datahandlers.KitData;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -14,17 +13,14 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 public class Kit {
-  private static final NamespacedKey key = new NamespacedKey(AuroraKits.INSTANCE, "last_used_kit");
   private static final Set<Kit> kits = new HashSet<>();
+  private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitData data;
   private final String name;
   private OfflinePlayer owner;
@@ -155,9 +151,7 @@ public class Kit {
       p.getInventory().setContents(this.getItemStacks());
       p.sendMessage(Lang.getComponent("kit-used"));
 
-      PersistentDataContainer container = p.getPersistentDataContainer();
-
-      container.set(key, PersistentDataType.STRING, this.getName());
+      LAST_USED_KIT.put(p, this);
     } else {
       p.sendMessage(Lang.getComponent("kit-not-found"));
     }
@@ -298,12 +292,10 @@ public class Kit {
   }
 
   public static Kit getLastUsedKit(Player p) {
-    PersistentDataContainer container = p.getPersistentDataContainer();
-
-    if (container.get(key, PersistentDataType.STRING) == null) {
-      return getKit(p, Config.get().getString("kits.lastUsedKit.defaultKit"));
-    } else {
-      return Kit.getKit(container.get(key, PersistentDataType.STRING));
+    if (LAST_USED_KIT.containsKey(p)) {
+      return LAST_USED_KIT.get(p);
     }
+
+    return null;
   }
 }
