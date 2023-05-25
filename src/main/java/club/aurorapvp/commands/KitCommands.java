@@ -72,6 +72,7 @@ public class KitCommands extends BaseCommand {
   }
 
   @Subcommand("deletepublic")
+  @CommandPermission("aurorakits.admin")
   @CommandCompletion("@kits")
   @Syntax("[name]")
   @Description("Deletes a public kit")

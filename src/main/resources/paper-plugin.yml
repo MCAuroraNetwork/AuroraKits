@@ -23,12 +23,28 @@ commands:
     usage: /createframe [name]
     permission: aurorakits.frame
 permissions:
-  aurorakits.kit:
-    description: Allows the use of kits
-    default: true
+  aurorakits.command.aurorakits:
+    default: false
+  aurorakits.command.kit:
+    default: false
+  aurorakits.command.kits:
+    default: false
+  aurorakits.command.frames:
+    default: false
   aurorakits.admin:
     description: Allows for the use of admin commands
     default: op
-  aurorakits.frames:
-    description: Allows for the creation of frames
-    default: op
+    children:
+      aurorakits.command.frames: true
+      aurorakits.command.aurorakits: true
+  aurorakits.kit:
+    description: Allows the use of kits
+    default: true
+    children:
+      aurorakits.command.kit: true
+      aurorakits.command.kits: true
+  aurorakits.default:
+    description: Allows for the use of basic commands
+    default: true
+    children:
+      aurorakits.command.aurorakits: true

@@ -15,14 +15,12 @@ import org.bukkit.entity.Player;
 @CommandAlias("frames")
 public class FrameCommands extends BaseCommand {
   @Subcommand("create")
-  @CommandPermission("aurorakits.admin")
   @Description("Creates a new frame")
   public void onCreate(Player p, String name) {
     new Frame(name).create(p);
   }
 
   @Subcommand("delete")
-  @CommandPermission("aurorakits.admin")
   @Description("Deletes a frame")
   public void onDelete(Player p, String name) {
     new Frame(name).delete(p);
