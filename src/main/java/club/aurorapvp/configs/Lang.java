@@ -35,9 +35,9 @@ public class Lang {
     DEFAULTS.put("frame-invalid", "prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!");
     DEFAULTS.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
     DEFAULTS.put("kit-created",
-        "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully created! Use /kits to access it!");
-    DEFAULTS.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully used!");
-    DEFAULTS.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit sucessfully deleted");
+        "prefix <gradient:#FFAA00:#FF55FF>Kit successfully created! Use /kits to access it!");
+    DEFAULTS.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully used!");
+    DEFAULTS.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully deleted");
     DEFAULTS.put("kit-too-many", "prefix <gradient:#FFAA00:#FF55FF>You have too many kits!");
     DEFAULTS.put("kit-invalid-name", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit name!");
     DEFAULTS.put("kit-invalid-item", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit display item!");
