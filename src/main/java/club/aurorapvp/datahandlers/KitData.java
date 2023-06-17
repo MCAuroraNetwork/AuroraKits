@@ -4,6 +4,7 @@ import club.aurorapvp.AuroraKits;
 import club.aurorapvp.modules.Kit;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -19,12 +20,14 @@ public class KitData {
   public KitData(Kit kit) {
     this.kit = kit;
     this.FILE =
-        new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
+        new File(AuroraKits.INSTANCE.getDataFolder(),
+            "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
   }
 
   public OfflinePlayer getOwner() {
-    return Bukkit.getOfflinePlayer(UUID.fromString(DATA_FILE.getString("owner")));
+    return Bukkit.getOfflinePlayer(UUID.fromString(
+        Objects.requireNonNull(DATA_FILE.getString("owner"))));
   }
 
   public ItemStack getDisplayItem() {
@@ -45,6 +48,7 @@ public class KitData {
 
   public ItemStack[] getItemStacks() {
     ConfigurationSection section = this.getYaml().getConfigurationSection("items");
+    assert section != null;
     ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
     int i = 0;
 
@@ -67,6 +71,7 @@ public class KitData {
     save();
   }
 
+  @SuppressWarnings("ResultOfMethodCallIgnored")
   public void save() {
     try {
       if (!FILE.exists()) {

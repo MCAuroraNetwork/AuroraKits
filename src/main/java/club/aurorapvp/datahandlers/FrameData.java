@@ -30,6 +30,7 @@ public class FrameData {
     return get().getItemStack("frames." + frame.getName() + ".item");
   }
 
+  @SuppressWarnings("ResultOfMethodCallIgnored")
   public void save() {
     try {
       if (!FILE.exists()) {

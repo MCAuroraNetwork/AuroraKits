@@ -23,9 +23,10 @@ public class Lang {
     final HashMap<String, String> DEFAULTS = new HashMap<>();
 
     for (Object path : get().getKeys(false).toArray()) {
-      if (get().getString((String) path).startsWith("~") &&
-          get().getString((String) path).endsWith("~")) {
-        PLACEHOLDERS.put((String) path, get().getString((String) path).replace("~", ""));
+      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~") &&
+          Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
+        PLACEHOLDERS.put((String) path, Objects.requireNonNull(get().getString((String) path))
+            .replace("~", ""));
       }
     }
 
@@ -45,6 +46,15 @@ public class Lang {
     DEFAULTS.put("kit-already-exists", "prefix <gradient:#FFAA00:#FF55FF>Kit already exists!");
     DEFAULTS.put("next-page", "<gradient:#FFAA00:#FF55FF>Next page");
     DEFAULTS.put("previous-page", "<gradient:#FFAA00:#FF55FF>Previous page");
+    DEFAULTS.put("unknown-frame-command",
+        "prefix <gradient:#FFAA00:#FF55FF>Unknown Frame Command!");
+    DEFAULTS.put("unknown-kit-command", "prefix <gradient:#FFAA00:#FF55FF>Unknown Kit Command!");
+    DEFAULTS.put("help-command", """
+        prefix <gradient:#FFAA00:#FF55FF>All Commands:\s
+        <blue><bold>/kits: <reset><yellow>Opens the Kit Menu\s
+        <blue><bold>/kit [name]: <reset><yellow>Opens a Kit\s
+        <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit\s
+        <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit""");
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().contains(path) || get().getString(path) == null) {
@@ -67,6 +77,7 @@ public class Lang {
     }
   }
 
+  @SuppressWarnings("unused")
   public static String getString(String message) {
     String pathString = get().getString(message);
     for (String placeholder : PLACEHOLDERS.keySet()) {
@@ -79,6 +90,7 @@ public class Lang {
     return pathString;
   }
 
+  @SuppressWarnings("unused")
   public static Component formatComponent(String message, Object... args) {
     String pathString = get().getString(message);
     assert pathString != null;
@@ -111,6 +123,7 @@ public class Lang {
     return lang;
   }
 
+  @SuppressWarnings("ResultOfMethodCallIgnored")
   public static void reload() {
     if (!FILE.exists()) {
       try {

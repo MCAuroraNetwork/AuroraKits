@@ -45,7 +45,7 @@ public class Kit {
     File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/public/");
 
     if (dir.exists()) {
-      for (File file : dir.listFiles()) {
+      for (File file : Objects.requireNonNull(dir.listFiles())) {
         String kitName = file.getName().replace(".yml", "");
         new Kit(kitName, "public");
       }
@@ -112,7 +112,7 @@ public class Kit {
           gui.addKit(this);
         }
       } else {
-        GUI.getGui(p).addKit(this);
+        Objects.requireNonNull(GUI.getGui(p)).addKit(this);
       }
 
       p.sendMessage(Lang.getComponent("kit-created"));
@@ -121,6 +121,7 @@ public class Kit {
     }
   }
 
+  @SuppressWarnings("ResultOfMethodCallIgnored")
   public void delete(Player p, boolean isPublic) {
     if (!Objects.equals(this.isPublic(), isPublic)) {
       if (p != null) {
@@ -136,7 +137,7 @@ public class Kit {
         gui.removeKit(this);
       }
     } else {
-      GUI.getGui(p).removeKit(this);
+      Objects.requireNonNull(GUI.getGui(p)).removeKit(this);
     }
 
     kits.remove(this);
@@ -193,6 +194,7 @@ public class Kit {
     return getKits(p, includePublic).size();
   }
 
+  @SuppressWarnings("unused")
   public static Kit createKit(String name, Player p) {
     Kit kit;
 
@@ -202,6 +204,7 @@ public class Kit {
     return kit;
   }
 
+  @SuppressWarnings("unused")
   public static void deleteKit(String name) {
     for (Kit kit : getKits()) {
       if (Objects.equals(kit.getName(), name)) {
@@ -210,6 +213,7 @@ public class Kit {
     }
   }
 
+  @SuppressWarnings("unused")
   public static Kit getKit(String name) {
     for (Kit kit : getKits()) {
       if (Objects.equals(kit.getName(), name)) {
@@ -219,6 +223,7 @@ public class Kit {
     return null;
   }
 
+  @SuppressWarnings("unused")
   public static Kit getLastKit(Player p) {
     return Kit.getLastUsedKit(p);
   }
@@ -227,6 +232,7 @@ public class Kit {
     return Kit.getKits(null, true);
   }
 
+  @SuppressWarnings("unused")
   public static void giveKit(Kit kit, Player p) {
     kit.giveKit(p);
   }
@@ -273,7 +279,7 @@ public class Kit {
     File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/" + p.getUniqueId());
 
     if (dir.exists()) {
-      for (File file : dir.listFiles()) {
+      for (File file : Objects.requireNonNull(dir.listFiles())) {
         String kitName = file.getName().replace(".yml", "");
         new Kit(kitName, String.valueOf(p.getUniqueId()));
       }

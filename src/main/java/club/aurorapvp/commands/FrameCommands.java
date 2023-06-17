@@ -15,19 +15,22 @@ import org.bukkit.entity.Player;
 public class FrameCommands extends BaseCommand {
   @Subcommand("create")
   @Description("Creates a new frame")
+  @SuppressWarnings("unused")
   public void onCreate(Player p, String name) {
     new Frame(name).create(p);
   }
 
   @Subcommand("delete")
   @Description("Deletes a frame")
+  @SuppressWarnings("unused")
   public void onDelete(Player p, String name) {
     new Frame(name).delete(p);
   }
 
   @Default
   @CatchUnknown
+  @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
-    sender.sendMessage(Lang.getComponent(""));
+    sender.sendMessage(Lang.getComponent("unknown-frame-command"));
   }
 }

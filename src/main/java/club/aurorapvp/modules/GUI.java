@@ -4,6 +4,7 @@ import club.aurorapvp.AuroraKits;
 import club.aurorapvp.configs.Lang;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -194,14 +195,14 @@ public class GUI {
   public static void inventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (GUI.getGui(p).isGuiInventory(event.getInventory())) {
+    if (Objects.requireNonNull(GUI.getGui(p)).isGuiInventory(event.getInventory())) {
       event.setCancelled(true);
 
       if (event.getSlot() == 45) {
-        GUI.getGui(p).previousPage();
+        Objects.requireNonNull(GUI.getGui(p)).previousPage();
         return;
       } else if (event.getSlot() == 53) {
-        GUI.getGui(p).nextPage();
+        Objects.requireNonNull(GUI.getGui(p)).nextPage();
         return;
       }
 
@@ -214,8 +215,9 @@ public class GUI {
       if (event.getCurrentItem().getItemMeta().displayName() == null) {
         p.sendMessage(Lang.getComponent("kit-invalid-name"));
       } else {
-        Kit.getKit(p, MiniMessage.miniMessage().serialize(
-            event.getCurrentItem().getItemMeta().displayName())).giveKit(p);
+        Objects.requireNonNull(Kit.getKit(p, MiniMessage.miniMessage().serialize(
+                Objects.requireNonNull(event.getCurrentItem().getItemMeta().displayName()))))
+            .giveKit(p);
       }
     }
   }
@@ -230,6 +232,6 @@ public class GUI {
   }
 
   public static void open(Player p) {
-    p.openInventory(GUI.getGui(p).getCurrentPage());
+    p.openInventory(Objects.requireNonNull(GUI.getGui(p)).getCurrentPage());
   }
 }

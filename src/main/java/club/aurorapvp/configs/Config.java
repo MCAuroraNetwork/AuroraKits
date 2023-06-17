@@ -38,6 +38,7 @@ public class Config {
     return config;
   }
 
+  @SuppressWarnings("ResultOfMethodCallIgnored")
   public static void reload() {
     if (!FILE.exists()) {
       try {

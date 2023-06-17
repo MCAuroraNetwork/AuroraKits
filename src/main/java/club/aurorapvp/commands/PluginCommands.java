@@ -20,6 +20,7 @@ public class PluginCommands extends BaseCommand {
   @Subcommand("reload")
   @CommandPermission("aurorakits.admin")
   @Description("Reloads all plugin data")
+  @SuppressWarnings("unused")
   public void onReload() {
     long startTime = System.currentTimeMillis();
 
@@ -34,15 +35,12 @@ public class PluginCommands extends BaseCommand {
             "ms");
   }
 
+  @Default
   @Subcommand("help")
   @Description("Lists all available plugin commands and their function")
-  public void onHelp(CommandSender sender) {
-
-  }
-
-  @Default
   @CatchUnknown
+  @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
-    sender.sendMessage(Lang.getComponent(""));
+    sender.sendMessage(Lang.getComponent("help-command"));
   }
 }

@@ -75,9 +75,11 @@ public class Frame {
   public void create(Player p) {
     if (name != null && p != null) {
       Block block = p.getTargetBlockExact(4);
+      assert block != null;
       ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
-      frame.teleport(block.getRelative(Frame.getBlockFace(p)).getLocation());
-      frame.setFacingDirection(Frame.getBlockFace(p), true);
+      frame.teleport(
+          block.getRelative(Objects.requireNonNull(Frame.getBlockFace(p))).getLocation());
+      frame.setFacingDirection(Objects.requireNonNull(Frame.getBlockFace(p)), true);
 
       frame.setItem(p.getInventory().getItemInMainHand());
       item = p.getInventory().getItemInMainHand();
@@ -120,6 +122,7 @@ public class Frame {
     return null;
   }
 
+  @SuppressWarnings("unused")
   public static Frame getFrame(String frameName) {
     for (Frame frame : frames) {
       if (Objects.equals(frame.getName(), frameName)) {

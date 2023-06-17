@@ -21,6 +21,7 @@ public class KitCommands extends BaseCommand {
 
   @Default
   @Description("Opens the kit GUI")
+  @SuppressWarnings("unused")
   public void onGUIOpen(Player p) {
     GUI.open(p);
   }
@@ -29,6 +30,7 @@ public class KitCommands extends BaseCommand {
   @Syntax("[name]")
   @CommandCompletion("@kits")
   @Description("Gives the player the specified kit")
+  @SuppressWarnings("unused")
   public void onGive(Player p, String name) {
     Kit kit = Kit.getKit(p, name);
     if (kit != null) {
@@ -41,6 +43,7 @@ public class KitCommands extends BaseCommand {
   @Subcommand("create")
   @Syntax("[name]")
   @Description("Creates a private kit")
+  @SuppressWarnings("unused")
   public void onCreate(Player p, @Optional String name) {
     if (name != null) {
       new Kit(name, p.getUniqueId().toString()).create(p, false);
@@ -54,6 +57,7 @@ public class KitCommands extends BaseCommand {
   @CommandPermission("aurorakits.admin")
   @Syntax("[name]")
   @Description("Creates a public kit")
+  @SuppressWarnings("unused")
   public void onCreatePublic(Player p, String name) {
     new Kit(name, "public").create(p, true);
   }
@@ -62,6 +66,7 @@ public class KitCommands extends BaseCommand {
   @CommandCompletion("@kits")
   @Syntax("[name]")
   @Description("Deletes a private kit")
+  @SuppressWarnings("unused")
   public void onDelete(Player p, String name) {
     Kit kit = Kit.getKit(p, name);
     if (kit != null) {
@@ -76,6 +81,7 @@ public class KitCommands extends BaseCommand {
   @CommandCompletion("@kits")
   @Syntax("[name]")
   @Description("Deletes a public kit")
+  @SuppressWarnings("unused")
   public void onDeletePublic(Player p, String name) {
     Kit kit = Kit.getKit(p, name);
     if (kit != null) {
@@ -86,7 +92,8 @@ public class KitCommands extends BaseCommand {
   }
 
   @CatchUnknown
+  @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
-    sender.sendMessage(Lang.getComponent(""));
+    sender.sendMessage(Lang.getComponent("unknown-kit-command"));
   }
 }
