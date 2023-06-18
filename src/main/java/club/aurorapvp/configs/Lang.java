@@ -47,8 +47,9 @@ public class Lang {
     DEFAULTS.put("next-page", "<gradient:#FFAA00:#FF55FF>Next page");
     DEFAULTS.put("previous-page", "<gradient:#FFAA00:#FF55FF>Previous page");
     DEFAULTS.put("unknown-frame-command",
-        "prefix <gradient:#FFAA00:#FF55FF>Unknown Frame Command!");
-    DEFAULTS.put("unknown-kit-command", "prefix <gradient:#FFAA00:#FF55FF>Unknown Kit Command!");
+        "prefix <gradient:#FFAA00:#FF55FF>Unknown Frame Command! Use /help for help!");
+    DEFAULTS.put("unknown-kit-command",
+        "prefix <gradient:#FFAA00:#FF55FF>Unknown Kit Command! Use /help for help!");
     DEFAULTS.put("help-command", """
         prefix <gradient:#FFAA00:#FF55FF>All Commands:\s
         <blue><bold>/kits: <reset><yellow>Opens the Kit Menu\s
