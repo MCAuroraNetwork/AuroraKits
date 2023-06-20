@@ -15,17 +15,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class GUI {
-  private static final Set<GUI> guis = new HashSet<>();
+public class KitsGUI {
+  private static final Set<KitsGUI> KITS_GUIS = new HashSet<>();
   private final Player owner;
   private Inventory[] inventories;
   private int currentPage = 0;
   private int pages;
 
-  public GUI(Player p) {
+  public KitsGUI(Player p) {
     this.owner = p;
 
-    guis.add(this);
+    KITS_GUIS.add(this);
   }
 
   public Player getOwner() {
@@ -112,7 +112,7 @@ public class GUI {
     } else {
       currentPage = 0;
     }
-    GUI.open(owner);
+    KitsGUI.open(owner);
   }
 
   public void previousPage() {
@@ -121,7 +121,7 @@ public class GUI {
     } else {
       currentPage = pages;
     }
-    GUI.open(owner);
+    KitsGUI.open(owner);
   }
 
   public Inventory getCurrentPage() {
@@ -178,31 +178,31 @@ public class GUI {
   }
 
   public static void reloadAll() {
-    for (GUI gui : guis) {
-      gui.reload();
+    for (KitsGUI kitsGui : KITS_GUIS) {
+      kitsGui.reload();
     }
     AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
   }
 
-  public static Set<GUI> getGuis() {
-    return guis;
+  public static Set<KitsGUI> getGuis() {
+    return KITS_GUIS;
   }
 
   public static void onPlayerQuit(Player p) {
-    guis.removeIf(gui -> gui.getOwner() == p);
+    KITS_GUIS.removeIf(gui -> gui.getOwner() == p);
   }
 
   public static void inventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (Objects.requireNonNull(GUI.getGui(p)).isGuiInventory(event.getInventory())) {
+    if (Objects.requireNonNull(KitsGUI.getGui(p)).isGuiInventory(event.getInventory())) {
       event.setCancelled(true);
 
       if (event.getSlot() == 45) {
-        Objects.requireNonNull(GUI.getGui(p)).previousPage();
+        Objects.requireNonNull(KitsGUI.getGui(p)).previousPage();
         return;
       } else if (event.getSlot() == 53) {
-        Objects.requireNonNull(GUI.getGui(p)).nextPage();
+        Objects.requireNonNull(KitsGUI.getGui(p)).nextPage();
         return;
       }
 
@@ -222,16 +222,16 @@ public class GUI {
     }
   }
 
-  public static GUI getGui(Player p) {
-    for (GUI gui : guis) {
-      if (gui.getOwner() == p) {
-        return gui;
+  public static KitsGUI getGui(Player p) {
+    for (KitsGUI kitsGui : KITS_GUIS) {
+      if (kitsGui.getOwner() == p) {
+        return kitsGui;
       }
     }
     return null;
   }
 
   public static void open(Player p) {
-    p.openInventory(Objects.requireNonNull(GUI.getGui(p)).getCurrentPage());
+    p.openInventory(Objects.requireNonNull(KitsGUI.getGui(p)).getCurrentPage());
   }
 }
