@@ -1,10 +1,10 @@
-package club.aurorapvp;
+package club.aurorapvp.aurorakits;
 
-import club.aurorapvp.commands.FrameCommands;
-import club.aurorapvp.commands.KitCommands;
-import club.aurorapvp.commands.PluginCommands;
-import club.aurorapvp.modules.Frame;
-import club.aurorapvp.modules.Kit;
+import club.aurorapvp.aurorakits.commands.FrameCommands;
+import club.aurorapvp.aurorakits.commands.KitCommands;
+import club.aurorapvp.aurorakits.commands.PluginCommands;
+import club.aurorapvp.aurorakits.modules.Frame;
+import club.aurorapvp.aurorakits.modules.Kit;
 import co.aikar.commands.BukkitCommandCompletionContext;
 import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.PaperCommandManager;

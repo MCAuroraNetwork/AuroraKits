@@ -1,6 +1,6 @@
 name: AuroraKits
 version: '${version}'
-main: club.aurorapvp.AuroraKits
+main: club.aurorapvp.aurorakits.AuroraKits
 api-version: '1.20'
 authors: [ Villagers654 ]
 description: A Crystal PvP Kits Plugin for the Aurora Network

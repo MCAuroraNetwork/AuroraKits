@@ -1,7 +1,7 @@
-package club.aurorapvp.datahandlers;
+package club.aurorapvp.aurorakits.datahandlers;
 
-import club.aurorapvp.AuroraKits;
-import club.aurorapvp.modules.Kit;
+import club.aurorapvp.aurorakits.AuroraKits;
+import club.aurorapvp.aurorakits.modules.Kit;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;

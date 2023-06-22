@@ -1,8 +1,8 @@
-package club.aurorapvp.modules;
+package club.aurorapvp.aurorakits.modules;
 
-import club.aurorapvp.AuroraKits;
-import club.aurorapvp.configs.Lang;
-import club.aurorapvp.datahandlers.FrameData;
+import club.aurorapvp.aurorakits.AuroraKits;
+import club.aurorapvp.aurorakits.configs.Lang;
+import club.aurorapvp.aurorakits.datahandlers.FrameData;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;

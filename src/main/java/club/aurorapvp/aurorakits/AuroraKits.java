@@ -1,10 +1,10 @@
-package club.aurorapvp;
+package club.aurorapvp.aurorakits;
 
-import club.aurorapvp.configs.Config;
-import club.aurorapvp.configs.Lang;
-import club.aurorapvp.events.Events;
-import club.aurorapvp.modules.Frame;
-import club.aurorapvp.modules.Kit;
+import club.aurorapvp.aurorakits.configs.Config;
+import club.aurorapvp.aurorakits.configs.Lang;
+import club.aurorapvp.aurorakits.events.Events;
+import club.aurorapvp.aurorakits.modules.Frame;
+import club.aurorapvp.aurorakits.modules.Kit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuroraKits extends JavaPlugin {
