@@ -1,7 +1,6 @@
 package club.aurorapvp.aurorakits.modules;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.KitsGUI;
 import club.aurorapvp.aurorakits.configs.Lang;
 import club.aurorapvp.aurorakits.datahandlers.KitData;
 import java.io.File;
@@ -10,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -182,8 +182,8 @@ public class Kit {
           .deserialize("This is a Public Kit")));
     } else {
       meta.lore(List.of(MiniMessage.miniMessage()
-          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Private Kit")));
+              .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator),
+          Component.text("This is a Private Kit")));
     }
 
     item.setItemMeta(meta);
