@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -138,7 +139,8 @@ public class KitsGUI {
   }
 
   public void reload() {
-    Set<club.aurorapvp.aurorakits.modules.Kit> kitSet = club.aurorapvp.aurorakits.modules.Kit.getKits(this.getOwner(), true);
+    Set<club.aurorapvp.aurorakits.modules.Kit> kitSet =
+        club.aurorapvp.aurorakits.modules.Kit.getKits(this.getOwner(), true);
 
     for (int i = 0; i < kitSet.size(); i++) {
       if (i % 44 == 0 && i != 0) {
@@ -152,7 +154,8 @@ public class KitsGUI {
 
     for (int i = 0; i < currentPages; i++) {
       int numKits = kitSet.size() - i * 45;
-      club.aurorapvp.aurorakits.modules.Kit[] kits = new club.aurorapvp.aurorakits.modules.Kit[Math.max(numKits, 0)];
+      club.aurorapvp.aurorakits.modules.Kit[] kits =
+          new club.aurorapvp.aurorakits.modules.Kit[Math.max(numKits, 0)];
 
       Iterator<club.aurorapvp.aurorakits.modules.Kit> iterator = kitSet.iterator();
 
@@ -215,10 +218,11 @@ public class KitsGUI {
       if (event.getCurrentItem().getItemMeta().displayName() == null) {
         p.sendMessage(Lang.getComponent("kit-invalid-name"));
       } else {
-        Objects.requireNonNull(
-                club.aurorapvp.aurorakits.modules.Kit.getKit(p, MiniMessage.miniMessage().serialize(
-                Objects.requireNonNull(event.getCurrentItem().getItemMeta().displayName()))))
-            .giveKit(p);
+        String itemName = PlainTextComponentSerializer.plainText()
+            .serialize(event.getCurrentItem().displayName());
+        String kitName = itemName.substring(1, itemName.length() - 1);
+
+        Objects.requireNonNull(Kit.getKit(kitName)).giveKit(p);
       }
     }
   }
