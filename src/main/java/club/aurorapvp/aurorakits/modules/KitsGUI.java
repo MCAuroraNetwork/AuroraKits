@@ -101,7 +101,7 @@ public class KitsGUI {
     meta.displayName(Lang.getComponent("previous-page"));
     previousPage.setItemMeta(meta);
 
-    inventory.setItem(45, nextPage);
+    inventory.setItem(45, previousPage);
     inventory.setItem(53, nextPage);
 
     inventories[pages] = inventory;
