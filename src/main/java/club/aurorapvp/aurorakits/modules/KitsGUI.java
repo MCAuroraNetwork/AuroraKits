@@ -34,21 +34,17 @@ public class KitsGUI {
     return owner;
   }
 
-  public void addKit(club.aurorapvp.aurorakits.modules.Kit kit) {
+  public void addKit(Kit kit) {
     Inventory lastPage = inventories[pages - 1];
 
     if (lastPage.getContents()[44] != null) {
       createPage(kit);
     } else {
-      if (lastPage.contains(kit.getDisplayItem())) {
-        return;
-      }
-
       lastPage.addItem(kit.getDisplayItem());
     }
   }
 
-  public void removeKit(club.aurorapvp.aurorakits.modules.Kit kit) {
+  public void removeKit(Kit kit) {
     for (Inventory inventory : inventories) {
       for (ItemStack itemStack : inventory.getContents()) {
 
@@ -63,7 +59,7 @@ public class KitsGUI {
     }
   }
 
-  public void createPage(club.aurorapvp.aurorakits.modules.Kit kit) {
+  public void createPage(Kit kit) {
     Inventory inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
     inventory.addItem(kit.getDisplayItem());
 
@@ -86,7 +82,7 @@ public class KitsGUI {
     pages++;
   }
 
-  public void createPage(club.aurorapvp.aurorakits.modules.Kit[] kits) {
+  public void createPage(Kit[] kits) {
     Inventory inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
 
     for (club.aurorapvp.aurorakits.modules.Kit kit : kits) {
@@ -158,10 +154,9 @@ public class KitsGUI {
 
     for (int i = 0; i < currentPages; i++) {
       int numKits = kitSet.size() - i * 45;
-      club.aurorapvp.aurorakits.modules.Kit[] kits =
-          new club.aurorapvp.aurorakits.modules.Kit[Math.max(numKits, 0)];
+      Kit[] kits = new Kit[Math.max(numKits, 0)];
 
-      Iterator<club.aurorapvp.aurorakits.modules.Kit> iterator = kitSet.iterator();
+      Iterator<Kit> iterator = kitSet.iterator();
 
       int counter = 0;
 

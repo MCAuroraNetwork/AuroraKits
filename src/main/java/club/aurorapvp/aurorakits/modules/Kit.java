@@ -103,6 +103,7 @@ public class Kit {
       }
 
       data.create();
+
       if (isPublic) {
         for (KitsGUI kitsGui : KitsGUI.getGuis()) {
           kitsGui.addKit(this);
@@ -125,8 +126,6 @@ public class Kit {
     }
 
     data.create();
-
-    Objects.requireNonNull(KitsGUI.getGui(p)).addKit(this);
 
     p.sendMessage(Lang.getComponent("kit-updated"));
   }

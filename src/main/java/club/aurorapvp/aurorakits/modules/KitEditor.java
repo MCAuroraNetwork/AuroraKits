@@ -101,7 +101,7 @@ public class KitEditor {
         event.getSlot() == 47 && !cursorItem.getType().name().endsWith("_LEGGINGS") ||
         event.getSlot() == 48 && (!cursorItem.getType().name().endsWith("_CHESTPLATE") &&
             cursorItem.getType() != Material.ELYTRA) ||
-        event.getSlot() == 49 && !cursorItem.getType().name().endsWith("HELMET")) {
+        event.getSlot() == 49 && !cursorItem.getType().name().endsWith("_HELMET")) {
       event.setCancelled(true);
     }
 
