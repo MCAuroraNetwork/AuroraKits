@@ -37,6 +37,8 @@ public class Lang {
     DEFAULTS.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
     DEFAULTS.put("kit-created",
         "prefix <gradient:#FFAA00:#FF55FF>Kit successfully created! Use /kits to access it!");
+    DEFAULTS.put("kit-updated",
+        "prefix <gradient:#FFAA00:#FF55FF>Kit successfully updated! Use /kits to access it!");
     DEFAULTS.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully used!");
     DEFAULTS.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully deleted");
     DEFAULTS.put("kit-too-many", "prefix <gradient:#FFAA00:#FF55FF>You have too many kits!");

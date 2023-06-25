@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -26,6 +25,8 @@ public class KitsGUI {
   public KitsGUI(Player p) {
     this.owner = p;
 
+    reload();
+
     KITS_GUIS.add(this);
   }
 
@@ -39,6 +40,10 @@ public class KitsGUI {
     if (lastPage.getContents()[44] != null) {
       createPage(kit);
     } else {
+      if (lastPage.contains(kit.getDisplayItem())) {
+        return;
+      }
+
       lastPage.addItem(kit.getDisplayItem());
     }
   }
@@ -139,8 +144,7 @@ public class KitsGUI {
   }
 
   public void reload() {
-    Set<club.aurorapvp.aurorakits.modules.Kit> kitSet =
-        club.aurorapvp.aurorakits.modules.Kit.getKits(this.getOwner(), true);
+    Set<Kit> kitSet = Kit.getKits(this.getOwner(), true);
 
     for (int i = 0; i < kitSet.size(); i++) {
       if (i % 44 == 0 && i != 0) {
@@ -198,33 +202,43 @@ public class KitsGUI {
   public static void inventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (Objects.requireNonNull(KitsGUI.getGui(p)).isGuiInventory(event.getInventory())) {
-      event.setCancelled(true);
+    if (!Objects.requireNonNull(KitsGUI.getGui(p)).isGuiInventory(event.getInventory())) {
+      return;
+    }
 
-      if (event.getSlot() == 45) {
-        Objects.requireNonNull(KitsGUI.getGui(p)).previousPage();
-        return;
-      } else if (event.getSlot() == 53) {
-        Objects.requireNonNull(KitsGUI.getGui(p)).nextPage();
-        return;
-      }
+    event.setCancelled(true);
 
-      final ItemStack clickedItem = event.getCurrentItem();
+    if (event.getSlot() == 45) {
+      Objects.requireNonNull(KitsGUI.getGui(p)).previousPage();
+      return;
+    } else if (event.getSlot() == 53) {
+      Objects.requireNonNull(KitsGUI.getGui(p)).nextPage();
+      return;
+    }
 
-      if (clickedItem == null || clickedItem.getType().isAir()) {
-        return;
-      }
+    final ItemStack clickedItem = event.getCurrentItem();
 
-      if (event.getCurrentItem().getItemMeta().displayName() == null) {
-        p.sendMessage(Lang.getComponent("kit-invalid-name"));
+    if (clickedItem == null || clickedItem.getType().isAir()) {
+      return;
+    }
+
+    if (event.getCurrentItem().getItemMeta().displayName() == null) {
+      p.sendMessage(Lang.getComponent("kit-invalid-name"));
+    } else {
+      String itemName = PlainTextComponentSerializer.plainText()
+          .serialize(event.getCurrentItem().displayName());
+      String kitName = itemName.substring(1, itemName.length() - 1);
+
+      Kit kit = Kit.getKit(p, kitName);
+
+      assert kit != null;
+      if (event.isRightClick() && !kit.isPublic()) {
+        kit.editKit(p);
       } else {
-        String itemName = PlainTextComponentSerializer.plainText()
-            .serialize(event.getCurrentItem().displayName());
-        String kitName = itemName.substring(1, itemName.length() - 1);
-
-        Objects.requireNonNull(Kit.getKit(kitName)).giveKit(p);
+        kit.giveKit(p);
       }
     }
+
   }
 
   public static KitsGUI getGui(Player p) {

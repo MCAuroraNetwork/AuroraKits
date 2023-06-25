@@ -3,21 +3,16 @@ package club.aurorapvp.aurorakits.modules;
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.configs.Lang;
 import club.aurorapvp.aurorakits.datahandlers.KitData;
+import club.aurorapvp.aurorakits.util.ItemStackUtil;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kit {
   private static final Set<Kit> kits = new HashSet<>();
@@ -97,8 +92,8 @@ public class Kit {
     }
 
     displayItem =
-        createDisplayItem(p.getInventory().getItemInMainHand().getType(), name, owner.getName(),
-            isPublic);
+        ItemStackUtil.createDisplayItem(p.getInventory().getItemInMainHand().getType(), name,
+            owner.getName(), isPublic);
 
     if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
       itemStacks = new ItemStack[p.getInventory().getContents().length];
@@ -120,6 +115,20 @@ public class Kit {
     } else {
       p.sendMessage(Lang.getComponent("kit-invalid-item"));
     }
+  }
+
+  public void edit(Player p, ItemStack[] newContents) {
+    itemStacks = new ItemStack[newContents.length];
+
+    for (int i = 0; i < newContents.length; i++) {
+      itemStacks[i] = newContents[i] == null ? null : newContents[i].clone();
+    }
+
+    data.create();
+
+    Objects.requireNonNull(KitsGUI.getGui(p)).addKit(this);
+
+    p.sendMessage(Lang.getComponent("kit-updated"));
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -148,6 +157,10 @@ public class Kit {
     }
   }
 
+  public void editKit(Player p) {
+    Objects.requireNonNull(KitEditor.getEditor(p)).openEditor(p, this);
+  }
+
   public void giveKit(Player p) {
     if (this.exists()) {
       p.getInventory().setContents(this.getItemStacks());
@@ -164,31 +177,6 @@ public class Kit {
     this.itemStacks = this.getData().getItemStacks();
     this.publicKit = this.getData().isPublic();
     this.displayItem = this.getData().getDisplayItem();
-  }
-
-  private static ItemStack createDisplayItem(final Material material, final String name,
-                                             String creator, boolean isPublic) {
-    final ItemStack item = new ItemStack(material, 1);
-    final ItemMeta meta = item.getItemMeta();
-
-    meta.displayName(
-        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + name)
-            .decoration(TextDecoration.ITALIC, false)
-            .decoration(TextDecoration.BOLD, true));
-
-    if (isPublic) {
-      meta.lore(List.of(MiniMessage.miniMessage()
-          .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator), MiniMessage.miniMessage()
-          .deserialize("This is a Public Kit")));
-    } else {
-      meta.lore(List.of(MiniMessage.miniMessage()
-              .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator),
-          Component.text("This is a Private Kit")));
-    }
-
-    item.setItemMeta(meta);
-
-    return item;
   }
 
   public static int getAmount(Player p, boolean includePublic) {
@@ -285,7 +273,8 @@ public class Kit {
         new Kit(kitName, String.valueOf(p.getUniqueId()));
       }
     }
-    new KitsGUI(p).reload();
+    new KitsGUI(p);
+    new KitEditor(p);
   }
 
   public static void onPlayerQuit(Player p) {
