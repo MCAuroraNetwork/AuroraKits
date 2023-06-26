@@ -1,8 +1,8 @@
-package club.aurorapvp.aurorakits.modules;
+package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.configs.Lang;
-import club.aurorapvp.aurorakits.datahandlers.KitData;
+import club.aurorapvp.aurorakits.config.Lang;
+import club.aurorapvp.aurorakits.data.KitDataHandler;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
 import java.io.File;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 public class Kit {
   private static final Set<Kit> kits = new HashSet<>();
   private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
-  private final KitData data;
+  private final KitDataHandler data;
   private final String name;
   private OfflinePlayer owner;
   private boolean publicKit;
@@ -28,7 +28,7 @@ public class Kit {
   public Kit(String kitName, String kitPath) {
     this.path = kitPath;
     this.name = kitName;
-    this.data = new KitData(this);
+    this.data = new KitDataHandler(this);
 
     kits.add(this);
 
@@ -74,7 +74,7 @@ public class Kit {
     return name;
   }
 
-  public KitData getData() {
+  public KitDataHandler getData() {
     return data;
   }
 

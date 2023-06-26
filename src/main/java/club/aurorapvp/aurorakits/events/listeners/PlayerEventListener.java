@@ -1,8 +1,8 @@
 package club.aurorapvp.aurorakits.events.listeners;
 
-import club.aurorapvp.aurorakits.configs.Config;
+import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.modules.Frame;
-import club.aurorapvp.aurorakits.modules.Kit;
+import club.aurorapvp.aurorakits.modules.kits.Kit;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerEvents implements Listener {
+public class PlayerEventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.setupPlayer(event.getPlayer());

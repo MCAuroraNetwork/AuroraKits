@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorakits.datahandlers;
+package club.aurorapvp.aurorakits.data;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.modules.Frame;
@@ -9,12 +9,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-public class FrameData {
+public class FrameDataHandler {
   private static final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "/frames.yml");
   private static final YamlConfiguration framesData = YamlConfiguration.loadConfiguration(FILE);
   private final Frame frame;
 
-  public FrameData(Frame frame) {
+  public FrameDataHandler(Frame frame) {
     this.frame = frame;
   }
 

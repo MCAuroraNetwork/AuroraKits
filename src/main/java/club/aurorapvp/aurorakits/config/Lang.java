@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorakits.configs;
+package club.aurorapvp.aurorakits.config;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import java.io.File;

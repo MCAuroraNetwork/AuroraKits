@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorakits.modules;
+package club.aurorapvp.aurorakits.modules.kits;
 
 import java.util.HashMap;
 import java.util.HashSet;

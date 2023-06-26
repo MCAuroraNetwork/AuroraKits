@@ -1,8 +1,8 @@
 package club.aurorapvp.aurorakits.modules;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.configs.Lang;
-import club.aurorapvp.aurorakits.datahandlers.FrameData;
+import club.aurorapvp.aurorakits.config.Lang;
+import club.aurorapvp.aurorakits.data.FrameDataHandler;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -23,12 +23,12 @@ public class Frame {
   private static final Set<Frame> frames = new HashSet<>();
   private Location location;
   private final String name;
-  private final FrameData data;
+  private final FrameDataHandler data;
   private ItemStack item;
 
   public Frame(String frameName) {
     this.name = frameName;
-    this.data = new FrameData(this);
+    this.data = new FrameDataHandler(this);
 
     frames.add(this);
 
@@ -56,7 +56,7 @@ public class Frame {
     return item;
   }
 
-  public FrameData getData() {
+  public FrameDataHandler getData() {
     return data;
   }
 

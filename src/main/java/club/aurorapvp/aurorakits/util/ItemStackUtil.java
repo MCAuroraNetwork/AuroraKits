@@ -15,9 +15,8 @@ public class ItemStackUtil {
     final ItemMeta meta = item.getItemMeta();
 
     meta.displayName(
-        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF>" + name)
-            .decoration(TextDecoration.ITALIC, false)
-            .decoration(TextDecoration.BOLD, true));
+        MiniMessage.miniMessage().deserialize("<gradient:#FFAA00:#FF55FF><bold>" + name)
+            .decoration(TextDecoration.ITALIC, false));
 
     if (isPublic) {
       meta.lore(List.of(MiniMessage.miniMessage()

@@ -1,7 +1,7 @@
-package club.aurorapvp.aurorakits.datahandlers;
+package club.aurorapvp.aurorakits.data;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.modules.Kit;
+import club.aurorapvp.aurorakits.modules.kits.Kit;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -12,12 +12,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-public class KitData {
+public class KitDataHandler {
   private final YamlConfiguration DATA_FILE;
   private final File FILE;
   private final Kit kit;
 
-  public KitData(Kit kit) {
+  public KitDataHandler(Kit kit) {
     this.kit = kit;
     this.FILE =
         new File(AuroraKits.INSTANCE.getDataFolder(),

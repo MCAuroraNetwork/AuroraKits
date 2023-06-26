@@ -1,7 +1,7 @@
-package club.aurorapvp.aurorakits.modules;
+package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.configs.Lang;
+import club.aurorapvp.aurorakits.config.Lang;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -85,7 +85,7 @@ public class KitsGUI {
   public void createPage(Kit[] kits) {
     Inventory inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
 
-    for (club.aurorapvp.aurorakits.modules.Kit kit : kits) {
+    for (Kit kit : kits) {
       inventory.addItem(kit.getDisplayItem());
     }
 
@@ -233,7 +233,6 @@ public class KitsGUI {
         kit.giveKit(p);
       }
     }
-
   }
 
   public static KitsGUI getGui(Player p) {
