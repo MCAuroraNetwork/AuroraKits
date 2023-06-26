@@ -1,7 +1,7 @@
 package club.aurorapvp.aurorakits.commands;
 
 import club.aurorapvp.aurorakits.config.Lang;
-import club.aurorapvp.aurorakits.modules.kits.KitsGUI;
+import club.aurorapvp.aurorakits.modules.kits.KitsGui;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
@@ -23,7 +23,7 @@ public class KitCommands extends BaseCommand {
   @Description("Opens the kit GUI")
   @SuppressWarnings("unused")
   public void onGUIOpen(Player p) {
-    KitsGUI.open(p);
+    KitsGui.open(p);
   }
 
   @Default

@@ -6,7 +6,7 @@ import club.aurorapvp.aurorakits.events.listeners.PlayerEventListener;
 import club.aurorapvp.aurorakits.events.listeners.WorldEventListener;
 import org.bukkit.Bukkit;
 
-public class Events {
+public class EventManager {
   public static void init() {
     Bukkit.getPluginManager().registerEvents(new InventoryEventListener(), AuroraKits.INSTANCE);
     Bukkit.getPluginManager().registerEvents(new PlayerEventListener(), AuroraKits.INSTANCE);

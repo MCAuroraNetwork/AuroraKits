@@ -4,7 +4,7 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.modules.Frame;
-import club.aurorapvp.aurorakits.modules.kits.KitsGUI;
+import club.aurorapvp.aurorakits.modules.kits.KitsGui;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
@@ -27,7 +27,7 @@ public class PluginCommands extends BaseCommand {
     Frame.reloadAll();
     Kit.reloadAll();
     Config.reload();
-    KitsGUI.reloadAll();
+    KitsGui.reloadAll();
     Lang.reload();
 
     AuroraKits.INSTANCE.getLogger().info(

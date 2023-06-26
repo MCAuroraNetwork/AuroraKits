@@ -15,14 +15,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class KitsGUI {
-  private static final Set<KitsGUI> KITS_GUIS = new HashSet<>();
+public class KitsGui {
+  private static final Set<KitsGui> KITS_GUIS = new HashSet<>();
   private final Player owner;
   private Inventory[] inventories;
   private int currentPage = 0;
   private int pages;
 
-  public KitsGUI(Player p) {
+  public KitsGui(Player p) {
     this.owner = p;
 
     reload();
@@ -114,7 +114,7 @@ public class KitsGUI {
     } else {
       currentPage = 0;
     }
-    KitsGUI.open(owner);
+    KitsGui.open(owner);
   }
 
   public void previousPage() {
@@ -123,7 +123,7 @@ public class KitsGUI {
     } else {
       currentPage = pages;
     }
-    KitsGUI.open(owner);
+    KitsGui.open(owner);
   }
 
   public Inventory getCurrentPage() {
@@ -180,13 +180,13 @@ public class KitsGUI {
   }
 
   public static void reloadAll() {
-    for (KitsGUI kitsGui : KITS_GUIS) {
+    for (KitsGui kitsGui : KITS_GUIS) {
       kitsGui.reload();
     }
     AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
   }
 
-  public static Set<KitsGUI> getGuis() {
+  public static Set<KitsGui> getGuis() {
     return KITS_GUIS;
   }
 
@@ -197,17 +197,17 @@ public class KitsGUI {
   public static void inventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (!Objects.requireNonNull(KitsGUI.getGui(p)).isGuiInventory(event.getInventory())) {
+    if (!Objects.requireNonNull(KitsGui.getGui(p)).isGuiInventory(event.getInventory())) {
       return;
     }
 
     event.setCancelled(true);
 
     if (event.getSlot() == 45) {
-      Objects.requireNonNull(KitsGUI.getGui(p)).previousPage();
+      Objects.requireNonNull(KitsGui.getGui(p)).previousPage();
       return;
     } else if (event.getSlot() == 53) {
-      Objects.requireNonNull(KitsGUI.getGui(p)).nextPage();
+      Objects.requireNonNull(KitsGui.getGui(p)).nextPage();
       return;
     }
 
@@ -235,8 +235,8 @@ public class KitsGUI {
     }
   }
 
-  public static KitsGUI getGui(Player p) {
-    for (KitsGUI kitsGui : KITS_GUIS) {
+  public static KitsGui getGui(Player p) {
+    for (KitsGui kitsGui : KITS_GUIS) {
       if (kitsGui.getOwner() == p) {
         return kitsGui;
       }
@@ -245,6 +245,6 @@ public class KitsGUI {
   }
 
   public static void open(Player p) {
-    p.openInventory(Objects.requireNonNull(KitsGUI.getGui(p)).getCurrentPage());
+    p.openInventory(Objects.requireNonNull(KitsGui.getGui(p)).getCurrentPage());
   }
 }

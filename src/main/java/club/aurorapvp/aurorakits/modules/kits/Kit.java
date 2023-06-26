@@ -105,11 +105,11 @@ public class Kit {
       data.create();
 
       if (isPublic) {
-        for (KitsGUI kitsGui : KitsGUI.getGuis()) {
+        for (KitsGui kitsGui : KitsGui.getGuis()) {
           kitsGui.addKit(this);
         }
       } else {
-        Objects.requireNonNull(KitsGUI.getGui(p)).addKit(this);
+        Objects.requireNonNull(KitsGui.getGui(p)).addKit(this);
       }
 
       p.sendMessage(Lang.getComponent("kit-created"));
@@ -142,11 +142,11 @@ public class Kit {
     data.getFile().delete();
 
     if (isPublic) {
-      for (KitsGUI kitsGui : KitsGUI.getGuis()) {
+      for (KitsGui kitsGui : KitsGui.getGuis()) {
         kitsGui.removeKit(this);
       }
     } else {
-      Objects.requireNonNull(KitsGUI.getGui(p)).removeKit(this);
+      Objects.requireNonNull(KitsGui.getGui(p)).removeKit(this);
     }
 
     kits.remove(this);
@@ -272,7 +272,7 @@ public class Kit {
         new Kit(kitName, String.valueOf(p.getUniqueId()));
       }
     }
-    new KitsGUI(p);
+    new KitsGui(p);
     new KitEditor(p);
   }
 
@@ -283,7 +283,7 @@ public class Kit {
       }
     }
 
-    KitsGUI.onPlayerQuit(p);
+    KitsGui.onPlayerQuit(p);
   }
 
   public static Kit getLastUsedKit(Player p) {
