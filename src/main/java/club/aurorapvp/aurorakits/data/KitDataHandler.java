@@ -38,7 +38,7 @@ public class KitDataHandler {
     return FILE;
   }
 
-  public YamlConfiguration getYaml() {
+  public YamlConfiguration get() {
     return DATA_FILE;
   }
 
@@ -47,13 +47,13 @@ public class KitDataHandler {
   }
 
   public ItemStack[] getItemStacks() {
-    ConfigurationSection section = this.getYaml().getConfigurationSection("items");
+    ConfigurationSection section = this.get().getConfigurationSection("items");
     assert section != null;
     ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
     int i = 0;
 
     for (String path : section.getKeys(false)) {
-      itemStacks[i] = this.getYaml().getItemStack("items." + path);
+      itemStacks[i] = this.get().getItemStack("items." + path);
       i++;
     }
     return itemStacks;

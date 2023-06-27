@@ -69,7 +69,7 @@ public class Frame {
   }
 
   public boolean exists() {
-    return this.getData().getConfigSection() != null;
+    return this.getData().exists();
   }
 
   public void create(Player p) {

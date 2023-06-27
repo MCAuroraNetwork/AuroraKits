@@ -18,8 +18,8 @@ public class FrameDataHandler {
     this.frame = frame;
   }
 
-  public ConfigurationSection getConfigSection() {
-    return get().getConfigurationSection(frame.getName());
+  public boolean exists() {
+    return get().contains(frame.getName());
   }
 
   public Location getLocation() {
