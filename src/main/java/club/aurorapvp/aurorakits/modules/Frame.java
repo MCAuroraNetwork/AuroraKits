@@ -21,9 +21,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class Frame {
   private static final Set<Frame> frames = new HashSet<>();
-  private Location location;
   private final String name;
   private final FrameDataHandler data;
+  private Location location;
   private ItemStack item;
 
   public Frame(String frameName) {
@@ -50,60 +50,6 @@ public class Frame {
       new Frame(name);
     }
     AuroraKits.INSTANCE.getLogger().info("All frames loaded!");
-  }
-
-  public ItemStack getItem() {
-    return item;
-  }
-
-  public FrameDataHandler getData() {
-    return data;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public boolean exists() {
-    return this.getData().exists();
-  }
-
-  public void create(Player p) {
-    if (name != null && p != null) {
-      Block block = p.getTargetBlockExact(4);
-      assert block != null;
-      ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
-      frame.teleport(
-          block.getRelative(Objects.requireNonNull(Frame.getBlockFace(p))).getLocation());
-      frame.setFacingDirection(Objects.requireNonNull(Frame.getBlockFace(p)), true);
-
-      frame.setItem(p.getInventory().getItemInMainHand());
-      item = p.getInventory().getItemInMainHand();
-      location = frame.getLocation();
-
-      this.data.create();
-
-      p.sendMessage(Lang.getComponent("frame-created"));
-    } else if (p != null) {
-      p.sendMessage(Lang.getComponent("frame-invalid"));
-    }
-  }
-
-  public void delete(Player p) {
-    this.getData().delete();
-    frames.remove(this);
-    if (p != null) {
-      p.sendMessage(Lang.getComponent("frame-deleted"));
-    }
-  }
-
-  public void reload() {
-    location = this.getData().getLocation();
-    item = this.getData().getItem();
   }
 
   public static void reloadAll() {
@@ -158,5 +104,59 @@ public class Frame {
     Block adjacentBlock = lastTwoTargetBlocks.get(0);
 
     return targetBlock.getFace(adjacentBlock);
+  }
+
+  public ItemStack getItem() {
+    return item;
+  }
+
+  public FrameDataHandler getData() {
+    return data;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Location getLocation() {
+    return location;
+  }
+
+  public boolean exists() {
+    return this.getData().exists();
+  }
+
+  public void create(Player p) {
+    if (name != null && p != null) {
+      Block block = p.getTargetBlockExact(4);
+      assert block != null;
+      ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
+      frame.teleport(
+          block.getRelative(Objects.requireNonNull(Frame.getBlockFace(p))).getLocation());
+      frame.setFacingDirection(Objects.requireNonNull(Frame.getBlockFace(p)), true);
+
+      frame.setItem(p.getInventory().getItemInMainHand());
+      item = p.getInventory().getItemInMainHand();
+      location = frame.getLocation();
+
+      this.data.create();
+
+      p.sendMessage(Lang.getComponent("frame-created"));
+    } else if (p != null) {
+      p.sendMessage(Lang.getComponent("frame-invalid"));
+    }
+  }
+
+  public void delete(Player p) {
+    this.getData().delete();
+    frames.remove(this);
+    if (p != null) {
+      p.sendMessage(Lang.getComponent("frame-deleted"));
+    }
+  }
+
+  public void reload() {
+    location = this.getData().getLocation();
+    item = this.getData().getItem();
   }
 }

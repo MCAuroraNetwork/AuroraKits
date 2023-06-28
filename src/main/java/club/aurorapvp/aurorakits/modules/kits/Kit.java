@@ -19,11 +19,11 @@ public class Kit {
   private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitDataHandler data;
   private final String name;
+  private final String path;
   private OfflinePlayer owner;
   private boolean publicKit;
   private ItemStack[] itemStacks;
   private ItemStack displayItem;
-  private final String path;
 
   public Kit(String kitName, String kitPath) {
     this.path = kitPath;
@@ -48,6 +48,122 @@ public class Kit {
     }
 
     AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
+  }
+
+  public static int getAmount(Player p, boolean includePublic) {
+    return getKits(p, includePublic).size();
+  }
+
+  @SuppressWarnings("unused")
+  public static Kit createKit(String name, Player p) {
+    Kit kit;
+
+    kit = new Kit(name, "public");
+    kit.create(p, true);
+
+    return kit;
+  }
+
+  @SuppressWarnings("unused")
+  public static void deleteKit(String name) {
+    for (Kit kit : getKits()) {
+      if (Objects.equals(kit.getName(), name)) {
+        kit.delete(null, true);
+      }
+    }
+  }
+
+  @SuppressWarnings("unused")
+  public static Kit getKit(String name) {
+    for (Kit kit : getKits()) {
+      if (Objects.equals(kit.getName(), name)) {
+        return kit;
+      }
+    }
+    return null;
+  }
+
+  @SuppressWarnings("unused")
+  public static Kit getLastKit(Player p) {
+    return Kit.getLastUsedKit(p);
+  }
+
+  public static Set<Kit> getKits() {
+    return Kit.getKits(null, true);
+  }
+
+  @SuppressWarnings("unused")
+  public static void giveKit(Kit kit, Player p) {
+    kit.giveKit(p);
+  }
+
+  public static void reloadAll() {
+    kits.clear();
+
+    Kit.init();
+
+    for (Player p : Bukkit.getOnlinePlayers()) {
+      setupPlayer(p);
+    }
+
+    for (Kit kit : kits) {
+      kit.reload();
+    }
+    AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
+  }
+
+  public static Set<Kit> getKits(Player p, boolean includePublic) {
+    Set<Kit> playerKits = new HashSet<>();
+
+    for (Kit kit : kits) {
+      if (kit.getOwner() == p || (kit.isPublic() && includePublic)) {
+        playerKits.add(kit);
+      }
+    }
+
+    return playerKits;
+  }
+
+  public static Kit getKit(Player p, String kitName) {
+    for (Kit kit : kits) {
+      if (kit.getOwner().getPlayer() == p || kit.publicKit) {
+        if (Objects.equals(kit.getName(), kitName)) {
+          return kit;
+        }
+      }
+    }
+    return null;
+  }
+
+  public static void setupPlayer(Player p) {
+    File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/" + p.getUniqueId());
+
+    if (dir.exists()) {
+      for (File file : Objects.requireNonNull(dir.listFiles())) {
+        String kitName = file.getName().replace(".yml", "");
+        new Kit(kitName, String.valueOf(p.getUniqueId()));
+      }
+    }
+    new KitsGui(p);
+    new KitEditor(p);
+  }
+
+  public static void onPlayerQuit(Player p) {
+    for (Kit kit : getKits(p, true)) {
+      if (!kit.isPublic()) {
+        kits.remove(kit);
+      }
+    }
+
+    KitsGui.onPlayerQuit(p);
+  }
+
+  public static Kit getLastUsedKit(Player p) {
+    if (LAST_USED_KIT.containsKey(p)) {
+      return LAST_USED_KIT.get(p);
+    }
+
+    return null;
   }
 
   public String getPath() {
@@ -176,121 +292,5 @@ public class Kit {
     this.itemStacks = this.getData().getItemStacks();
     this.publicKit = this.getData().isPublic();
     this.displayItem = this.getData().getDisplayItem();
-  }
-
-  public static int getAmount(Player p, boolean includePublic) {
-    return getKits(p, includePublic).size();
-  }
-
-  @SuppressWarnings("unused")
-  public static Kit createKit(String name, Player p) {
-    Kit kit;
-
-    kit = new Kit(name, "public");
-    kit.create(p, true);
-
-    return kit;
-  }
-
-  @SuppressWarnings("unused")
-  public static void deleteKit(String name) {
-    for (Kit kit : getKits()) {
-      if (Objects.equals(kit.getName(), name)) {
-        kit.delete(null, true);
-      }
-    }
-  }
-
-  @SuppressWarnings("unused")
-  public static Kit getKit(String name) {
-    for (Kit kit : getKits()) {
-      if (Objects.equals(kit.getName(), name)) {
-        return kit;
-      }
-    }
-    return null;
-  }
-
-  @SuppressWarnings("unused")
-  public static Kit getLastKit(Player p) {
-    return Kit.getLastUsedKit(p);
-  }
-
-  public static Set<Kit> getKits() {
-    return Kit.getKits(null, true);
-  }
-
-  @SuppressWarnings("unused")
-  public static void giveKit(Kit kit, Player p) {
-    kit.giveKit(p);
-  }
-
-  public static void reloadAll() {
-    kits.clear();
-
-    Kit.init();
-
-    for (Player p : Bukkit.getOnlinePlayers()) {
-      setupPlayer(p);
-    }
-
-    for (Kit kit : kits) {
-      kit.reload();
-    }
-    AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
-  }
-
-  public static Set<Kit> getKits(Player p, boolean includePublic) {
-    Set<Kit> playerKits = new HashSet<>();
-
-    for (Kit kit : kits) {
-      if (kit.getOwner() == p || (kit.isPublic() && includePublic)) {
-        playerKits.add(kit);
-      }
-    }
-
-    return playerKits;
-  }
-
-  public static Kit getKit(Player p, String kitName) {
-    for (Kit kit : kits) {
-      if (kit.getOwner().getPlayer() == p || kit.publicKit) {
-        if (Objects.equals(kit.getName(), kitName)) {
-          return kit;
-        }
-      }
-    }
-    return null;
-  }
-
-  public static void setupPlayer(Player p) {
-    File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/" + p.getUniqueId());
-
-    if (dir.exists()) {
-      for (File file : Objects.requireNonNull(dir.listFiles())) {
-        String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName, String.valueOf(p.getUniqueId()));
-      }
-    }
-    new KitsGui(p);
-    new KitEditor(p);
-  }
-
-  public static void onPlayerQuit(Player p) {
-    for (Kit kit : getKits(p, true)) {
-      if (!kit.isPublic()) {
-        kits.remove(kit);
-      }
-    }
-
-    KitsGui.onPlayerQuit(p);
-  }
-
-  public static Kit getLastUsedKit(Player p) {
-    if (LAST_USED_KIT.containsKey(p)) {
-      return LAST_USED_KIT.get(p);
-    }
-
-    return null;
   }
 }

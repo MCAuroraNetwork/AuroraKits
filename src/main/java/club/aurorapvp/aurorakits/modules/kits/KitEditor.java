@@ -17,8 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitEditor {
-  private final Player owner;
   private static final Set<KitEditor> KIT_EDITORS = new HashSet<>();
+  private final Player owner;
   private final Map<String, Inventory> kitEditors = new HashMap<>();
 
   public KitEditor(Player p) {
@@ -27,54 +27,6 @@ public class KitEditor {
     reload();
 
     KIT_EDITORS.add(this);
-  }
-
-  public Player getOwner() {
-    return owner;
-  }
-
-  public boolean isEditorInventory(Inventory inventory) {
-    for (Inventory editor : this.kitEditors.values()) {
-      if (editor == inventory) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public void openEditor(Player p, Kit kit) {
-    p.openInventory(kitEditors.get(kit.getName()));
-  }
-
-  public void reload() {
-    Set<Kit> kitSet = Kit.getKits(this.getOwner(), true);
-
-    for (Kit kit : kitSet) {
-      Inventory kitEditor = Bukkit.createInventory(null, 54, Component.text(kit.getName()));
-
-      kitEditor.setContents(kit.getItemStacks());
-
-      for (int i = 0; i < 35; i++) {
-        kitEditor.setItem(i, kit.getItemStacks()[i]);
-      }
-
-      ItemStack barrier = new ItemStack(Material.BARRIER);
-      ItemMeta meta = barrier.getItemMeta();
-      meta.displayName(Component.text(""));
-      barrier.setItemMeta(meta);
-
-      for (int i = 36; i < 54; i++) {
-        kitEditor.setItem(i, barrier);
-      }
-
-      for (int i = 46; i < 50; i++) {
-        kitEditor.setItem(i, kit.getItemStacks()[i - 10]);
-      }
-
-      kitEditor.setItem(51, kit.getItemStacks()[40]);
-
-      kitEditors.put(kit.getName(), kitEditor);
-    }
   }
 
   public static void inventoryClicked(InventoryClickEvent event) {
@@ -139,5 +91,53 @@ public class KitEditor {
       }
     }
     return null;
+  }
+
+  public Player getOwner() {
+    return owner;
+  }
+
+  public boolean isEditorInventory(Inventory inventory) {
+    for (Inventory editor : this.kitEditors.values()) {
+      if (editor == inventory) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public void openEditor(Player p, Kit kit) {
+    p.openInventory(kitEditors.get(kit.getName()));
+  }
+
+  public void reload() {
+    Set<Kit> kitSet = Kit.getKits(this.getOwner(), true);
+
+    for (Kit kit : kitSet) {
+      Inventory kitEditor = Bukkit.createInventory(null, 54, Component.text(kit.getName()));
+
+      kitEditor.setContents(kit.getItemStacks());
+
+      for (int i = 0; i < 35; i++) {
+        kitEditor.setItem(i, kit.getItemStacks()[i]);
+      }
+
+      ItemStack barrier = new ItemStack(Material.BARRIER);
+      ItemMeta meta = barrier.getItemMeta();
+      meta.displayName(Component.text(""));
+      barrier.setItemMeta(meta);
+
+      for (int i = 36; i < 54; i++) {
+        kitEditor.setItem(i, barrier);
+      }
+
+      for (int i = 46; i < 50; i++) {
+        kitEditor.setItem(i, kit.getItemStacks()[i - 10]);
+      }
+
+      kitEditor.setItem(51, kit.getItemStacks()[40]);
+
+      kitEditors.put(kit.getName(), kitEditor);
+    }
   }
 }

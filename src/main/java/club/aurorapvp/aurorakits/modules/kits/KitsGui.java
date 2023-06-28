@@ -30,6 +30,75 @@ public class KitsGui {
     KITS_GUIS.add(this);
   }
 
+  public static void reloadAll() {
+    for (KitsGui kitsGui : KITS_GUIS) {
+      kitsGui.reload();
+    }
+    AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
+  }
+
+  public static Set<KitsGui> getGuis() {
+    return KITS_GUIS;
+  }
+
+  public static void onPlayerQuit(Player p) {
+    KITS_GUIS.removeIf(gui -> gui.getOwner() == p);
+  }
+
+  public static void inventoryClicked(InventoryClickEvent event) {
+    Player p = (Player) event.getWhoClicked();
+
+    if (!Objects.requireNonNull(KitsGui.getGui(p)).isGuiInventory(event.getInventory())) {
+      return;
+    }
+
+    event.setCancelled(true);
+
+    if (event.getSlot() == 45) {
+      Objects.requireNonNull(KitsGui.getGui(p)).previousPage();
+      return;
+    } else if (event.getSlot() == 53) {
+      Objects.requireNonNull(KitsGui.getGui(p)).nextPage();
+      return;
+    }
+
+    final ItemStack clickedItem = event.getCurrentItem();
+
+    if (clickedItem == null || clickedItem.getType().isAir()) {
+      return;
+    }
+
+    if (event.getCurrentItem().getItemMeta().displayName() == null) {
+      p.sendMessage(Lang.getComponent("kit-invalid-name"));
+    } else {
+      String itemName = PlainTextComponentSerializer.plainText()
+          .serialize(event.getCurrentItem().displayName());
+      String kitName = itemName.substring(1, itemName.length() - 1);
+
+      Kit kit = Kit.getKit(p, kitName);
+
+      assert kit != null;
+      if (event.isRightClick() && !kit.isPublic()) {
+        kit.editKit(p);
+      } else {
+        kit.giveKit(p);
+      }
+    }
+  }
+
+  public static KitsGui getGui(Player p) {
+    for (KitsGui kitsGui : KITS_GUIS) {
+      if (kitsGui.getOwner() == p) {
+        return kitsGui;
+      }
+    }
+    return null;
+  }
+
+  public static void open(Player p) {
+    p.openInventory(Objects.requireNonNull(KitsGui.getGui(p)).getCurrentPage());
+  }
+
   public Player getOwner() {
     return owner;
   }
@@ -177,74 +246,5 @@ public class KitsGui {
 
       createPage(kits);
     }
-  }
-
-  public static void reloadAll() {
-    for (KitsGui kitsGui : KITS_GUIS) {
-      kitsGui.reload();
-    }
-    AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
-  }
-
-  public static Set<KitsGui> getGuis() {
-    return KITS_GUIS;
-  }
-
-  public static void onPlayerQuit(Player p) {
-    KITS_GUIS.removeIf(gui -> gui.getOwner() == p);
-  }
-
-  public static void inventoryClicked(InventoryClickEvent event) {
-    Player p = (Player) event.getWhoClicked();
-
-    if (!Objects.requireNonNull(KitsGui.getGui(p)).isGuiInventory(event.getInventory())) {
-      return;
-    }
-
-    event.setCancelled(true);
-
-    if (event.getSlot() == 45) {
-      Objects.requireNonNull(KitsGui.getGui(p)).previousPage();
-      return;
-    } else if (event.getSlot() == 53) {
-      Objects.requireNonNull(KitsGui.getGui(p)).nextPage();
-      return;
-    }
-
-    final ItemStack clickedItem = event.getCurrentItem();
-
-    if (clickedItem == null || clickedItem.getType().isAir()) {
-      return;
-    }
-
-    if (event.getCurrentItem().getItemMeta().displayName() == null) {
-      p.sendMessage(Lang.getComponent("kit-invalid-name"));
-    } else {
-      String itemName = PlainTextComponentSerializer.plainText()
-          .serialize(event.getCurrentItem().displayName());
-      String kitName = itemName.substring(1, itemName.length() - 1);
-
-      Kit kit = Kit.getKit(p, kitName);
-
-      assert kit != null;
-      if (event.isRightClick() && !kit.isPublic()) {
-        kit.editKit(p);
-      } else {
-        kit.giveKit(p);
-      }
-    }
-  }
-
-  public static KitsGui getGui(Player p) {
-    for (KitsGui kitsGui : KITS_GUIS) {
-      if (kitsGui.getOwner() == p) {
-        return kitsGui;
-      }
-    }
-    return null;
-  }
-
-  public static void open(Player p) {
-    p.openInventory(Objects.requireNonNull(KitsGui.getGui(p)).getCurrentPage());
   }
 }

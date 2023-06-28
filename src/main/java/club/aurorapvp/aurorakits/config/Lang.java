@@ -46,8 +46,8 @@ public class Lang {
     DEFAULTS.put("kit-invalid-item", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit display item!");
     DEFAULTS.put("kit-not-found", "prefix <gradient:#FFAA00:#FF55FF>Kit not found!");
     DEFAULTS.put("kit-already-exists", "prefix <gradient:#FFAA00:#FF55FF>Kit already exists!");
-    DEFAULTS.put("next-page", "<gradient:#FFAA00:#FF55FF>Next page");
-    DEFAULTS.put("previous-page", "<gradient:#FFAA00:#FF55FF>Previous page");
+    DEFAULTS.put("next-page", "<gradient:#FFAA00:#FF55FF><bold>Next Page");
+    DEFAULTS.put("previous-page", "<gradient:#FFAA00:#FF55FF><bold>Previous Page");
     DEFAULTS.put("unknown-frame-command",
         "prefix <gradient:#FFAA00:#FF55FF>Unknown Frame Command! Use /help for help!");
     DEFAULTS.put("unknown-kit-command",

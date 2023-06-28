@@ -5,7 +5,6 @@ import club.aurorapvp.aurorakits.modules.Frame;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +15,10 @@ public class FrameDataHandler {
 
   public FrameDataHandler(Frame frame) {
     this.frame = frame;
+  }
+
+  public static YamlConfiguration get() {
+    return framesData;
   }
 
   public boolean exists() {
@@ -52,9 +55,5 @@ public class FrameDataHandler {
     get().set("frames." + frame.getName() + ".item", frame.getItem());
     get().set("frames." + frame.getName() + ".location", frame.getLocation());
     save();
-  }
-
-  public static YamlConfiguration get() {
-    return framesData;
   }
 }
