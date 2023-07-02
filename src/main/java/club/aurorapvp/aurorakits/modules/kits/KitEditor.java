@@ -63,7 +63,9 @@ public class KitEditor {
     Player p = (Player) event.getPlayer();
     Inventory inventory = event.getInventory();
 
-    if (!Objects.requireNonNull(KitEditor.getEditor(p)).isEditorInventory(inventory)) {
+    KitEditor editor = KitEditor.getEditor(p);
+
+    if (editor == null || !editor.isEditorInventory(inventory)) {
       return;
     }
 
