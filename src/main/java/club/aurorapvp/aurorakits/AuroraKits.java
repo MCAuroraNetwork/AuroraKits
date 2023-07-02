@@ -27,13 +27,13 @@ public final class AuroraKits extends JavaPlugin {
     Kit.init();
 
     getLogger().info(
-        "AuroraKits loaded in " + (System.currentTimeMillis() - startTime) +
+        "AuroraKits enabled in " + (System.currentTimeMillis() - startTime) +
             "ms");
   }
 
   @Override
   public void onDisable() {
-    getLogger().info("AuroraKits unloaded");
+    getLogger().info("AuroraKits disabled");
   }
 }
 
