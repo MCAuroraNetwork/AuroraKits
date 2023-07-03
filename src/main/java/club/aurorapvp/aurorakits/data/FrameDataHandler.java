@@ -22,7 +22,7 @@ public class FrameDataHandler {
   }
 
   public boolean exists() {
-    return get().contains(frame.getName());
+    return get().contains("frames." + frame.getName());
   }
 
   public Location getLocation() {
