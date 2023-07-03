@@ -207,31 +207,32 @@ public class Kit {
       return;
     }
 
+    if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
+      p.sendMessage(Lang.getComponent("kit-invalid-item"));
+      return;
+    }
+
     displayItem =
         ItemStackUtil.createDisplayItem(p.getInventory().getItemInMainHand().getType(), name,
             owner.getName(), isPublic);
 
-    if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
-      itemStacks = new ItemStack[p.getInventory().getContents().length];
-      for (int i = 0; i < p.getInventory().getContents().length; i++) {
-        itemStacks[i] = p.getInventory().getContents()[i] == null ? null :
-            p.getInventory().getContents()[i].clone();
-      }
-
-      data.create();
-
-      if (isPublic) {
-        for (KitsGui kitsGui : KitsGui.getGuis()) {
-          kitsGui.addKit(this);
-        }
-      } else {
-        Objects.requireNonNull(KitsGui.getGui(p)).addKit(this);
-      }
-
-      p.sendMessage(Lang.getComponent("kit-created"));
-    } else {
-      p.sendMessage(Lang.getComponent("kit-invalid-item"));
+    itemStacks = new ItemStack[p.getInventory().getContents().length];
+    for (int i = 0; i < p.getInventory().getContents().length; i++) {
+      itemStacks[i] = p.getInventory().getContents()[i] == null ? null :
+          p.getInventory().getContents()[i].clone();
     }
+
+    data.create();
+
+    if (isPublic) {
+      for (KitsGui kitsGui : KitsGui.getGuis()) {
+        kitsGui.addKit(this);
+      }
+    } else {
+      Objects.requireNonNull(KitsGui.getGui(p)).addKit(this);
+    }
+
+    p.sendMessage(Lang.getComponent("kit-created"));
   }
 
   public void edit(Player p, ItemStack[] newContents) {
