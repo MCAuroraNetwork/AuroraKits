@@ -128,7 +128,7 @@ public class Frame {
 
   public void create(Player p) {
     if (name != null && p != null) {
-      Block block = p.getTargetBlockExact(4);
+      Block block = p.getTargetBlockExact(10);
       assert block != null;
       ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
       frame.teleport(
