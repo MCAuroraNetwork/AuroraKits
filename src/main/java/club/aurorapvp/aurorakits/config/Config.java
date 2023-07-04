@@ -19,7 +19,8 @@ public class Config {
     final HashMap<String, Object> DEFAULTS = new HashMap<>();
 
     DEFAULTS.put("kits.give-last-kit.enabled", false);
-    DEFAULTS.put("kits.give-last-kit.defaultKit", "Default");
+    DEFAULTS.put("kits.give-last-kit.default-kit", "Default");
+    DEFAULTS.put("optional-plugins.auroracombat-compatibility", true);
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().isSet(path) || get().getString(path) == null) {

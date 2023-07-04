@@ -1,6 +1,7 @@
 package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
+import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.KitDataHandler;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
@@ -163,7 +164,7 @@ public class Kit {
       return LAST_USED_KIT.get(p);
     }
 
-    return null;
+    return Kit.getKit(Config.get().getString("kits.give-last-kit.default-kit"));
   }
 
   public String getPath() {
@@ -229,6 +230,7 @@ public class Kit {
         kitsGui.addKit(this);
       }
     } else {
+      Objects.requireNonNull(KitEditor.getEditor(p)).addKit(this);
       Objects.requireNonNull(KitsGui.getGui(p)).addKit(this);
     }
 

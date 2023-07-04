@@ -48,3 +48,8 @@ permissions:
     default: true
     children:
       aurorakits.command.aurorakits: true
+
+dependencies:
+  server:
+    AuroraCombat:
+      required: false

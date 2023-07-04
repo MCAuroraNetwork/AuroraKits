@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'AuroraKits'
-version = '1.6.0'
+version = '1.6.2'
 
 repositories {
     mavenCentral()
@@ -19,6 +19,9 @@ repositories {
     maven {
         url = 'https://repo.aikar.co/content/groups/aikar/'
     }
+    flatDir {
+        dirs '.'
+    }
 }
 
 dependencies {
@@ -26,6 +29,7 @@ dependencies {
     implementation "co.aikar:acf-paper:0.5.1-SNAPSHOT"
 
     compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly ':AuroraCombat:1.5.1'
 }
 
 build {
