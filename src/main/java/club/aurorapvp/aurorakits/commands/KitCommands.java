@@ -106,6 +106,19 @@ public class KitCommands extends BaseCommand {
     }
   }
 
+  @Subcommand("copy")
+  @Syntax("[name]")
+  @Description("Copies a kit")
+  @SuppressWarnings("unused")
+  public void onCopy(Player p, String name, String newName) {
+    Kit kit = Kit.getKit(p, name);
+    if (kit != null) {
+      new Kit(newName, p, false).create(kit.getItemStacks());
+    } else {
+      p.sendMessage(Lang.getComponent("kit-not-found"));
+    }
+  }
+
   @CatchUnknown
   @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
