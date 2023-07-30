@@ -6,28 +6,31 @@ import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.KitDataHandler;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
 import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class Kit {
   private static final Set<Kit> kits = new HashSet<>();
   private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitDataHandler data;
+  private final boolean isPublic;
   private final String name;
   private final String path;
-  private OfflinePlayer owner;
+  private final OfflinePlayer owner;
   private boolean publicKit;
   private ItemStack[] itemStacks;
   private ItemStack displayItem;
 
-  public Kit(String kitName, String kitPath) {
-    this.path = kitPath;
+  public Kit(String kitName, OfflinePlayer owner, boolean isPublic) {
+    this.owner = owner;
+    this.isPublic = isPublic;
+    this.path = isPublic ? "public" : String.valueOf(owner.getUniqueId());
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
@@ -38,13 +41,30 @@ public class Kit {
     }
   }
 
+  public Kit(String kitName, OfflinePlayer owner, boolean isPublic, Inventory contents) {
+    this.owner = owner;
+    this.isPublic = isPublic;
+    this.path = isPublic ? "public" : String.valueOf(owner.getUniqueId());
+    this.name = kitName;
+    this.data = new KitDataHandler(this);
+
+    kits.add(this);
+
+    this.create(contents);
+  }
+
   public static void init() {
     File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/public/");
 
     if (dir.exists()) {
       for (File file : Objects.requireNonNull(dir.listFiles())) {
         String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName, "public");
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+        new Kit(
+            kitName,
+            Bukkit.getOfflinePlayer(
+                UUID.fromString(Objects.requireNonNull(yaml.getString("owner")))),
+            yaml.getBoolean("isPublic"));
       }
     }
 
@@ -59,8 +79,8 @@ public class Kit {
   public static Kit createKit(String name, Player p) {
     Kit kit;
 
-    kit = new Kit(name, "public");
-    kit.create(p, true);
+    kit = new Kit(name, p, true);
+    kit.create(p.getInventory());
 
     return kit;
   }
@@ -142,7 +162,12 @@ public class Kit {
     if (dir.exists()) {
       for (File file : Objects.requireNonNull(dir.listFiles())) {
         String kitName = file.getName().replace(".yml", "");
-        new Kit(kitName, String.valueOf(p.getUniqueId()));
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+        new Kit(
+            kitName,
+            Bukkit.getOfflinePlayer(
+                UUID.fromString(Objects.requireNonNull(yaml.getString("owner")))),
+            yaml.getBoolean("isPublic"));
       }
     }
     new KitsGui(p);
@@ -199,28 +224,34 @@ public class Kit {
     return this.getData().getFile().exists();
   }
 
-  public void create(Player p, boolean isPublic) {
-    this.owner = p;
+  public void create(Inventory contents) {
     this.publicKit = isPublic;
 
     if (this.exists()) {
-      p.sendMessage(Lang.getComponent("kit-already-exists"));
+      Objects.requireNonNull(owner.getPlayer())
+          .sendMessage(Lang.getComponent("kit-already-exists"));
       return;
     }
 
-    if (p.getInventory().getItemInMainHand().getItemMeta() == null) {
-      p.sendMessage(Lang.getComponent("kit-invalid-item"));
+    if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
+        == null) {
+      Objects.requireNonNull(owner.getPlayer()).sendMessage(Lang.getComponent("kit-invalid-item"));
       return;
     }
 
     displayItem =
-        ItemStackUtil.createDisplayItem(p.getInventory().getItemInMainHand().getType(), name,
-            owner.getName(), isPublic);
+        ItemStackUtil.createDisplayItem(
+            owner.getPlayer().getInventory().getItemInMainHand().getType(),
+            name,
+            owner.getName(),
+            isPublic);
 
-    itemStacks = new ItemStack[p.getInventory().getContents().length];
-    for (int i = 0; i < p.getInventory().getContents().length; i++) {
-      itemStacks[i] = p.getInventory().getContents()[i] == null ? null :
-          p.getInventory().getContents()[i].clone();
+    itemStacks = new ItemStack[contents.getContents().length];
+    for (int i = 0; i < contents.getContents().length; i++) {
+      itemStacks[i] =
+          contents.getContents()[i] == null
+              ? null
+              : Objects.requireNonNull(contents.getContents()[i]).clone();
     }
 
     data.create();
@@ -230,11 +261,11 @@ public class Kit {
         kitsGui.addKit(this);
       }
     } else {
-      Objects.requireNonNull(KitEditor.getEditor(p)).addKit(this);
-      Objects.requireNonNull(KitsGui.getGui(p)).addKit(this);
+      Objects.requireNonNull(KitEditor.getEditor(owner.getPlayer())).addKit(this);
+      Objects.requireNonNull(KitsGui.getGui(owner.getPlayer())).addKit(this);
     }
 
-    p.sendMessage(Lang.getComponent("kit-created"));
+    Objects.requireNonNull(owner.getPlayer()).sendMessage(Lang.getComponent("kit-created"));
   }
 
   public void edit(Player p, ItemStack[] newContents) {
@@ -291,7 +322,6 @@ public class Kit {
   }
 
   public void reload() {
-    this.owner = this.getData().getOwner();
     this.itemStacks = this.getData().getItemStacks();
     this.publicKit = this.getData().isPublic();
     this.displayItem = this.getData().getDisplayItem();

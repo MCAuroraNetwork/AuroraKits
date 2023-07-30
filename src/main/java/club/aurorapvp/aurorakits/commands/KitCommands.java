@@ -16,6 +16,8 @@ import co.aikar.commands.annotation.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 @CommandAlias("kit|kits")
 public class KitCommands extends BaseCommand {
 
@@ -45,12 +47,12 @@ public class KitCommands extends BaseCommand {
   @Description("Creates a private kit")
   @SuppressWarnings("unused")
   public void onCreate(Player p, @Optional String name) {
-    if (name != null) {
-      new Kit(name, p.getUniqueId().toString()).create(p, false);
-    } else {
-      new Kit("Kit" + Math.addExact(Kit.getAmount(p, false), 1),
-          String.valueOf(p.getUniqueId())).create(p, false);
-    }
+    new Kit(
+            Objects.requireNonNullElseGet(
+                name, () -> "Kit" + Math.addExact(Kit.getAmount(p, false), 1)),
+            p,
+            false)
+        .create(p.getInventory());
   }
 
   @Subcommand("createpublic")
@@ -59,7 +61,7 @@ public class KitCommands extends BaseCommand {
   @Description("Creates a public kit")
   @SuppressWarnings("unused")
   public void onCreatePublic(Player p, String name) {
-    new Kit(name, "public").create(p, true);
+    new Kit(name, p, true).create(p.getInventory());
   }
 
   @Subcommand("delete")
