@@ -91,6 +91,19 @@ public class KitCommands extends BaseCommand {
     }
   }
 
+  @Subcommand("edit")
+  @Syntax("[name]")
+  @Description("Edits a kit")
+  @SuppressWarnings("unused")
+  public void onEdit(Player p, String name) {
+    Kit kit = Kit.getKit(p, name);
+    if (kit != null) {
+      kit.editKit(p);
+    } else {
+      p.sendMessage(Lang.getComponent("kit-not-found"));
+    }
+  }
+
   @CatchUnknown
   @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
