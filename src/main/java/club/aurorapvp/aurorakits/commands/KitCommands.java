@@ -52,7 +52,7 @@ public class KitCommands extends BaseCommand {
                 name, () -> "Kit" + Math.addExact(Kit.getAmount(p, false), 1)),
             p,
             false)
-        .create(p.getInventory());
+        .create(p.getInventory().getContents());
   }
 
   @Subcommand("createpublic")
@@ -61,7 +61,7 @@ public class KitCommands extends BaseCommand {
   @Description("Creates a public kit")
   @SuppressWarnings("unused")
   public void onCreatePublic(Player p, String name) {
-    new Kit(name, p, true).create(p.getInventory());
+    new Kit(name, p, true).create(p.getInventory().getContents());
   }
 
   @Subcommand("delete")

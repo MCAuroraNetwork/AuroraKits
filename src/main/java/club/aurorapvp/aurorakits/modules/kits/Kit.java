@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class Kit {
@@ -41,7 +40,7 @@ public class Kit {
     }
   }
 
-  public Kit(String kitName, OfflinePlayer owner, boolean isPublic, Inventory contents) {
+  public Kit(String kitName, OfflinePlayer owner, boolean isPublic, ItemStack[] contents) {
     this.owner = owner;
     this.isPublic = isPublic;
     this.path = isPublic ? "public" : String.valueOf(owner.getUniqueId());
@@ -80,7 +79,7 @@ public class Kit {
     Kit kit;
 
     kit = new Kit(name, p, true);
-    kit.create(p.getInventory());
+    kit.create(p.getInventory().getContents());
 
     return kit;
   }
@@ -224,7 +223,7 @@ public class Kit {
     return this.getData().getFile().exists();
   }
 
-  public void create(Inventory contents) {
+  public void create(ItemStack[] contents) {
     this.publicKit = isPublic;
 
     if (this.exists()) {
@@ -246,12 +245,9 @@ public class Kit {
             owner.getName(),
             isPublic);
 
-    itemStacks = new ItemStack[contents.getContents().length];
-    for (int i = 0; i < contents.getContents().length; i++) {
-      itemStacks[i] =
-          contents.getContents()[i] == null
-              ? null
-              : Objects.requireNonNull(contents.getContents()[i]).clone();
+    itemStacks = new ItemStack[contents.length];
+    for (int i = 0; i < contents.length; i++) {
+      itemStacks[i] = contents[i] == null ? null : contents[i].clone();
     }
 
     data.create();
