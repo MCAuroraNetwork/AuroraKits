@@ -21,25 +21,29 @@ public class CommandManager {
     CommandCompletions<BukkitCommandCompletionContext> commandCompletions =
         MANAGER.getCommandCompletions();
 
-    commandCompletions.registerCompletion("kits", c -> {
-      Player p = c.getPlayer();
-      List<String> kitNames = new ArrayList<>();
+    commandCompletions.registerCompletion(
+        "kits",
+        c -> {
+          Player p = c.getPlayer();
+          List<String> kitNames = new ArrayList<>();
 
-      for (Kit kit : Kit.getKits(p, true)) {
-        kitNames.add(kit.getName());
-      }
+          for (Kit kit : Kit.getKits(p, true)) {
+            kitNames.add(kit.getName());
+          }
 
-      return kitNames;
-    });
+          return kitNames;
+        });
 
-    commandCompletions.registerCompletion("frames", c -> {
-      List<String> kitNames = new ArrayList<>();
+    commandCompletions.registerCompletion(
+        "frames",
+        c -> {
+          List<String> kitNames = new ArrayList<>();
 
-      for (Frame frame : Frame.getFrames()) {
-        kitNames.add(frame.getName());
-      }
+          for (Frame frame : Frame.getFrames()) {
+            kitNames.add(frame.getName());
+          }
 
-      return kitNames;
-    });
+          return kitNames;
+        });
   }
 }

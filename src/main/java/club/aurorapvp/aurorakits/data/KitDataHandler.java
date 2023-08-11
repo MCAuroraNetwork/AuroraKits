@@ -20,14 +20,15 @@ public class KitDataHandler {
   public KitDataHandler(Kit kit) {
     this.kit = kit;
     this.FILE =
-        new File(AuroraKits.INSTANCE.getDataFolder(),
+        new File(
+            AuroraKits.INSTANCE.getDataFolder(),
             "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
   }
 
   public OfflinePlayer getOwner() {
-    return Bukkit.getOfflinePlayer(UUID.fromString(
-        Objects.requireNonNull(DATA_FILE.getString("owner"))));
+    return Bukkit.getOfflinePlayer(
+        UUID.fromString(Objects.requireNonNull(DATA_FILE.getString("owner"))));
   }
 
   public ItemStack getDisplayItem() {

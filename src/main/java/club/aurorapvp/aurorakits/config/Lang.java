@@ -23,10 +23,10 @@ public class Lang {
     final HashMap<String, String> DEFAULTS = new HashMap<>();
 
     for (Object path : get().getKeys(false).toArray()) {
-      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~") &&
-          Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
-        PLACEHOLDERS.put((String) path, Objects.requireNonNull(get().getString((String) path))
-            .replace("~", ""));
+      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~")
+          && Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
+        PLACEHOLDERS.put(
+            (String) path, Objects.requireNonNull(get().getString((String) path)).replace("~", ""));
       }
     }
 
@@ -35,9 +35,11 @@ public class Lang {
     DEFAULTS.put("frame-deleted", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully deleted");
     DEFAULTS.put("frame-invalid", "prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!");
     DEFAULTS.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
-    DEFAULTS.put("kit-created",
+    DEFAULTS.put(
+        "kit-created",
         "prefix <gradient:#FFAA00:#FF55FF>Kit successfully created! Use /kits to access it!");
-    DEFAULTS.put("kit-updated",
+    DEFAULTS.put(
+        "kit-updated",
         "prefix <gradient:#FFAA00:#FF55FF>Kit successfully updated! Use /kits to access it!");
     DEFAULTS.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully used!");
     DEFAULTS.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully deleted");
@@ -48,11 +50,15 @@ public class Lang {
     DEFAULTS.put("kit-already-exists", "prefix <gradient:#FFAA00:#FF55FF>Kit already exists!");
     DEFAULTS.put("next-page", "<gradient:#FFAA00:#FF55FF><bold>Next Page");
     DEFAULTS.put("previous-page", "<gradient:#FFAA00:#FF55FF><bold>Previous Page");
-    DEFAULTS.put("unknown-frame-command",
+    DEFAULTS.put(
+        "unknown-frame-command",
         "prefix <gradient:#FFAA00:#FF55FF>Unknown Frame Command! Use /help for help!");
-    DEFAULTS.put("unknown-kit-command",
+    DEFAULTS.put(
+        "unknown-kit-command",
         "prefix <gradient:#FFAA00:#FF55FF>Unknown Kit Command! Use /help for help!");
-    DEFAULTS.put("help-command", """
+    DEFAULTS.put(
+        "help-command",
+        """
         prefix <gradient:#FFAA00:#FF55FF>All Commands:\s
         <blue><bold>/kits: <reset><yellow>Opens the Kit Menu\s
         <blue><bold>/kit [name]: <reset><yellow>Opens a Kit\s
@@ -72,10 +78,10 @@ public class Lang {
     }
 
     for (Object path : get().getKeys(false).toArray()) {
-      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~") &&
-          Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
-        PLACEHOLDERS.put((String) path, Objects.requireNonNull(get().getString((String) path))
-            .replace("~", ""));
+      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~")
+          && Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
+        PLACEHOLDERS.put(
+            (String) path, Objects.requireNonNull(get().getString((String) path)).replace("~", ""));
       }
     }
   }
@@ -86,8 +92,7 @@ public class Lang {
     for (String placeholder : PLACEHOLDERS.keySet()) {
       assert pathString != null;
       if (pathString.contains(placeholder)) {
-        pathString = pathString.replace(placeholder,
-            PLACEHOLDERS.get(placeholder));
+        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
       }
     }
     return pathString;
@@ -99,8 +104,7 @@ public class Lang {
     assert pathString != null;
     for (String placeholder : PLACEHOLDERS.keySet()) {
       if (pathString.contains(placeholder)) {
-        pathString = pathString.replace(placeholder,
-            PLACEHOLDERS.get(placeholder));
+        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
       }
     }
 
@@ -115,8 +119,7 @@ public class Lang {
 
     for (String placeholder : PLACEHOLDERS.keySet()) {
       if (pathString.contains(placeholder)) {
-        pathString = pathString.replace(placeholder,
-            PLACEHOLDERS.get(placeholder));
+        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
       }
     }
     return MiniMessage.miniMessage().deserialize(pathString);

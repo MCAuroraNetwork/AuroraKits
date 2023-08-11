@@ -38,9 +38,7 @@ public final class AuroraKits extends JavaPlugin {
       }
     }
 
-    getLogger().info(
-        "AuroraKits enabled in " + (System.currentTimeMillis() - startTime) +
-            "ms");
+    getLogger().info("AuroraKits enabled in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
@@ -48,4 +46,3 @@ public final class AuroraKits extends JavaPlugin {
     getLogger().info("AuroraKits disabled");
   }
 }
-

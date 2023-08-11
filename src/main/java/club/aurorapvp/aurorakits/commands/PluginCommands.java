@@ -30,9 +30,9 @@ public class PluginCommands extends BaseCommand {
     KitsGui.reloadAll();
     Lang.reload();
 
-    AuroraKits.INSTANCE.getLogger().info(
-        "AuroraKits reloaded in " + (System.currentTimeMillis() - startTime) +
-            "ms");
+    AuroraKits.INSTANCE
+        .getLogger()
+        .info("AuroraKits reloaded in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Default

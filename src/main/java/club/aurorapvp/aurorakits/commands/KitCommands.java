@@ -13,10 +13,9 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Optional;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
+import java.util.Objects;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 @CommandAlias("kit|kits")
 public class KitCommands extends BaseCommand {

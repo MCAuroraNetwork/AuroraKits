@@ -49,14 +49,14 @@ public class KitEditor {
       return;
     }
 
-    if ((event.getSlot() == 46 && !cursorItem.getType().name().endsWith("_BOOTS")) ||
-        event.getSlot() == 47 && !cursorItem.getType().name().endsWith("_LEGGINGS") ||
-        event.getSlot() == 48 && (!cursorItem.getType().name().endsWith("_CHESTPLATE") &&
-            cursorItem.getType() != Material.ELYTRA) ||
-        event.getSlot() == 49 && !cursorItem.getType().name().endsWith("_HELMET")) {
+    if ((event.getSlot() == 46 && !cursorItem.getType().name().endsWith("_BOOTS"))
+        || event.getSlot() == 47 && !cursorItem.getType().name().endsWith("_LEGGINGS")
+        || event.getSlot() == 48
+            && (!cursorItem.getType().name().endsWith("_CHESTPLATE")
+                && cursorItem.getType() != Material.ELYTRA)
+        || event.getSlot() == 49 && !cursorItem.getType().name().endsWith("_HELMET")) {
       event.setCancelled(true);
     }
-
   }
 
   public static void inventoryClosed(InventoryCloseEvent event) {
@@ -80,7 +80,8 @@ public class KitEditor {
     itemStacks[40] = inventory.getContents()[51];
 
     Objects.requireNonNull(
-            Kit.getKit(p, PlainTextComponentSerializer.plainText().serialize(event.getView().title())))
+            Kit.getKit(
+                p, PlainTextComponentSerializer.plainText().serialize(event.getView().title())))
         .edit(p, itemStacks);
   }
 
