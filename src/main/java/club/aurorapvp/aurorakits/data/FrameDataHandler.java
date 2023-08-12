@@ -52,7 +52,7 @@ public class FrameDataHandler {
   }
 
   public void create() {
-    get().set("frames." + frame.getName() + ".item", frame.getItem());
+    get().set("frames." + frame.getName() + ".item", frame.getContents());
     get().set("frames." + frame.getName() + ".location", frame.getLocation());
     save();
   }

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,13 +19,14 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Frame {
   private static final Set<Frame> frames = new HashSet<>();
   private final String name;
   private final FrameDataHandler data;
   private Location location;
-  private ItemStack item;
+  private ItemStack contents;
 
   public Frame(String frameName) {
     this.name = frameName;
@@ -87,7 +89,7 @@ public class Frame {
     if (clicked instanceof ItemFrame) {
       Frame frame = Frame.getFrame(clicked.getLocation());
       if (frame != null) {
-        event.getPlayer().getInventory().addItem(frame.getItem());
+        event.getPlayer().getInventory().addItem(frame.getContents());
         event.setCancelled(true);
       }
     }
@@ -106,8 +108,8 @@ public class Frame {
     return targetBlock.getFace(adjacentBlock);
   }
 
-  public ItemStack getItem() {
-    return item;
+  public ItemStack getContents() {
+    return contents;
   }
 
   public FrameDataHandler getData() {
@@ -135,9 +137,15 @@ public class Frame {
           block.getRelative(Objects.requireNonNull(Frame.getBlockFace(p))).getLocation());
       frame.setFacingDirection(Objects.requireNonNull(Frame.getBlockFace(p)), true);
 
-      frame.setItem(p.getInventory().getItemInMainHand());
-      item = p.getInventory().getItemInMainHand();
+      contents = p.getInventory().getItemInMainHand();
       location = frame.getLocation();
+
+      ItemStack displayItem = p.getInventory().getItemInMainHand();
+      ItemMeta meta = displayItem.getItemMeta();
+      meta.displayName(Component.text(name));
+      displayItem.setItemMeta(meta);
+
+      frame.setItem(displayItem);
 
       this.data.create();
 
@@ -157,6 +165,6 @@ public class Frame {
 
   public void reload() {
     location = this.getData().getLocation();
-    item = this.getData().getItem();
+    contents = this.getData().getItem();
   }
 }
