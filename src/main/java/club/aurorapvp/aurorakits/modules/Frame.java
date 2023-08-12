@@ -3,6 +3,7 @@ package club.aurorapvp.aurorakits.modules;
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.FrameDataHandler;
+import club.aurorapvp.aurorakits.util.StringUtil;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -142,7 +143,7 @@ public class Frame {
 
       ItemStack displayItem = p.getInventory().getItemInMainHand();
       ItemMeta meta = displayItem.getItemMeta();
-      meta.displayName(Component.text(name));
+      meta.displayName(Component.text(StringUtil.convertToNormalTypedLanguage(name)));
       displayItem.setItemMeta(meta);
 
       frame.setItem(displayItem);
