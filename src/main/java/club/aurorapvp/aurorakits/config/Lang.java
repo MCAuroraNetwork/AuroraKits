@@ -31,31 +31,23 @@ public class Lang {
     }
 
     DEFAULTS.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraKits ><reset>~");
-    DEFAULTS.put("frame-created", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully created");
-    DEFAULTS.put("frame-deleted", "prefix <gradient:#FFAA00:#FF55FF>Frame successfully deleted");
-    DEFAULTS.put("frame-invalid", "prefix <gradient:#FFAA00:#FF55FF>Invalid frame name!");
-    DEFAULTS.put("GUIName", "<gradient:#FFAA00:#FF55FF>KitGUI");
-    DEFAULTS.put(
-        "kit-created",
-        "prefix <gradient:#FFAA00:#FF55FF>Kit successfully created! Use /kits to access it!");
-    DEFAULTS.put(
-        "kit-updated",
-        "prefix <gradient:#FFAA00:#FF55FF>Kit successfully updated! Use /kits to access it!");
-    DEFAULTS.put("kit-used", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully used!");
-    DEFAULTS.put("kit-deleted", "prefix <gradient:#FFAA00:#FF55FF>Kit successfully deleted");
-    DEFAULTS.put("kit-too-many", "prefix <gradient:#FFAA00:#FF55FF>You have too many kits!");
-    DEFAULTS.put("kit-invalid-name", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit name!");
-    DEFAULTS.put("kit-invalid-item", "prefix <gradient:#FFAA00:#FF55FF>Invalid kit display item!");
-    DEFAULTS.put("kit-not-found", "prefix <gradient:#FFAA00:#FF55FF>Kit not found!");
-    DEFAULTS.put("kit-already-exists", "prefix <gradient:#FFAA00:#FF55FF>Kit already exists!");
-    DEFAULTS.put("next-page", "<gradient:#FFAA00:#FF55FF><bold>Next Page");
-    DEFAULTS.put("previous-page", "<gradient:#FFAA00:#FF55FF><bold>Previous Page");
-    DEFAULTS.put(
-        "unknown-frame-command",
-        "prefix <gradient:#FFAA00:#FF55FF>Unknown Frame Command! Use /help for help!");
-    DEFAULTS.put(
-        "unknown-kit-command",
-        "prefix <gradient:#FFAA00:#FF55FF>Unknown Kit Command! Use /help for help!");
+    DEFAULTS.put("frame-created", "prefix <aqua>Frame created");
+    DEFAULTS.put("frame-deleted", "prefix <aqua>Frame deleted");
+    DEFAULTS.put("frame-invalid", "prefix <aqua>Invalid frame name");
+    DEFAULTS.put("GUIName", "<aqua>KitGUI");
+    DEFAULTS.put("kit-created", "prefix <aqua>Kit created! Use /kits");
+    DEFAULTS.put("kit-updated", "prefix <aqua>Kit updated! Use /kits");
+    DEFAULTS.put("kit-used", "prefix <aqua>Kit used");
+    DEFAULTS.put("kit-deleted", "prefix <aqua>Kit deleted");
+    DEFAULTS.put("kit-too-many", "prefix <aqua>Too many kits");
+    DEFAULTS.put("kit-invalid-name", "prefix <aqua>Invalid kit name");
+    DEFAULTS.put("kit-invalid-item", "prefix <aqua>Invalid kit item");
+    DEFAULTS.put("kit-not-found", "prefix <aqua>Kit not found");
+    DEFAULTS.put("kit-already-exists", "prefix <aqua>Kit exists");
+    DEFAULTS.put("next-page", "<aqua><bold>Next");
+    DEFAULTS.put("previous-page", "<aqua><bold>Previous");
+    DEFAULTS.put("unknown-frame-command", "prefix <aqua>Unknown Frame Command! Use /help");
+    DEFAULTS.put("unknown-kit-command", "prefix <aqua>Unknown Kit Command! Use /help");
     DEFAULTS.put(
         "help-command",
         """
