@@ -215,7 +215,7 @@ public class KitsGui {
     }
 
     private KitsGuiPage(Kit kit) {
-      inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
+      inventory = Bukkit.createInventory(this, 54, Lang.getComponent("GUIName"));
       inventory.addItem(kit.getDisplayItem());
 
       ItemMeta meta;
