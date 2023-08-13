@@ -2,8 +2,9 @@ package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -12,43 +13,41 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 public class KitsGui {
-  private static final Set<KitsGui> KITS_GUIS = new HashSet<>();
-  private final Player owner;
-  private Inventory[] inventories;
+  private static final Map<Player, KitsGui> KITS_GUIS = new HashMap<>();
+  private final Player p;
+  private KitsGuiPage[] pages;
   private int currentPage = 0;
-  private int pages;
+  private int index;
 
   public KitsGui(Player p) {
-    this.owner = p;
+    this.p = p;
 
     reload();
 
-    KITS_GUIS.add(this);
+    KITS_GUIS.put(p, this);
   }
 
   public static void reloadAll() {
-    for (KitsGui kitsGui : KITS_GUIS) {
+    for (KitsGui kitsGui : KITS_GUIS.values()) {
       kitsGui.reload();
     }
     AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
   }
 
-  public static Set<KitsGui> getGuis() {
-    return KITS_GUIS;
-  }
-
   public static void onPlayerQuit(Player p) {
-    KITS_GUIS.removeIf(gui -> gui.getOwner() == p);
+    KITS_GUIS.remove(p);
   }
 
   public static void inventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (!Objects.requireNonNull(KitsGui.getGui(p)).isGuiInventory(event.getInventory())) {
+    if (!(event.getInventory().getHolder() instanceof KitsGuiPage)) {
       return;
     }
 
@@ -87,139 +86,80 @@ public class KitsGui {
   }
 
   public static KitsGui getGui(Player p) {
-    for (KitsGui kitsGui : KITS_GUIS) {
-      if (kitsGui.getOwner() == p) {
-        return kitsGui;
-      }
-    }
-    return null;
+    return KITS_GUIS.get(p);
+  }
+
+  public static Set<KitsGui> getGuis() {
+    return Set.copyOf(KITS_GUIS.values());
   }
 
   public static void open(Player p) {
     p.openInventory(Objects.requireNonNull(KitsGui.getGui(p)).getCurrentPage());
   }
 
-  public Player getOwner() {
-    return owner;
+  public Player getPlayer() {
+    return p;
   }
 
   public void addKit(Kit kit) {
-    Inventory lastPage = inventories[pages - 1];
+    Inventory lastPage = pages[index - 1].getInventory();
 
     if (lastPage.getContents()[44] != null) {
-      createPage(kit);
+      new KitsGuiPage(kit);
     } else {
       lastPage.addItem(kit.getDisplayItem());
     }
   }
 
   public void removeKit(Kit kit) {
-    for (Inventory inventory : inventories) {
-      for (ItemStack itemStack : inventory.getContents()) {
+    for (KitsGuiPage page : pages) {
+      for (ItemStack itemStack : page.getInventory().getContents()) {
 
         if (itemStack == null) {
           continue;
         }
 
         if (itemStack.isSimilar(kit.getDisplayItem())) {
-          inventory.remove(itemStack);
+          page.getInventory().remove(itemStack);
         }
       }
     }
   }
 
-  public void createPage(Kit kit) {
-    Inventory inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
-    inventory.addItem(kit.getDisplayItem());
-
-    ItemMeta meta;
-
-    ItemStack nextPage = new ItemStack(Material.PAPER);
-    meta = nextPage.getItemMeta();
-    meta.displayName(Lang.getComponent("next-page"));
-    nextPage.setItemMeta(meta);
-
-    ItemStack previousPage = new ItemStack(Material.PAPER);
-    meta = previousPage.getItemMeta();
-    meta.displayName(Lang.getComponent("previous-page"));
-    previousPage.setItemMeta(meta);
-
-    inventory.setItem(45, nextPage);
-    inventory.setItem(53, nextPage);
-
-    inventories[pages - 1] = inventory;
-    pages++;
-  }
-
-  public void createPage(Kit[] kits) {
-    Inventory inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
-
-    for (Kit kit : kits) {
-      inventory.addItem(kit.getDisplayItem());
-    }
-
-    ItemMeta meta;
-
-    ItemStack nextPage = new ItemStack(Material.PAPER);
-    meta = nextPage.getItemMeta();
-    meta.displayName(Lang.getComponent("next-page"));
-    nextPage.setItemMeta(meta);
-
-    ItemStack previousPage = new ItemStack(Material.PAPER);
-    meta = previousPage.getItemMeta();
-    meta.displayName(Lang.getComponent("previous-page"));
-    previousPage.setItemMeta(meta);
-
-    inventory.setItem(45, previousPage);
-    inventory.setItem(53, nextPage);
-
-    inventories[pages] = inventory;
-    pages++;
-  }
-
   public void nextPage() {
-    if (currentPage <= pages) {
+    if (currentPage <= index) {
       currentPage++;
     } else {
       currentPage = 0;
     }
-    KitsGui.open(owner);
+    KitsGui.open(p);
   }
 
   public void previousPage() {
     if (currentPage >= 1) {
       currentPage--;
     } else {
-      currentPage = pages;
+      currentPage = index;
     }
-    KitsGui.open(owner);
+    KitsGui.open(p);
   }
 
   public Inventory getCurrentPage() {
-    return inventories[currentPage];
-  }
-
-  public boolean isGuiInventory(Inventory inventory) {
-    for (Inventory guiInventory : inventories) {
-      if (inventory.equals(guiInventory)) {
-        return true;
-      }
-    }
-    return false;
+    return pages[currentPage].getInventory();
   }
 
   public void reload() {
-    Set<Kit> kitSet = Kit.getKits(this.getOwner(), true);
+    Set<Kit> kitSet = Kit.getKits(this.getPlayer(), true);
 
     for (int i = 0; i < kitSet.size(); i++) {
       if (i % 44 == 0 && i != 0) {
-        pages++;
+        index++;
       }
     }
 
-    inventories = new Inventory[pages + 1];
+    pages = new KitsGuiPage[index + 1];
 
-    int currentPages = pages + 1;
+    int currentPages = index + 1;
 
     for (int i = 0; i < currentPages; i++) {
       int numKits = kitSet.size() - i * 45;
@@ -244,7 +184,59 @@ public class KitsGui {
         counter++;
       }
 
-      createPage(kits);
+      pages[index] = new KitsGuiPage(kits);
+      index++;
+    }
+  }
+
+  public static class KitsGuiPage implements InventoryHolder {
+    private final Inventory inventory;
+    private KitsGuiPage(Kit[] kits) {
+      inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
+
+      for (Kit kit : kits) {
+        inventory.addItem(kit.getDisplayItem());
+      }
+
+      ItemMeta meta;
+
+      ItemStack nextPage = new ItemStack(Material.PAPER);
+      meta = nextPage.getItemMeta();
+      meta.displayName(Lang.getComponent("next-page"));
+      nextPage.setItemMeta(meta);
+
+      ItemStack previousPage = new ItemStack(Material.PAPER);
+      meta = previousPage.getItemMeta();
+      meta.displayName(Lang.getComponent("previous-page"));
+      previousPage.setItemMeta(meta);
+
+      inventory.setItem(45, previousPage);
+      inventory.setItem(53, nextPage);
+    }
+
+    private KitsGuiPage(Kit kit) {
+      inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
+      inventory.addItem(kit.getDisplayItem());
+
+      ItemMeta meta;
+
+      ItemStack nextPage = new ItemStack(Material.PAPER);
+      meta = nextPage.getItemMeta();
+      meta.displayName(Lang.getComponent("next-page"));
+      nextPage.setItemMeta(meta);
+
+      ItemStack previousPage = new ItemStack(Material.PAPER);
+      meta = previousPage.getItemMeta();
+      meta.displayName(Lang.getComponent("previous-page"));
+      previousPage.setItemMeta(meta);
+
+      inventory.setItem(45, nextPage);
+      inventory.setItem(53, nextPage);
+    }
+
+    @Override
+    public @NotNull Inventory getInventory() {
+      return inventory;
     }
   }
 }
