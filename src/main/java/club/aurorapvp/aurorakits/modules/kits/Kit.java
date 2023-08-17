@@ -168,6 +168,7 @@ public class Kit {
             yaml.getBoolean("isPublic"));
       }
     }
+
     new KitsGui(p);
     new KitEditor(p);
   }
@@ -245,6 +246,7 @@ public class Kit {
             isPublic);
 
     itemStacks = new ItemStack[contents.length];
+
     for (int i = 0; i < contents.length; i++) {
       itemStacks[i] = contents[i] == null ? null : contents[i].clone();
     }

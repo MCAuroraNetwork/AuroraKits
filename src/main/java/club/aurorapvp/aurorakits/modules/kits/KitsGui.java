@@ -11,6 +11,8 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -18,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class KitsGui {
+public class KitsGui implements Listener {
   private static final Map<Player, KitsGui> KITS_GUIS = new HashMap<>();
   private final Player p;
   private Page[] pages;
@@ -31,6 +33,8 @@ public class KitsGui {
     reload();
 
     KITS_GUIS.put(p, this);
+
+    Bukkit.getPluginManager().registerEvents(this, AuroraKits.INSTANCE);
   }
 
   public static void reloadAll() {
@@ -44,20 +48,27 @@ public class KitsGui {
     KITS_GUIS.remove(p);
   }
 
-  public static void inventoryClicked(InventoryClickEvent event) {
+  @EventHandler
+  public void onInventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (!(event.getInventory().getHolder() instanceof Page)) {
+    if (!(event.getInventory().getHolder() instanceof Page page)) {
+      return;
+    }
+
+    KitsGui gui = page.getGui();
+
+    if (gui != this) {
       return;
     }
 
     event.setCancelled(true);
 
     if (event.getSlot() == 45) {
-      Objects.requireNonNull(KitsGui.getGui(p)).previousPage();
+      gui.previousPage();
       return;
     } else if (event.getSlot() == 53) {
-      Objects.requireNonNull(KitsGui.getGui(p)).nextPage();
+      gui.nextPage();
       return;
     }
 
@@ -105,7 +116,7 @@ public class KitsGui {
     Inventory lastPage = pages[index - 1].getInventory();
 
     if (lastPage.getContents()[44] != null) {
-      new Page(kit);
+      new Page(kit, this);
     } else {
       lastPage.addItem(kit.getDisplayItem());
     }
@@ -184,15 +195,17 @@ public class KitsGui {
         counter++;
       }
 
-      pages[index] = new Page(kits);
+      pages[index] = new Page(kits, this);
       index++;
     }
   }
 
   public static class Page implements InventoryHolder {
     private final Inventory inventory;
-    private Page(Kit[] kits) {
+    private final KitsGui gui;
+    private Page(Kit[] kits, KitsGui gui) {
       inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
+      this.gui = gui;
 
       for (Kit kit : kits) {
         inventory.addItem(kit.getDisplayItem());
@@ -214,8 +227,10 @@ public class KitsGui {
       inventory.setItem(53, nextPage);
     }
 
-    private Page(Kit kit) {
+    private Page(Kit kit, KitsGui gui) {
       inventory = Bukkit.createInventory(this, 54, Lang.getComponent("GUIName"));
+      this.gui = gui;
+
       inventory.addItem(kit.getDisplayItem());
 
       ItemMeta meta;
@@ -232,6 +247,10 @@ public class KitsGui {
 
       inventory.setItem(45, nextPage);
       inventory.setItem(53, nextPage);
+    }
+
+    public KitsGui getGui() {
+      return gui;
     }
 
     @Override
