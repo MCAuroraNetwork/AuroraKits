@@ -302,7 +302,7 @@ public class Kit {
   }
 
   public void editKit(Player p) {
-    Objects.requireNonNull(KitEditor.getEditor(p)).openEditor(p, this);
+    Objects.requireNonNull(KitEditor.getEditor(p)).open(p, this);
   }
 
   public void giveKit(Player p) {

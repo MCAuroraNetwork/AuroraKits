@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class KitsGui {
   private static final Map<Player, KitsGui> KITS_GUIS = new HashMap<>();
   private final Player p;
-  private KitsGuiPage[] pages;
+  private Page[] pages;
   private int currentPage = 0;
   private int index;
 
@@ -47,7 +47,7 @@ public class KitsGui {
   public static void inventoryClicked(InventoryClickEvent event) {
     Player p = (Player) event.getWhoClicked();
 
-    if (!(event.getInventory().getHolder() instanceof KitsGuiPage)) {
+    if (!(event.getInventory().getHolder() instanceof Page)) {
       return;
     }
 
@@ -105,14 +105,14 @@ public class KitsGui {
     Inventory lastPage = pages[index - 1].getInventory();
 
     if (lastPage.getContents()[44] != null) {
-      new KitsGuiPage(kit);
+      new Page(kit);
     } else {
       lastPage.addItem(kit.getDisplayItem());
     }
   }
 
   public void removeKit(Kit kit) {
-    for (KitsGuiPage page : pages) {
+    for (Page page : pages) {
       for (ItemStack itemStack : page.getInventory().getContents()) {
 
         if (itemStack == null) {
@@ -157,7 +157,7 @@ public class KitsGui {
       }
     }
 
-    pages = new KitsGuiPage[index + 1];
+    pages = new Page[index + 1];
 
     int currentPages = index + 1;
 
@@ -184,14 +184,14 @@ public class KitsGui {
         counter++;
       }
 
-      pages[index] = new KitsGuiPage(kits);
+      pages[index] = new Page(kits);
       index++;
     }
   }
 
-  public static class KitsGuiPage implements InventoryHolder {
+  public static class Page implements InventoryHolder {
     private final Inventory inventory;
-    private KitsGuiPage(Kit[] kits) {
+    private Page(Kit[] kits) {
       inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
 
       for (Kit kit : kits) {
@@ -214,7 +214,7 @@ public class KitsGui {
       inventory.setItem(53, nextPage);
     }
 
-    private KitsGuiPage(Kit kit) {
+    private Page(Kit kit) {
       inventory = Bukkit.createInventory(this, 54, Lang.getComponent("GUIName"));
       inventory.addItem(kit.getDisplayItem());
 

@@ -1,25 +1,29 @@
 package club.aurorapvp.aurorakits.modules.kits;
 
+import club.aurorapvp.aurorakits.AuroraKits;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
-public class KitEditor {
+public class KitEditor implements Listener {
   private static final Set<KitEditor> KIT_EDITORS = new HashSet<>();
   private final Player owner;
-  private final Map<String, Inventory> kitEditors = new HashMap<>();
+  private final Map<Kit, EditPage> kitEditors = new HashMap<>();
 
   public KitEditor(Player p) {
     this.owner = p;
@@ -27,19 +31,20 @@ public class KitEditor {
     reload();
 
     KIT_EDITORS.add(this);
+
+    Bukkit.getPluginManager().registerEvents(this, AuroraKits.INSTANCE);
   }
 
-  public static void inventoryClicked(InventoryClickEvent event) {
-    Player p = (Player) event.getWhoClicked();
+  @EventHandler
+  public void inventoryClicked(InventoryClickEvent event) {
+    if (!Objects.equals(event.getInventory().getHolder(), this)) {
+      return;
+    }
 
     final ItemStack clickedItem = event.getCurrentItem();
 
     if (clickedItem != null && event.getCurrentItem().getType() == Material.BARRIER) {
       event.setCancelled(true);
-      return;
-    }
-
-    if (!Objects.requireNonNull(KitEditor.getEditor(p)).isEditorInventory(event.getInventory())) {
       return;
     }
 
@@ -59,13 +64,15 @@ public class KitEditor {
     }
   }
 
-  public static void inventoryClosed(InventoryCloseEvent event) {
-    Player p = (Player) event.getPlayer();
+  @EventHandler
+  public void inventoryClosed(InventoryCloseEvent event) {
     Inventory inventory = event.getInventory();
 
-    if (!Objects.requireNonNull(KitEditor.getEditor(p)).isEditorInventory(inventory)) {
+    if (!(inventory.getHolder() instanceof EditPage editPage)) {
       return;
     }
+
+    Player p = (Player) event.getPlayer();
 
     ItemStack[] itemStacks = new ItemStack[41];
 
@@ -79,10 +86,7 @@ public class KitEditor {
 
     itemStacks[40] = inventory.getContents()[51];
 
-    Objects.requireNonNull(
-            Kit.getKit(
-                p, PlainTextComponentSerializer.plainText().serialize(event.getView().title())))
-        .edit(p, itemStacks);
+    editPage.getKit().edit(p, itemStacks);
   }
 
   public static KitEditor getEditor(Player p) {
@@ -98,56 +102,34 @@ public class KitEditor {
     return owner;
   }
 
-  public boolean isEditorInventory(Inventory inventory) {
-    for (Inventory editor : this.kitEditors.values()) {
-      if (editor == inventory) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public void openEditor(Player p, Kit kit) {
-    p.openInventory(kitEditors.get(kit.getName()));
+  public void open(Player p, Kit kit) {
+    p.openInventory(kitEditors.get(kit).getInventory());
   }
 
   public void addKit(Kit kit) {
-    Inventory kitEditor = Bukkit.createInventory(null, 54, Component.text(kit.getName()));
-
-    kitEditor.setContents(kit.getItemStacks());
-
-    for (int i = 0; i < 35; i++) {
-      kitEditor.setItem(i, kit.getItemStacks()[i]);
-    }
-
-    ItemStack barrier = new ItemStack(Material.BARRIER);
-    ItemMeta meta = barrier.getItemMeta();
-    meta.displayName(Component.text(""));
-    barrier.setItemMeta(meta);
-
-    for (int i = 36; i < 54; i++) {
-      kitEditor.setItem(i, barrier);
-    }
-
-    for (int i = 46; i < 50; i++) {
-      kitEditor.setItem(i, kit.getItemStacks()[i - 10]);
-    }
-
-    kitEditor.setItem(51, kit.getItemStacks()[40]);
-
-    kitEditors.put(kit.getName(), kitEditor);
+    kitEditors.put(kit, new EditPage(kit));
   }
 
   public void reload() {
     Set<Kit> kitSet = Kit.getKits(this.getOwner(), false);
 
     for (Kit kit : kitSet) {
-      Inventory kitEditor = Bukkit.createInventory(null, 54, Component.text(kit.getName()));
+      kitEditors.put(kit, new EditPage(kit));
+    }
+  }
 
-      kitEditor.setContents(kit.getItemStacks());
+  public static class EditPage implements InventoryHolder {
+    private final Inventory inventory;
+    private final Kit kit;
+
+    private EditPage(Kit kit) {
+      inventory = Bukkit.createInventory(this, 54, Component.text(kit.getName()));
+      this.kit = kit;
+
+      inventory.setContents(kit.getItemStacks());
 
       for (int i = 0; i < 35; i++) {
-        kitEditor.setItem(i, kit.getItemStacks()[i]);
+        inventory.setItem(i, kit.getItemStacks()[i]);
       }
 
       ItemStack barrier = new ItemStack(Material.BARRIER);
@@ -156,16 +138,24 @@ public class KitEditor {
       barrier.setItemMeta(meta);
 
       for (int i = 36; i < 54; i++) {
-        kitEditor.setItem(i, barrier);
+        inventory.setItem(i, barrier);
       }
 
       for (int i = 46; i < 50; i++) {
-        kitEditor.setItem(i, kit.getItemStacks()[i - 10]);
+        inventory.setItem(i, kit.getItemStacks()[i - 10]);
       }
 
-      kitEditor.setItem(51, kit.getItemStacks()[40]);
+      inventory.setItem(51, kit.getItemStacks()[40]);
+    }
 
-      kitEditors.put(kit.getName(), kitEditor);
+    public Kit getKit() {
+      return kit;
+    }
+
+    @Override
+    @NotNull
+    public Inventory getInventory() {
+      return inventory;
     }
   }
 }
