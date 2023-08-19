@@ -28,7 +28,7 @@ public class KitCommands extends BaseCommand {
   }
 
   @Default
-  @Syntax("[name]")
+  @Syntax("<name>")
   @CommandCompletion("@kits")
   @Description("Gives the player the specified kit")
   @SuppressWarnings("unused")
@@ -42,7 +42,7 @@ public class KitCommands extends BaseCommand {
   }
 
   @Subcommand("create")
-  @Syntax("[name]")
+  @Syntax("<name>")
   @Description("Creates a private kit")
   @SuppressWarnings("unused")
   public void onCreate(Player player, @Optional String name) {
@@ -56,7 +56,7 @@ public class KitCommands extends BaseCommand {
 
   @Subcommand("createpublic")
   @CommandPermission("aurorakits.admin")
-  @Syntax("[name]")
+  @Syntax("<name>")
   @Description("Creates a public kit")
   @SuppressWarnings("unused")
   public void onCreatePublic(Player player, String name) {
@@ -65,7 +65,7 @@ public class KitCommands extends BaseCommand {
 
   @Subcommand("delete")
   @CommandCompletion("@kits")
-  @Syntax("[name]")
+  @Syntax("<name>")
   @Description("Deletes a private kit")
   @SuppressWarnings("unused")
   public void onDelete(Player player, String name) {
@@ -80,7 +80,7 @@ public class KitCommands extends BaseCommand {
   @Subcommand("deletepublic")
   @CommandPermission("aurorakits.admin")
   @CommandCompletion("@kits")
-  @Syntax("[name]")
+  @Syntax("<name>")
   @Description("Deletes a public kit")
   @SuppressWarnings("unused")
   public void onDeletePublic(Player player, String name) {
@@ -93,7 +93,7 @@ public class KitCommands extends BaseCommand {
   }
 
   @Subcommand("edit")
-  @Syntax("[name]")
+  @Syntax("<name>")
   @Description("Edits a kit")
   @SuppressWarnings("unused")
   public void onEdit(Player player, String name) {
@@ -106,7 +106,7 @@ public class KitCommands extends BaseCommand {
   }
 
   @Subcommand("copy")
-  @Syntax("[name]")
+  @Syntax("<name>")
   @Description("Copies a kit")
   @SuppressWarnings("unused")
   public void onCopy(Player player, String name, String newName) {
