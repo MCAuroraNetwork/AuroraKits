@@ -2,11 +2,7 @@ package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class KitsGUI implements Listener {
   private static final Map<Player, KitsGUI> KITS_GUIS = new HashMap<>();
   private final Player player;
-  private Page[] pages;
+  private List<Page> pages = new ArrayList<>();
   private int currentPage = 0;
   private int index;
 
@@ -113,7 +109,7 @@ public class KitsGUI implements Listener {
   }
 
   public void addKit(Kit kit) {
-    Inventory lastPage = pages[index - 1].getInventory();
+    Inventory lastPage = pages.get(index - 1).getInventory();
 
     if (lastPage.getContents()[44] != null) {
       new Page(kit, this);
@@ -156,7 +152,7 @@ public class KitsGUI implements Listener {
   }
 
   public Inventory getCurrentPage() {
-    return pages[currentPage].getInventory();
+    return pages.get(currentPage).getInventory();
   }
 
   public void reload() {
@@ -167,8 +163,6 @@ public class KitsGUI implements Listener {
         index++;
       }
     }
-
-    pages = new Page[index + 1];
 
     int currentPages = index + 1;
 
@@ -195,7 +189,7 @@ public class KitsGUI implements Listener {
         counter++;
       }
 
-      pages[index] = new Page(kits, this);
+      pages.add(new Page(kits, this));
       index++;
     }
   }
