@@ -4,6 +4,8 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.modules.Frame;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +44,7 @@ public class FrameDataHandler {
       }
       get().save(FILE);
     } catch (IOException e) {
-      AuroraKits.INSTANCE.getLogger().severe("Failed to save frame data");
+      AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to save frame data", e);
     }
   }
 

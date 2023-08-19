@@ -4,6 +4,8 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
@@ -31,7 +33,7 @@ public class Config {
     try {
       get().save(FILE);
     } catch (IOException e) {
-      AuroraKits.INSTANCE.getLogger().severe("Failed to save config file");
+      AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to save config file", e);
     }
   }
 
@@ -46,7 +48,7 @@ public class Config {
         FILE.getParentFile().mkdirs();
         FILE.createNewFile();
       } catch (IOException e) {
-        AuroraKits.INSTANCE.getLogger().severe("Failed to generate config file");
+        AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to generate config file", e);
       }
     }
     config = YamlConfiguration.loadConfiguration(FILE);

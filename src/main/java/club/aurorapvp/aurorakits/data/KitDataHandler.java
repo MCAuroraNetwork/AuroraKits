@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -81,7 +83,7 @@ public class KitDataHandler {
       }
       DATA_FILE.save(FILE);
     } catch (IOException e) {
-      AuroraKits.INSTANCE.getLogger().severe("Failed to save kit data");
+      AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to save kit data", e);
     }
   }
 }
