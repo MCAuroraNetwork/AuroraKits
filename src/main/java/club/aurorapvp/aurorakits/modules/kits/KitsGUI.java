@@ -20,14 +20,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class KitsGui implements Listener {
-  private static final Map<Player, KitsGui> KITS_GUIS = new HashMap<>();
+public class KitsGUI implements Listener {
+  private static final Map<Player, KitsGUI> KITS_GUIS = new HashMap<>();
   private final Player player;
   private Page[] pages;
   private int currentPage = 0;
   private int index;
 
-  public KitsGui(Player player) {
+  public KitsGUI(Player player) {
     this.player = player;
 
     reload();
@@ -38,13 +38,13 @@ public class KitsGui implements Listener {
   }
 
   public static void reloadAll() {
-    for (KitsGui kitsGui : KITS_GUIS.values()) {
+    for (KitsGUI kitsGui : KITS_GUIS.values()) {
       kitsGui.reload();
     }
     AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
   }
 
-  public static void onPlayerQuit(Player player) {
+  public static void unregister(Player player) {
     KITS_GUIS.remove(player);
   }
 
@@ -56,7 +56,7 @@ public class KitsGui implements Listener {
       return;
     }
 
-    KitsGui gui = page.getGui();
+    KitsGUI gui = page.getGui();
 
     if (gui != this) {
       return;
@@ -96,16 +96,16 @@ public class KitsGui implements Listener {
     }
   }
 
-  public static KitsGui getGui(Player player) {
+  public static KitsGUI getGUI(Player player) {
     return KITS_GUIS.get(player);
   }
 
-  public static Set<KitsGui> getGuis() {
+  public static Set<KitsGUI> getGuis() {
     return Set.copyOf(KITS_GUIS.values());
   }
 
   public static void open(Player player) {
-    player.openInventory(Objects.requireNonNull(KitsGui.getGui(player)).getCurrentPage());
+    player.openInventory(Objects.requireNonNull(KitsGUI.getGUI(player)).getCurrentPage());
   }
 
   public Player getPlayer() {
@@ -143,7 +143,7 @@ public class KitsGui implements Listener {
     } else {
       currentPage = 0;
     }
-    KitsGui.open(player);
+    KitsGUI.open(player);
   }
 
   public void previousPage() {
@@ -152,7 +152,7 @@ public class KitsGui implements Listener {
     } else {
       currentPage = index;
     }
-    KitsGui.open(player);
+    KitsGUI.open(player);
   }
 
   public Inventory getCurrentPage() {
@@ -202,8 +202,8 @@ public class KitsGui implements Listener {
 
   public static class Page implements InventoryHolder {
     private final Inventory inventory;
-    private final KitsGui gui;
-    private Page(Kit[] kits, KitsGui gui) {
+    private final KitsGUI gui;
+    private Page(Kit[] kits, KitsGUI gui) {
       inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
       this.gui = gui;
 
@@ -227,7 +227,7 @@ public class KitsGui implements Listener {
       inventory.setItem(53, nextPage);
     }
 
-    private Page(Kit kit, KitsGui gui) {
+    private Page(Kit kit, KitsGUI gui) {
       inventory = Bukkit.createInventory(this, 54, Lang.getComponent("GUIName"));
       this.gui = gui;
 
@@ -249,7 +249,7 @@ public class KitsGui implements Listener {
       inventory.setItem(53, nextPage);
     }
 
-    public KitsGui getGui() {
+    public KitsGUI getGui() {
       return gui;
     }
 

@@ -14,7 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Kit {
-  private static final Set<Kit> kits = new HashSet<>();
+  private static final Map<OfflinePlayer, Set<Kit>> PRIVATE_KITS = new HashMap<>();
+  private static final Map<OfflinePlayer, Set<Kit>> PUBLIC_KITS = new HashMap<>();
   private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitDataHandler data;
   private final boolean isPublic;
@@ -32,7 +33,11 @@ public class Kit {
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
-    kits.add(this);
+    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner, new HashSet<>());
+
+    set.add(this);
+
+    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).put(owner, set);
 
     if (this.exists()) {
       this.reload();
@@ -46,7 +51,11 @@ public class Kit {
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
-    kits.add(this);
+    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner, new HashSet<>());
+
+    set.add(this);
+
+    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).put(owner, set);
 
     this.create(contents);
   }
@@ -108,7 +117,27 @@ public class Kit {
   }
 
   public static Set<Kit> getKits() {
-    return Kit.getKits(null, true);
+    Set<Kit> set = new HashSet<>();
+
+    for (Set<Kit> kits : PRIVATE_KITS.values()) {
+      set.addAll(kits);
+    }
+
+    for (Set<Kit> kits : PUBLIC_KITS.values()) {
+      set.addAll(kits);
+    }
+
+    return set;
+  }
+
+  public static Set<Kit> getPublicKits() {
+    Set<Kit> set = new HashSet<>();
+
+    for (Set<Kit> kits : PUBLIC_KITS.values()) {
+      set.addAll(kits);
+    }
+
+    return set;
   }
 
   @SuppressWarnings("unused")
@@ -117,24 +146,30 @@ public class Kit {
   }
 
   public static void reloadAll() {
-    kits.clear();
+    PUBLIC_KITS.clear();
+    PRIVATE_KITS.clear();
 
     Kit.init();
 
     for (Player player : Bukkit.getOnlinePlayers()) {
-      setupPlayer(player);
+      register(player);
     }
 
-    for (Kit kit : kits) {
+    for (Kit kit : Kit.getKits()) {
       kit.reload();
     }
+
     AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
   }
 
   public static Set<Kit> getKits(Player player, boolean includePublic) {
-    Set<Kit> playerKits = new HashSet<>();
+    Set<Kit> playerKits = new HashSet<>(PRIVATE_KITS.get(player));
 
-    for (Kit kit : kits) {
+    if (includePublic) {
+      playerKits.addAll(Kit.getPublicKits());
+    }
+
+    for (Kit kit : Kit.getKits()) {
       if (kit.getOwner() == player || (kit.isPublic() && includePublic)) {
         playerKits.add(kit);
       }
@@ -144,17 +179,22 @@ public class Kit {
   }
 
   public static Kit getKit(Player player, String kitName) {
-    for (Kit kit : kits) {
-      if (kit.getOwner().getPlayer() == player || kit.publicKit) {
-        if (Objects.equals(kit.getName(), kitName)) {
-          return kit;
-        }
+    for (Kit kit : PRIVATE_KITS.get(player)) {
+      if (Objects.equals(kit.getName(), kitName)) {
+        return kit;
       }
     }
+
+    for (Kit kit : Kit.getPublicKits()) {
+      if (Objects.equals(kit.getName(), kitName)) {
+        return kit;
+      }
+    }
+
     return null;
   }
 
-  public static void setupPlayer(Player player) {
+  public static void register(Player player) {
     File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/" + player.getUniqueId());
 
     if (dir.exists()) {
@@ -169,18 +209,18 @@ public class Kit {
       }
     }
 
-    new KitsGui(player);
+    new KitsGUI(player);
     new KitEditor(player);
   }
 
-  public static void onPlayerQuit(Player player) {
+  public static void unregister(Player player) {
     for (Kit kit : getKits(player, true)) {
       if (!kit.isPublic()) {
-        kits.remove(kit);
+        Kit.getKits().remove(kit);
       }
     }
 
-    KitsGui.onPlayerQuit(player);
+    KitsGUI.unregister(player);
   }
 
   public static Kit getLastUsedKit(Player player) {
@@ -254,12 +294,12 @@ public class Kit {
     data.create();
 
     if (isPublic) {
-      for (KitsGui kitsGui : KitsGui.getGuis()) {
+      for (KitsGUI kitsGui : KitsGUI.getGuis()) {
         kitsGui.addKit(this);
       }
     } else {
       Objects.requireNonNull(KitEditor.getEditor(owner.getPlayer())).addKit(this);
-      Objects.requireNonNull(KitsGui.getGui(owner.getPlayer())).addKit(this);
+      Objects.requireNonNull(KitsGUI.getGUI(owner.getPlayer())).addKit(this);
     }
 
     Objects.requireNonNull(owner.getPlayer()).sendMessage(Lang.getComponent("kit-created"));
@@ -289,14 +329,16 @@ public class Kit {
     data.getFile().delete();
 
     if (isPublic) {
-      for (KitsGui kitsGui : KitsGui.getGuis()) {
+      for (KitsGUI kitsGui : KitsGUI.getGuis()) {
         kitsGui.removeKit(this);
       }
     } else {
-      Objects.requireNonNull(KitsGui.getGui(player)).removeKit(this);
+      Objects.requireNonNull(KitsGUI.getGUI(player)).removeKit(this);
     }
 
-    kits.remove(this);
+    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).get(player);
+
+    set.remove(this);
 
     if (player != null) {
       player.sendMessage(Lang.getComponent("kit-deleted"));

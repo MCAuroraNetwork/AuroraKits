@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerEventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    Kit.setupPlayer(event.getPlayer());
+    Kit.register(event.getPlayer());
 
     if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
       Kit kit = Kit.getLastUsedKit(event.getPlayer());
@@ -27,7 +27,7 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
-    Kit.onPlayerQuit(event.getPlayer());
+    Kit.unregister(event.getPlayer());
   }
 
   @EventHandler
