@@ -1,6 +1,7 @@
 package club.aurorapvp.aurorakits.events.listeners;
 
 import club.aurorapvp.auroracombat.events.custom.PlayerKilledByPlayerEvent;
+import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.modules.Frame;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
@@ -48,6 +49,11 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerKilled(PlayerKilledByPlayerEvent event) {
+    if (!AuroraKits.isAuroraCombatInstalled()) {
+      return;
+    }
+
+
     if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
       Kit kit = Kit.getLastUsedKit(event.getKiller());
 

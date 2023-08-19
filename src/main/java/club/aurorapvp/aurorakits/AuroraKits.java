@@ -13,7 +13,7 @@ public final class AuroraKits extends JavaPlugin {
   public static JavaPlugin INSTANCE;
   private static boolean auroraCombatInstalled;
 
-  public boolean isAuroraCombatInstalled() {
+  public static boolean isAuroraCombatInstalled() {
     return auroraCombatInstalled;
   }
 
