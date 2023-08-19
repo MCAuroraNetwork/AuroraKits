@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuroraKits extends JavaPlugin {
-  public static JavaPlugin INSTANCE;
+  public static AuroraKits INSTANCE;
   private static boolean auroraCombatInstalled;
 
   public static boolean isAuroraCombatInstalled() {
