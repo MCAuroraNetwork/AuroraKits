@@ -15,7 +15,8 @@ public class PlayerEventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.setupPlayer(event.getPlayer());
-    if (Config.get().getBoolean("kits.lastUsedKit.enabled")) {
+
+    if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
       Kit kit = Kit.getLastUsedKit(event.getPlayer());
 
       if (kit != null) {
