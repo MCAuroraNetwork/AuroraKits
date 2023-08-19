@@ -129,19 +129,19 @@ public class Frame {
     return this.getData().exists();
   }
 
-  public void create(Player p) {
-    if (name != null && p != null) {
-      Block block = p.getTargetBlockExact(10);
+  public void create(Player player) {
+    if (name != null && player != null) {
+      Block block = player.getTargetBlockExact(10);
       assert block != null;
-      ItemFrame frame = p.getWorld().spawn(block.getLocation(), ItemFrame.class);
+      ItemFrame frame = player.getWorld().spawn(block.getLocation(), ItemFrame.class);
       frame.teleport(
-          block.getRelative(Objects.requireNonNull(Frame.getBlockFace(p))).getLocation());
-      frame.setFacingDirection(Objects.requireNonNull(Frame.getBlockFace(p)), true);
+          block.getRelative(Objects.requireNonNull(Frame.getBlockFace(player))).getLocation());
+      frame.setFacingDirection(Objects.requireNonNull(Frame.getBlockFace(player)), true);
 
-      contents = p.getInventory().getItemInMainHand();
+      contents = player.getInventory().getItemInMainHand();
       location = frame.getLocation();
 
-      ItemStack displayItem = p.getInventory().getItemInMainHand();
+      ItemStack displayItem = player.getInventory().getItemInMainHand();
       ItemMeta meta = displayItem.getItemMeta();
       meta.displayName(Component.text(StringUtil.convertToNormalTypedLanguage(name)));
       displayItem.setItemMeta(meta);
@@ -150,17 +150,17 @@ public class Frame {
 
       this.data.create();
 
-      p.sendMessage(Lang.getComponent("frame-created"));
-    } else if (p != null) {
-      p.sendMessage(Lang.getComponent("frame-invalid"));
+      player.sendMessage(Lang.getComponent("frame-created"));
+    } else if (player != null) {
+      player.sendMessage(Lang.getComponent("frame-invalid"));
     }
   }
 
-  public void delete(Player p) {
+  public void delete(Player player) {
     this.getData().delete();
     frames.remove(this);
-    if (p != null) {
-      p.sendMessage(Lang.getComponent("frame-deleted"));
+    if (player != null) {
+      player.sendMessage(Lang.getComponent("frame-deleted"));
     }
   }
 

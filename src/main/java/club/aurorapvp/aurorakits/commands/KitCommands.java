@@ -23,8 +23,8 @@ public class KitCommands extends BaseCommand {
   @Default
   @Description("Opens the kit GUI")
   @SuppressWarnings("unused")
-  public void onGUIOpen(Player p) {
-    KitsGui.open(p);
+  public void onGUIOpen(Player player) {
+    KitsGui.open(player);
   }
 
   @Default
@@ -32,12 +32,12 @@ public class KitCommands extends BaseCommand {
   @CommandCompletion("@kits")
   @Description("Gives the player the specified kit")
   @SuppressWarnings("unused")
-  public void onGive(Player p, String name) {
-    Kit kit = Kit.getKit(p, name);
+  public void onGive(Player player, String name) {
+    Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      kit.giveKit(p);
+      kit.giveKit(player);
     } else {
-      p.sendMessage(Lang.getComponent("kit-not-found"));
+      player.sendMessage(Lang.getComponent("kit-not-found"));
     }
   }
 
@@ -45,13 +45,13 @@ public class KitCommands extends BaseCommand {
   @Syntax("[name]")
   @Description("Creates a private kit")
   @SuppressWarnings("unused")
-  public void onCreate(Player p, @Optional String name) {
+  public void onCreate(Player player, @Optional String name) {
     new Kit(
             Objects.requireNonNullElseGet(
-                name, () -> "Kit" + Math.addExact(Kit.getAmount(p, false), 1)),
-            p,
+                name, () -> "Kit" + Math.addExact(Kit.getAmount(player, false), 1)),
+            player,
             false)
-        .create(p.getInventory().getContents());
+        .create(player.getInventory().getContents());
   }
 
   @Subcommand("createpublic")
@@ -59,8 +59,8 @@ public class KitCommands extends BaseCommand {
   @Syntax("[name]")
   @Description("Creates a public kit")
   @SuppressWarnings("unused")
-  public void onCreatePublic(Player p, String name) {
-    new Kit(name, p, true).create(p.getInventory().getContents());
+  public void onCreatePublic(Player player, String name) {
+    new Kit(name, player, true).create(player.getInventory().getContents());
   }
 
   @Subcommand("delete")
@@ -68,12 +68,12 @@ public class KitCommands extends BaseCommand {
   @Syntax("[name]")
   @Description("Deletes a private kit")
   @SuppressWarnings("unused")
-  public void onDelete(Player p, String name) {
-    Kit kit = Kit.getKit(p, name);
+  public void onDelete(Player player, String name) {
+    Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      kit.delete(p, false);
+      kit.delete(player, false);
     } else {
-      p.sendMessage(Lang.getComponent("kit-invalid-name"));
+      player.sendMessage(Lang.getComponent("kit-invalid-name"));
     }
   }
 
@@ -83,12 +83,12 @@ public class KitCommands extends BaseCommand {
   @Syntax("[name]")
   @Description("Deletes a public kit")
   @SuppressWarnings("unused")
-  public void onDeletePublic(Player p, String name) {
-    Kit kit = Kit.getKit(p, name);
+  public void onDeletePublic(Player player, String name) {
+    Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      kit.delete(p, true);
+      kit.delete(player, true);
     } else {
-      p.sendMessage(Lang.getComponent("kit-invalid-name"));
+      player.sendMessage(Lang.getComponent("kit-invalid-name"));
     }
   }
 
@@ -96,12 +96,12 @@ public class KitCommands extends BaseCommand {
   @Syntax("[name]")
   @Description("Edits a kit")
   @SuppressWarnings("unused")
-  public void onEdit(Player p, String name) {
-    Kit kit = Kit.getKit(p, name);
+  public void onEdit(Player player, String name) {
+    Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      kit.editKit(p);
+      kit.editKit(player);
     } else {
-      p.sendMessage(Lang.getComponent("kit-not-found"));
+      player.sendMessage(Lang.getComponent("kit-not-found"));
     }
   }
 
@@ -109,12 +109,12 @@ public class KitCommands extends BaseCommand {
   @Syntax("[name]")
   @Description("Copies a kit")
   @SuppressWarnings("unused")
-  public void onCopy(Player p, String name, String newName) {
-    Kit kit = Kit.getKit(p, name);
+  public void onCopy(Player player, String name, String newName) {
+    Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      new Kit(newName, p, false).create(kit.getItemStacks());
+      new Kit(newName, player, false).create(kit.getItemStacks());
     } else {
-      p.sendMessage(Lang.getComponent("kit-not-found"));
+      player.sendMessage(Lang.getComponent("kit-not-found"));
     }
   }
 

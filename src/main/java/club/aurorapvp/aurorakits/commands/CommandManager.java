@@ -24,10 +24,10 @@ public class CommandManager {
     commandCompletions.registerCompletion(
         "kits",
         c -> {
-          Player p = c.getPlayer();
+          Player player = c.getPlayer();
           List<String> kitNames = new ArrayList<>();
 
-          for (Kit kit : Kit.getKits(p, true)) {
+          for (Kit kit : Kit.getKits(player, true)) {
             kitNames.add(kit.getName());
           }
 

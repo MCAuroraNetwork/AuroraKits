@@ -16,15 +16,15 @@ public class FrameCommands extends BaseCommand {
   @Subcommand("create")
   @Description("Creates a new frame")
   @SuppressWarnings("unused")
-  public void onCreate(Player p, String name) {
-    new Frame(name).create(p);
+  public void onCreate(Player player, String name) {
+    new Frame(name).create(player);
   }
 
   @Subcommand("delete")
   @Description("Deletes a frame")
   @SuppressWarnings("unused")
-  public void onDelete(Player p, String name) {
-    new Frame(name).delete(p);
+  public void onDelete(Player player, String name) {
+    new Frame(name).delete(player);
   }
 
   @Default

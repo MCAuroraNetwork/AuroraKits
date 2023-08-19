@@ -25,8 +25,8 @@ public class KitEditor implements Listener {
   private final Player owner;
   private final Map<Kit, EditPage> kitEditors = new HashMap<>();
 
-  public KitEditor(Player p) {
-    this.owner = p;
+  public KitEditor(Player player) {
+    this.owner = player;
 
     reload();
 
@@ -72,7 +72,7 @@ public class KitEditor implements Listener {
       return;
     }
 
-    Player p = (Player) event.getPlayer();
+    Player player = (Player) event.getPlayer();
 
     ItemStack[] itemStacks = new ItemStack[41];
 
@@ -86,12 +86,12 @@ public class KitEditor implements Listener {
 
     itemStacks[40] = inventory.getContents()[51];
 
-    editPage.getKit().edit(p, itemStacks);
+    editPage.getKit().edit(player, itemStacks);
   }
 
-  public static KitEditor getEditor(Player p) {
+  public static KitEditor getEditor(Player player) {
     for (KitEditor kitEditor : KIT_EDITORS) {
-      if (kitEditor.getOwner() == p) {
+      if (kitEditor.getOwner() == player) {
         return kitEditor;
       }
     }
@@ -102,8 +102,8 @@ public class KitEditor implements Listener {
     return owner;
   }
 
-  public void open(Player p, Kit kit) {
-    p.openInventory(kitEditors.get(kit).getInventory());
+  public void open(Player player, Kit kit) {
+    player.openInventory(kitEditors.get(kit).getInventory());
   }
 
   public void addKit(Kit kit) {

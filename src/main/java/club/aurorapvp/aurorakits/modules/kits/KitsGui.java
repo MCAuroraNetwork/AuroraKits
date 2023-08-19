@@ -22,17 +22,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class KitsGui implements Listener {
   private static final Map<Player, KitsGui> KITS_GUIS = new HashMap<>();
-  private final Player p;
+  private final Player player;
   private Page[] pages;
   private int currentPage = 0;
   private int index;
 
-  public KitsGui(Player p) {
-    this.p = p;
+  public KitsGui(Player player) {
+    this.player = player;
 
     reload();
 
-    KITS_GUIS.put(p, this);
+    KITS_GUIS.put(player, this);
 
     Bukkit.getPluginManager().registerEvents(this, AuroraKits.INSTANCE);
   }
@@ -44,13 +44,13 @@ public class KitsGui implements Listener {
     AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
   }
 
-  public static void onPlayerQuit(Player p) {
-    KITS_GUIS.remove(p);
+  public static void onPlayerQuit(Player player) {
+    KITS_GUIS.remove(player);
   }
 
   @EventHandler
   public void onInventoryClicked(InventoryClickEvent event) {
-    Player p = (Player) event.getWhoClicked();
+    Player player = (Player) event.getWhoClicked();
 
     if (!(event.getInventory().getHolder() instanceof Page page)) {
       return;
@@ -79,37 +79,37 @@ public class KitsGui implements Listener {
     }
 
     if (event.getCurrentItem().getItemMeta().displayName() == null) {
-      p.sendMessage(Lang.getComponent("kit-invalid-name"));
+      player.sendMessage(Lang.getComponent("kit-invalid-name"));
     } else {
       String itemName =
           PlainTextComponentSerializer.plainText().serialize(event.getCurrentItem().displayName());
       String kitName = itemName.substring(1, itemName.length() - 1);
 
-      Kit kit = Kit.getKit(p, kitName);
+      Kit kit = Kit.getKit(player, kitName);
 
       assert kit != null;
       if (event.isRightClick() && !kit.isPublic()) {
-        kit.editKit(p);
+        kit.editKit(player);
       } else {
-        kit.giveKit(p);
+        kit.giveKit(player);
       }
     }
   }
 
-  public static KitsGui getGui(Player p) {
-    return KITS_GUIS.get(p);
+  public static KitsGui getGui(Player player) {
+    return KITS_GUIS.get(player);
   }
 
   public static Set<KitsGui> getGuis() {
     return Set.copyOf(KITS_GUIS.values());
   }
 
-  public static void open(Player p) {
-    p.openInventory(Objects.requireNonNull(KitsGui.getGui(p)).getCurrentPage());
+  public static void open(Player player) {
+    player.openInventory(Objects.requireNonNull(KitsGui.getGui(player)).getCurrentPage());
   }
 
   public Player getPlayer() {
-    return p;
+    return player;
   }
 
   public void addKit(Kit kit) {
@@ -143,7 +143,7 @@ public class KitsGui implements Listener {
     } else {
       currentPage = 0;
     }
-    KitsGui.open(p);
+    KitsGui.open(player);
   }
 
   public void previousPage() {
@@ -152,7 +152,7 @@ public class KitsGui implements Listener {
     } else {
       currentPage = index;
     }
-    KitsGui.open(p);
+    KitsGui.open(player);
   }
 
   public Inventory getCurrentPage() {
