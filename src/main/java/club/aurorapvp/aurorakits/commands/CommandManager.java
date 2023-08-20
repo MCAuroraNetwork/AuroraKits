@@ -17,6 +17,7 @@ public class CommandManager {
     MANAGER.registerCommand(new PluginCommands());
     MANAGER.registerCommand(new KitCommands());
     MANAGER.registerCommand(new FrameCommands());
+    MANAGER.registerCommand(new KitsGUICommand());
 
     CommandCompletions<BukkitCommandCompletionContext> commandCompletions =
         MANAGER.getCommandCompletions();

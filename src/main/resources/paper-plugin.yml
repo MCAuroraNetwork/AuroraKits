@@ -41,7 +41,7 @@ permissions:
     default: false
 
   aurorakits.command.kits:
-    default: true
+    default: false
 
   aurorakits.command.frames:
     default: false
@@ -64,6 +64,7 @@ permissions:
     default: true
     children:
       aurorakits.command.kit: true
+      aurorakits.command.kits: true
 
   aurorakits.frames:
     description: Allows for use of all frame commands

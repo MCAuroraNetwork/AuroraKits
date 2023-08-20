@@ -17,19 +17,10 @@ import java.util.Objects;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandAlias("kit|kits")
+@CommandAlias("kit")
 @CommandPermission("aurorakits.command.kit")
 public class KitCommands extends BaseCommand {
-
   @Default
-  @Description("Opens the kit GUI")
-  @SuppressWarnings("unused")
-  public void onGUIOpen(Player player) {
-    KitsGUI.open(player);
-  }
-
-  @Default
-  @CommandPermission("aurorakits.command.kits")
   @CommandCompletion("@kits")
   @Syntax("<name>")
   @Description("Gives the player the specified kit")
