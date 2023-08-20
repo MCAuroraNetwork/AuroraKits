@@ -8,7 +8,7 @@ website: aurorapvp.club
 commands:
 permissions:
   aurorakits.command.aurorakits:
-    default: true
+    default: false
     children:
       aurorakits.command.aurorakits.reload: false
       aurorakits.command.aurorakits.help: true
@@ -19,7 +19,7 @@ permissions:
     default: false
 
   aurorakits.command.kit:
-    default: true
+    default: false
     children:
       aurorakits.command.kit.create: true
       aurorakits.command.kit.delete: true
@@ -53,6 +53,18 @@ permissions:
   aurorakits.command.frames.delete:
     default: false
 
+  aurorakits.default:
+    description: Allows for basic AuroraKits functionality
+    default: true
+    children:
+      aurorakits.command.aurorakits: true
+
+  aurorakits.kits:
+    description: Allows for use of all kit commands
+    default: true
+    children:
+      aurorakits.command.kit: true
+
   aurorakits.frames:
     description: Allows for use of all frame commands
     default: op
@@ -71,10 +83,6 @@ permissions:
     default: op
     children:
       aurorakits.command.aurorakits.reload: true
-
-  aurorakits.kit:
-    description: Allows the use of kits
-    default: true
 
 dependencies:
   server:
