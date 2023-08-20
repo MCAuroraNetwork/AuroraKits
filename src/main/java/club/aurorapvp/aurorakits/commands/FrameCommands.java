@@ -5,6 +5,7 @@ import club.aurorapvp.aurorakits.modules.Frame;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
@@ -12,8 +13,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("frames")
+@CommandPermission("aurorakits.command.frames")
 public class FrameCommands extends BaseCommand {
   @Subcommand("create")
+  @CommandPermission("aurorakits.command.frames.create")
   @Description("Creates a new frame")
   @SuppressWarnings("unused")
   public void onCreate(Player player, String name) {
@@ -25,12 +28,5 @@ public class FrameCommands extends BaseCommand {
   @SuppressWarnings("unused")
   public void onDelete(Player player, String name) {
     new Frame(name).delete(player);
-  }
-
-  @Default
-  @CatchUnknown
-  @SuppressWarnings("unused")
-  public void onUnknown(CommandSender sender) {
-    sender.sendMessage(Lang.getComponent("unknown-frame-command"));
   }
 }

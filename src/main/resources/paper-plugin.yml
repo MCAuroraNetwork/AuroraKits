@@ -6,48 +6,75 @@ authors: [ Villagers654 ]
 description: A Crystal PvP Kits Plugin for the Aurora Network
 website: aurorapvp.club
 commands:
-  aurorakits:
-    description: AuroraKits admin plugin commands
-    usage: /aurorakits
-    permission: aurorakits.admin
-  kit:
-    description: Opens a kit
-    usage: /kit [name]
-    permission: aurorakits.kit
-  kits:
-    description: Opens the Kit GUI
-    usage: /kits
-    permission: aurorakits.kit
-  frames:
-    description: Manages AuroraKits frames
-    usage: /createframe [name]
-    permission: aurorakits.frame
 permissions:
   aurorakits.command.aurorakits:
+    default: true
+    children:
+      aurorakits.command.aurorakits.reload: false
+      aurorakits.command.aurorakits.help: true
+
+  aurorakits.command.aurorakits.reload:
     default: false
+  aurorakits.command.aurorakits.help:
+    default: false
+
   aurorakits.command.kit:
+    default: true
+    children:
+      aurorakits.command.kit.create: true
+      aurorakits.command.kit.delete: true
+      aurorakits.command.kit.edit: true
+      aurorakits.command.kit.createpublic: false
+      aurorakits.command.kit.deletepublic: false
+      aurorakits.command.kit.help: true
+  aurorakits.command.kit.create:
     default: false
+  aurorakits.command.kit.delete:
+    default: false
+  aurorakits.command.kit.createpublic:
+    default: false
+  aurorakits.command.kit.deletepublic:
+    default: false
+  aurorakits.command.kit.edit:
+    default: false
+  aurorakits.command.kit.help:
+    default: false
+
   aurorakits.command.kits:
-    default: false
+    default: true
+
   aurorakits.command.frames:
     default: false
+    children:
+      aurorakits.command.frames.create: true
+      aurorakits.command.frames.delete: true
+  aurorakits.command.frames.create:
+    default: false
+  aurorakits.command.frames.delete:
+    default: false
+
+  aurorakits.frames:
+    description: Allows for use of all frame commands
+    default: op
+    children:
+      aurorakits.command.frames: true
+
+  aurorakits.publickits:
+    description: Allows for creation and deletion of public kits
+    default: op
+    children:
+      aurorakits.command.kit.createpublic: true
+      aurorakits.command.kit.deletepublic: true
+
   aurorakits.admin:
     description: Allows for the use of admin commands
     default: op
     children:
-      aurorakits.command.frames: true
-      aurorakits.command.aurorakits: true
+      aurorakits.command.aurorakits.reload: true
+
   aurorakits.kit:
     description: Allows the use of kits
     default: true
-    children:
-      aurorakits.command.kit: true
-      aurorakits.command.kits: true
-  aurorakits.default:
-    description: Allows for the use of basic commands
-    default: true
-    children:
-      aurorakits.command.aurorakits: true
 
 dependencies:
   server:

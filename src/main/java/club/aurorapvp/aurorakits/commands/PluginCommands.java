@@ -14,14 +14,16 @@ import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @CommandAlias("aurorakits")
+@CommandPermission("aurorakits.command.aurorakits")
 public class PluginCommands extends BaseCommand {
   @Subcommand("reload")
-  @CommandPermission("aurorakits.admin")
+  @CommandPermission("aurorakits.command.aurorakits.reload")
   @Description("Reloads all plugin data")
   @SuppressWarnings("unused")
-  public void onReload() {
+  public void onReload(Player player) {
     long startTime = System.currentTimeMillis();
 
     Frame.reloadAll();
@@ -37,6 +39,7 @@ public class PluginCommands extends BaseCommand {
 
   @Default
   @Subcommand("help")
+  @CommandPermission("aurorakits.command.aurorakits.help")
   @Description("Lists all available plugin commands and their function")
   @CatchUnknown
   @SuppressWarnings("unused")

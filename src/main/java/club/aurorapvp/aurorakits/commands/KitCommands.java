@@ -18,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("kit|kits")
+@CommandPermission("aurorakits.command.kit")
 public class KitCommands extends BaseCommand {
 
   @Default
@@ -28,8 +29,9 @@ public class KitCommands extends BaseCommand {
   }
 
   @Default
-  @Syntax("<name>")
+  @CommandPermission("aurorakits.command.kits")
   @CommandCompletion("@kits")
+  @Syntax("<name>")
   @Description("Gives the player the specified kit")
   @SuppressWarnings("unused")
   public void onGive(Player player, String name) {
@@ -42,6 +44,7 @@ public class KitCommands extends BaseCommand {
   }
 
   @Subcommand("create")
+  @CommandPermission("aurorakits.command.kit.create")
   @Syntax("<name>")
   @Description("Creates a private kit")
   @SuppressWarnings("unused")
@@ -54,16 +57,8 @@ public class KitCommands extends BaseCommand {
         .create(player.getInventory().getContents());
   }
 
-  @Subcommand("createpublic")
-  @CommandPermission("aurorakits.admin")
-  @Syntax("<name>")
-  @Description("Creates a public kit")
-  @SuppressWarnings("unused")
-  public void onCreatePublic(Player player, String name) {
-    new Kit(name, player, true).create(player.getInventory().getContents());
-  }
-
   @Subcommand("delete")
+  @CommandPermission("aurorakits.command.kit.delete")
   @CommandCompletion("@kits")
   @Syntax("<name>")
   @Description("Deletes a private kit")
@@ -77,8 +72,17 @@ public class KitCommands extends BaseCommand {
     }
   }
 
+  @Subcommand("createpublic")
+  @CommandPermission("aurorakits.command.kit.createpublic")
+  @Syntax("<name>")
+  @Description("Creates a public kit")
+  @SuppressWarnings("unused")
+  public void onCreatePublic(Player player, String name) {
+    new Kit(name, player, true).create(player.getInventory().getContents());
+  }
+
   @Subcommand("deletepublic")
-  @CommandPermission("aurorakits.admin")
+  @CommandPermission("aurorakits.command.kit.delete")
   @CommandCompletion("@kits")
   @Syntax("<name>")
   @Description("Deletes a public kit")
@@ -93,6 +97,8 @@ public class KitCommands extends BaseCommand {
   }
 
   @Subcommand("edit")
+  @CommandPermission("aurorakits.command.kit.edit")
+  @CommandCompletion("@kits")
   @Syntax("<name>")
   @Description("Edits a kit")
   @SuppressWarnings("unused")
@@ -118,7 +124,9 @@ public class KitCommands extends BaseCommand {
     }
   }
 
+  // TODO
   @CatchUnknown
+  @Subcommand("help")
   @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
     sender.sendMessage(Lang.getComponent("unknown-kit-command"));

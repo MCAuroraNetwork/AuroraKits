@@ -48,7 +48,6 @@ public class Lang {
     DEFAULTS.put("kit-already-exists", "prefix <red>Kit exists");
     DEFAULTS.put("next-page", "<aqua><bold>Next");
     DEFAULTS.put("previous-page", "<aqua><bold>Previous");
-    DEFAULTS.put("unknown-frame-command", "prefix <red>Unknown Frame Command! Use /help");
     DEFAULTS.put("unknown-kit-command", "prefix <red>Unknown Kit Command! Use /help");
     DEFAULTS.put(
         "help-command",
