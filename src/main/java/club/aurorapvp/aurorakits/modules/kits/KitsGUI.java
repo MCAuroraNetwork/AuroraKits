@@ -207,7 +207,7 @@ public class KitsGUI implements Listener {
     private final KitsGUI gui;
 
     private Page(Kit[] kits, KitsGUI gui) {
-      inventory = Bukkit.createInventory(null, 54, Lang.getComponent("GUIName"));
+      inventory = Bukkit.createInventory(this, 54, Lang.getComponent("GUIName"));
       this.gui = gui;
 
       for (Kit kit : kits) {
