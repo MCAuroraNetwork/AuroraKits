@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemStackUtil {
+
   public static ItemStack createDisplayItem(
       final Material material, final String name, String creator, boolean isPublic) {
     final ItemStack item = new ItemStack(material, 1);

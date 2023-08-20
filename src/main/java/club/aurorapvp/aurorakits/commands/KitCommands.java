@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 @CommandAlias("kit")
 @CommandPermission("aurorakits.command.kit")
 public class KitCommands extends BaseCommand {
+
   @Default
   @CommandCompletion("@kits")
   @Syntax("<name>")
@@ -40,10 +41,10 @@ public class KitCommands extends BaseCommand {
   @SuppressWarnings("unused")
   public void onCreate(Player player, @Optional String name) {
     new Kit(
-            Objects.requireNonNullElseGet(
-                name, () -> "Kit" + Math.addExact(Kit.getAmount(player, false), 1)),
-            player,
-            false)
+        Objects.requireNonNullElseGet(
+            name, () -> "Kit" + Math.addExact(Kit.getAmount(player, false), 1)),
+        player,
+        false)
         .create(player.getInventory().getContents());
   }
 

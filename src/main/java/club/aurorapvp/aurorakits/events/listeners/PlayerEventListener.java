@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerEventListener implements Listener {
+
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.register(event.getPlayer());
@@ -52,7 +53,6 @@ public class PlayerEventListener implements Listener {
     if (!AuroraKits.isAuroraCombatInstalled()) {
       return;
     }
-
 
     if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
       Kit kit = Kit.getLastUsedKit(event.getKiller());

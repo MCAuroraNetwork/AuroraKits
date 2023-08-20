@@ -5,12 +5,12 @@ import club.aurorapvp.aurorakits.modules.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
-
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class FrameDataHandler {
+
   private static final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "/frames.yml");
   private static final YamlConfiguration framesData = YamlConfiguration.loadConfiguration(FILE);
   private final Frame frame;

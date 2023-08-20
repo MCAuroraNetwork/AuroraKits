@@ -11,6 +11,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 public class CommandManager {
+
   public static PaperCommandManager MANAGER = new PaperCommandManager(AuroraKits.INSTANCE);
 
   public static void init() {

@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class KitEditor implements Listener {
+
   private static final Set<KitEditor> KIT_EDITORS = new HashSet<>();
   private final Player owner;
   private final Map<Kit, EditPage> kitEditors = new HashMap<>();
@@ -57,8 +58,8 @@ public class KitEditor implements Listener {
     if ((event.getSlot() == 46 && !cursorItem.getType().name().endsWith("_BOOTS"))
         || event.getSlot() == 47 && !cursorItem.getType().name().endsWith("_LEGGINGS")
         || event.getSlot() == 48
-            && (!cursorItem.getType().name().endsWith("_CHESTPLATE")
-                && cursorItem.getType() != Material.ELYTRA)
+        && (!cursorItem.getType().name().endsWith("_CHESTPLATE")
+        && cursorItem.getType() != Material.ELYTRA)
         || event.getSlot() == 49 && !cursorItem.getType().name().endsWith("_HELMET")) {
       event.setCancelled(true);
     }
@@ -119,6 +120,7 @@ public class KitEditor implements Listener {
   }
 
   public static class EditPage implements InventoryHolder {
+
     private final Inventory inventory;
     private final Kit kit;
 

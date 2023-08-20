@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.logging.Level;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Lang {
+
   private static final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
   private static final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "lang.yml");
   private static YamlConfiguration lang;
@@ -52,13 +52,13 @@ public class Lang {
     DEFAULTS.put(
         "help-command",
         """
-        prefix <aqua><bold>All Commands:
-        
-        <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
-        <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
-        <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit
-        <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit
-        """);
+            prefix <aqua><bold>All Commands:
+                    
+            <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
+            <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
+            <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit
+            <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit
+            """);
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().contains(path) || get().getString(path) == null) {

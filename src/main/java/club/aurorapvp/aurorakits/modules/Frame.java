@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Frame {
+
   private static final Set<Frame> frames = new HashSet<>();
   private final String name;
   private final FrameDataHandler data;

@@ -1,6 +1,7 @@
 package club.aurorapvp.aurorakits.util;
 
 public class StringUtil {
+
   public static String convertToNormalTypedLanguage(String camelCaseString) {
     StringBuilder normalTypedLanguage = new StringBuilder();
 

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 @CommandAlias("kits")
 @CommandPermission("aurorakits.command.kits")
 public class KitsGUICommand extends BaseCommand {
+
   @Default
   @Description("Opens the kit GUI")
   @SuppressWarnings("unused")

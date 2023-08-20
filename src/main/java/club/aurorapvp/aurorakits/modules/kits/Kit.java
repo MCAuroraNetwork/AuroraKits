@@ -6,8 +6,12 @@ import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.KitDataHandler;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
 import java.io.File;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Kit {
+
   private static final Map<OfflinePlayer, Set<Kit>> PRIVATE_KITS = new HashMap<>();
   private static final Map<OfflinePlayer, Set<Kit>> PUBLIC_KITS = new HashMap<>();
   private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
