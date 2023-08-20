@@ -52,11 +52,13 @@ public class Lang {
     DEFAULTS.put(
         "help-command",
         """
-        prefix <gradient:#FFAA00:#FF55FF>All Commands:\s
-        <blue><bold>/kits: <reset><yellow>Opens the Kit Menu\s
-        <blue><bold>/kit [name]: <reset><yellow>Opens a Kit\s
-        <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit\s
-        <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit""");
+        prefix <aqua><bold>All Commands:
+        
+        <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
+        <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
+        <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit
+        <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit
+        """);
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().contains(path) || get().getString(path) == null) {

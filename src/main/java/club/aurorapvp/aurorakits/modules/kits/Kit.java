@@ -112,11 +112,6 @@ public class Kit {
     return null;
   }
 
-  @SuppressWarnings("unused")
-  public static Kit getLastKit(Player player) {
-    return Kit.getLastUsedKit(player);
-  }
-
   public static Set<Kit> getKits() {
     Set<Kit> set = new HashSet<>();
 
