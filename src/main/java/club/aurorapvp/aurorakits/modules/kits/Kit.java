@@ -164,7 +164,11 @@ public class Kit {
   }
 
   public static Set<Kit> getKits(Player player, boolean includePublic) {
-    Set<Kit> playerKits = new HashSet<>(PRIVATE_KITS.get(player));
+    Set<Kit> playerKits = new HashSet<>();
+
+    if (PRIVATE_KITS.containsKey(player) && PRIVATE_KITS.get(player) != null) {
+      playerKits.addAll(PRIVATE_KITS.get(player));
+    }
 
     if (includePublic) {
       playerKits.addAll(Kit.getPublicKits());
