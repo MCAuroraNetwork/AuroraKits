@@ -4,17 +4,13 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.UUID;
 import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class KitDataHandler {
+
   private final YamlConfiguration DATA_FILE;
   private final File FILE;
   private final Kit kit;
@@ -26,11 +22,6 @@ public class KitDataHandler {
             AuroraKits.INSTANCE.getDataFolder(),
             "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
-  }
-
-  public OfflinePlayer getOwner() {
-    return Bukkit.getOfflinePlayer(
-        UUID.fromString(Objects.requireNonNull(DATA_FILE.getString("owner"))));
   }
 
   public ItemStack getDisplayItem() {

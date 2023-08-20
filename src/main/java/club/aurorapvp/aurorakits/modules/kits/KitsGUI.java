@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class KitsGUI implements Listener {
   private static final Map<Player, KitsGUI> KITS_GUIS = new HashMap<>();
   private final Player player;
-  private List<Page> pages = new ArrayList<>();
+  private final List<Page> pages = new ArrayList<>();
   private int currentPage = 0;
   private int index;
 

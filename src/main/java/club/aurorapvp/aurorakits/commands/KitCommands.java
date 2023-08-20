@@ -2,7 +2,6 @@ package club.aurorapvp.aurorakits.commands;
 
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
-import club.aurorapvp.aurorakits.modules.kits.KitsGUI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
