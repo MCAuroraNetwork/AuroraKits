@@ -359,7 +359,6 @@ public class Kit {
   public void giveKit(Player player) {
     if (this.exists()) {
       player.getInventory().setContents(this.getItemStacks());
-      player.sendMessage(Lang.getComponent("kit-used"));
 
       LAST_USED_KIT.put(player, this);
     } else {

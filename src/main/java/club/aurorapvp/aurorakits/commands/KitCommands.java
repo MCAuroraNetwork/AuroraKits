@@ -29,6 +29,7 @@ public class KitCommands extends BaseCommand {
     Kit kit = Kit.getKit(player, name);
     if (kit != null) {
       kit.giveKit(player);
+      player.sendMessage(Lang.getComponent("kit-used"));
     } else {
       player.sendMessage(Lang.getComponent("kit-not-found"));
     }
