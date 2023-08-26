@@ -40,6 +40,7 @@ public class Lang {
     DEFAULTS.put("kit-created", "prefix <green>Kit created! Use /kits to get it!");
     DEFAULTS.put("kit-updated", "prefix <green>Kit updated! Use /kits to get it!");
     DEFAULTS.put("kit-used", "prefix <green>Kit used!");
+    DEFAULTS.put("kit-refilled", "prefix <green>Kit refilled!");
     DEFAULTS.put("kit-deleted", "prefix <red>Kit deleted");
     DEFAULTS.put("kit-too-many", "prefix <red>Too many kits");
     DEFAULTS.put("kit-invalid-name", "prefix <red>Invalid kit name");
