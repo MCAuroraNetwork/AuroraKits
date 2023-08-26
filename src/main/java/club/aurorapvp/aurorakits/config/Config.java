@@ -13,8 +13,8 @@ public class Config {
   private static YamlConfiguration config;
 
   public static void init() {
-    reload();
-    generateDefaults();
+    Config.reload();
+    Config.generateDefaults();
   }
 
   public static void generateDefaults() {
@@ -47,6 +47,10 @@ public class Config {
       try {
         FILE.getParentFile().mkdirs();
         FILE.createNewFile();
+
+        config = YamlConfiguration.loadConfiguration(FILE);
+
+        Config.generateDefaults();
       } catch (IOException e) {
         AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to generate config file", e);
       }
