@@ -36,9 +36,11 @@ public class Lang {
     DEFAULTS.put("frame-created", "prefix <green>Frame created!");
     DEFAULTS.put("frame-deleted", "prefix <red>Frame deleted");
     DEFAULTS.put("frame-invalid", "prefix <red>Invalid frame name");
-    DEFAULTS.put("GUIName", "<aqua>KitGUI");
-    DEFAULTS.put("kit-created", "prefix <green>Kit created! Use /kits to get it!");
-    DEFAULTS.put("kit-updated", "prefix <green>Kit updated! Use /kits to get it!");
+    DEFAULTS.put("GUIName", "<yellow>KitGUI");
+    DEFAULTS.put("kit-created",
+        "prefix <green>Kit created! Use <bold>/kits<reset><green> to get it!");
+    DEFAULTS.put("kit-updated",
+        "prefix <green>Kit updated! Use <bold>/kits<reset><green> to get it!");
     DEFAULTS.put("kit-used", "prefix <green>Kit used!");
     DEFAULTS.put("kit-refilled", "prefix <green>Kit refilled!");
     DEFAULTS.put("kit-deleted", "prefix <red>Kit deleted");
@@ -47,13 +49,13 @@ public class Lang {
     DEFAULTS.put("kit-invalid-item", "prefix <red>Invalid kit item");
     DEFAULTS.put("kit-not-found", "prefix <red>Kit not found");
     DEFAULTS.put("kit-already-exists", "prefix <red>Kit already exists");
-    DEFAULTS.put("next-page", "<aqua><bold>Next");
-    DEFAULTS.put("previous-page", "<aqua><bold>Previous");
+    DEFAULTS.put("next-page", "<yellow><bold>Next");
+    DEFAULTS.put("previous-page", "<yellow><bold>Previous");
     DEFAULTS.put("unknown-kit-command", "prefix <red>Unknown Kit Command! Use /help");
     DEFAULTS.put(
         "help-command",
         """
-            prefix <aqua><bold>All Commands:
+            prefix <yellow><bold>All Commands:
                     
             <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
             <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
