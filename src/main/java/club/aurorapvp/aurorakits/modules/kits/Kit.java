@@ -166,7 +166,7 @@ public class Kit {
   public static Set<Kit> getKits(Player player, boolean includePublic) {
     Set<Kit> playerKits = new HashSet<>();
 
-    if (PRIVATE_KITS.containsKey(player) && PRIVATE_KITS.get(player) != null) {
+    if (PRIVATE_KITS.containsKey(player)) {
       playerKits.addAll(PRIVATE_KITS.get(player));
     }
 
@@ -184,9 +184,11 @@ public class Kit {
   }
 
   public static Kit getKit(Player player, String kitName) {
-    for (Kit kit : PRIVATE_KITS.get(player)) {
-      if (Objects.equals(kit.getName(), kitName)) {
-        return kit;
+    if (PRIVATE_KITS.containsKey(player)) {
+      for (Kit kit : PRIVATE_KITS.get(player)) {
+        if (Objects.equals(kit.getName(), kitName)) {
+          return kit;
+        }
       }
     }
 

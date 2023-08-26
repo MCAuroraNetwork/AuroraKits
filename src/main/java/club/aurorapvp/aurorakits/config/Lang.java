@@ -37,8 +37,8 @@ public class Lang {
     DEFAULTS.put("frame-deleted", "prefix <red>Frame deleted");
     DEFAULTS.put("frame-invalid", "prefix <red>Invalid frame name");
     DEFAULTS.put("GUIName", "<aqua>KitGUI");
-    DEFAULTS.put("kit-created", "prefix <green>Kit created! Use /kits");
-    DEFAULTS.put("kit-updated", "prefix <green>Kit updated! Use /kits");
+    DEFAULTS.put("kit-created", "prefix <green>Kit created! Use /kits to get it!");
+    DEFAULTS.put("kit-updated", "prefix <green>Kit updated! Use /kits to get it!");
     DEFAULTS.put("kit-used", "prefix <green>Kit used!");
     DEFAULTS.put("kit-deleted", "prefix <red>Kit deleted");
     DEFAULTS.put("kit-too-many", "prefix <red>Too many kits");
