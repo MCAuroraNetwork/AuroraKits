@@ -35,7 +35,7 @@ public class KitCommands extends BaseCommand {
     }
   }
 
-  @Subcommand("create")
+  @Subcommand("create|save")
   @CommandPermission("aurorakits.command.kit.create")
   @Syntax("<name>")
   @Description("Creates a private kit")
@@ -49,7 +49,7 @@ public class KitCommands extends BaseCommand {
         .create(player.getInventory().getContents());
   }
 
-  @Subcommand("delete")
+  @Subcommand("delete|remove")
   @CommandPermission("aurorakits.command.kit.delete")
   @CommandCompletion("@kits")
   @Syntax("<name>")
@@ -64,7 +64,7 @@ public class KitCommands extends BaseCommand {
     }
   }
 
-  @Subcommand("createpublic")
+  @Subcommand("createpublic|savepublic")
   @CommandPermission("aurorakits.command.kit.createpublic")
   @Syntax("<name>")
   @Description("Creates a public kit")
@@ -73,7 +73,7 @@ public class KitCommands extends BaseCommand {
     new Kit(name, player, true).create(player.getInventory().getContents());
   }
 
-  @Subcommand("deletepublic")
+  @Subcommand("deletepublic|removepublic")
   @CommandPermission("aurorakits.command.kit.delete")
   @CommandCompletion("@kits")
   @Syntax("<name>")
