@@ -353,6 +353,11 @@ public class Kit {
   }
 
   public void editKit(Player player) {
+    // TODO do this better
+    if (this.isPublic()) {
+      return;
+    }
+
     Objects.requireNonNull(KitEditor.getEditor(player)).open(player, this);
   }
 
