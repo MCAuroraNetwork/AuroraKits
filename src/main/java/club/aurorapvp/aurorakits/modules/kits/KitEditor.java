@@ -21,16 +21,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class KitEditor implements Listener {
 
-  private static final Set<KitEditor> KIT_EDITORS = new HashSet<>();
-  private final Player owner;
+  private static final Map<Player, KitEditor> KIT_EDITORS = new HashMap<>();
+  private final Player player;
   private final Map<Kit, EditPage> kitEditors = new HashMap<>();
 
   public KitEditor(Player player) {
-    this.owner = player;
+    this.player = player;
 
     reload();
 
-    KIT_EDITORS.add(this);
+    KIT_EDITORS.put(player, this);
 
     Bukkit.getPluginManager().registerEvents(this, AuroraKits.INSTANCE);
   }
@@ -90,16 +90,7 @@ public class KitEditor implements Listener {
   }
 
   public static KitEditor getEditor(Player player) {
-    for (KitEditor kitEditor : KIT_EDITORS) {
-      if (kitEditor.getOwner() == player) {
-        return kitEditor;
-      }
-    }
-    return null;
-  }
-
-  public Player getOwner() {
-    return owner;
+    return KIT_EDITORS.getOrDefault(player, new KitEditor(player));
   }
 
   public void open(Player player, Kit kit) {
@@ -111,7 +102,7 @@ public class KitEditor implements Listener {
   }
 
   public void reload() {
-    Set<Kit> kitSet = Kit.getKits(this.getOwner(), false);
+    Set<Kit> kitSet = Kit.getKits(player, false);
 
     for (Kit kit : kitSet) {
       kitEditors.put(kit, new EditPage(kit));

@@ -101,7 +101,7 @@ public class KitsGUI implements Listener {
   }
 
   public static KitsGUI getGUI(Player player) {
-    return KITS_GUIS.get(player);
+    return KITS_GUIS.getOrDefault(player, new KitsGUI(player));
   }
 
   public static Set<KitsGUI> getGuis() {
