@@ -55,10 +55,6 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerKilled(PlayerKilledByPlayerEvent event) {
-    if (!AuroraKits.isAuroraCombatInstalled()) {
-      return;
-    }
-
     if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
       Kit kit = Kit.getLastUsedKit(event.getKiller());
 
