@@ -108,10 +108,6 @@ public class KitsGUI implements Listener {
     return Set.copyOf(KITS_GUIS.values());
   }
 
-  public static void open(Player player) {
-    player.openInventory(Objects.requireNonNull(KitsGUI.getGUI(player)).getCurrentPage());
-  }
-
   public Player getPlayer() {
     return player;
   }
@@ -147,7 +143,7 @@ public class KitsGUI implements Listener {
     } else {
       currentPage = 0;
     }
-    KitsGUI.open(player);
+    player.openInventory(KitsGUI.getGUI(player).getCurrentPage());
   }
 
   public void previousPage() {
@@ -156,7 +152,7 @@ public class KitsGUI implements Listener {
     } else {
       currentPage = index;
     }
-    KitsGUI.open(player);
+    player.openInventory(KitsGUI.getGUI(player).getCurrentPage());
   }
 
   public Inventory getCurrentPage() {
