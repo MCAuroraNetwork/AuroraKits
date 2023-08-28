@@ -4,6 +4,7 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.KitDataHandler;
+import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
 import java.io.File;
 import java.util.HashMap;
@@ -143,6 +144,14 @@ public class Kit {
 
   @SuppressWarnings("unused")
   public static void giveKit(Kit kit, Player player) {
+    KitGiveEvent event = new KitGiveEvent(kit, player);
+
+    event.callEvent();
+
+    if (event.isCancelled()) {
+      return;
+    }
+
     kit.giveKit(player);
   }
 
@@ -349,15 +358,6 @@ public class Kit {
     }
   }
 
-  public void editKit(Player player) {
-    // TODO do this better
-    if (this.isPublic()) {
-      return;
-    }
-
-    Objects.requireNonNull(KitEditor.getEditor(player)).open(player, this);
-  }
-
   public void giveKit(Player player) {
     if (this.exists()) {
       player.getInventory().setContents(this.getItemStacks());
@@ -366,6 +366,15 @@ public class Kit {
     } else {
       player.sendMessage(Lang.getComponent("kit-not-found"));
     }
+  }
+
+  public void editKit(Player player) {
+    // TODO do this better
+    if (this.isPublic()) {
+      return;
+    }
+
+    Objects.requireNonNull(KitEditor.getEditor(player)).open(player, this);
   }
 
   public void reload() {

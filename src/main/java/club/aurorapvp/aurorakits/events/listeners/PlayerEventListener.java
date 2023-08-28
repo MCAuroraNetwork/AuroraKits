@@ -3,6 +3,7 @@ package club.aurorapvp.aurorakits.events.listeners;
 import club.aurorapvp.auroracombat.events.custom.PlayerKilledByPlayerEvent;
 import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.config.Lang;
+import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.modules.Frame;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
@@ -22,6 +23,14 @@ public class PlayerEventListener implements Listener {
       Kit kit = Kit.getLastUsedKit(event.getPlayer());
 
       if (kit != null) {
+        KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, event.getPlayer());
+
+        event.callEvent();
+
+        if (kitGiveEvent.isCancelled()) {
+          return;
+        }
+
         kit.giveKit(event.getPlayer());
       }
 
@@ -48,6 +57,14 @@ public class PlayerEventListener implements Listener {
     Kit kit = Kit.getLastUsedKit(event.getPlayer());
 
     if (kit != null) {
+      KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, event.getPlayer());
+
+      event.callEvent();
+
+      if (kitGiveEvent.isCancelled()) {
+        return;
+      }
+
       kit.giveKit(event.getPlayer());
 
       event.getPlayer().sendMessage(Lang.getComponent("kit-refilled"));
@@ -63,6 +80,14 @@ public class PlayerEventListener implements Listener {
     Kit kit = Kit.getLastUsedKit(event.getKiller());
 
     if (kit != null) {
+      KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, event.getKiller());
+
+      event.callEvent();
+
+      if (kitGiveEvent.isCancelled()) {
+        return;
+      }
+
       kit.giveKit(event.getKiller());
 
       event.getKiller().sendMessage(Lang.getComponent("kit-refilled"));

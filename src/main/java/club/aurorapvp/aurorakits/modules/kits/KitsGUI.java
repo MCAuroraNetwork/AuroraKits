@@ -2,12 +2,12 @@ package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
+import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -94,6 +94,14 @@ public class KitsGUI implements Listener {
       if (event.isRightClick() && !kit.isPublic()) {
         kit.editKit(player);
       } else {
+        KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, player);
+
+        event.callEvent();
+
+        if (kitGiveEvent.isCancelled()) {
+          return;
+        }
+
         kit.giveKit(player);
         player.sendMessage(Lang.getComponent("kit-used"));
       }
