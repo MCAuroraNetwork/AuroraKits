@@ -1,7 +1,6 @@
 package club.aurorapvp.aurorakits.events.listeners;
 
 import club.aurorapvp.auroracombat.events.custom.PlayerKilledByPlayerEvent;
-import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.modules.Frame;
@@ -42,12 +41,14 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerRespawn(PlayerPostRespawnEvent event) {
-    if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
-      Kit kit = Kit.getLastUsedKit(event.getPlayer());
+    if (!Config.get().getBoolean("kits.give-last-kit.enabled")) {
+      return;
+    }
 
-      if (kit != null) {
-        kit.giveKit(event.getPlayer());
-      }
+    Kit kit = Kit.getLastUsedKit(event.getPlayer());
+
+    if (kit != null) {
+      kit.giveKit(event.getPlayer());
 
       event.getPlayer().sendMessage(Lang.getComponent("kit-refilled"));
     }
@@ -55,12 +56,14 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerKilled(PlayerKilledByPlayerEvent event) {
-    if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
-      Kit kit = Kit.getLastUsedKit(event.getKiller());
+    if (!Config.get().getBoolean("kits.give-last-kit.enabled")) {
+      return;
+    }
 
-      if (kit != null) {
-        kit.giveKit(event.getKiller());
-      }
+    Kit kit = Kit.getLastUsedKit(event.getKiller());
+
+    if (kit != null) {
+      kit.giveKit(event.getKiller());
 
       event.getKiller().sendMessage(Lang.getComponent("kit-refilled"));
     }
