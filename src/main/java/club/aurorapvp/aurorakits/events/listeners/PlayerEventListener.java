@@ -25,7 +25,7 @@ public class PlayerEventListener implements Listener {
       if (kit != null) {
         KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, event.getPlayer());
 
-        event.callEvent();
+        kitGiveEvent.callEvent();
 
         if (kitGiveEvent.isCancelled()) {
           return;
@@ -59,7 +59,7 @@ public class PlayerEventListener implements Listener {
     if (kit != null) {
       KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, event.getPlayer());
 
-      event.callEvent();
+      kitGiveEvent.callEvent();
 
       if (kitGiveEvent.isCancelled()) {
         return;
@@ -82,7 +82,7 @@ public class PlayerEventListener implements Listener {
     if (kit != null) {
       KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, event.getKiller());
 
-      event.callEvent();
+      kitGiveEvent.callEvent();
 
       if (kitGiveEvent.isCancelled()) {
         return;

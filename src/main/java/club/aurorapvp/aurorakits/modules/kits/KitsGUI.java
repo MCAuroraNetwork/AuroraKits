@@ -96,7 +96,7 @@ public class KitsGUI implements Listener {
       } else {
         KitGiveEvent kitGiveEvent = new KitGiveEvent(kit, player);
 
-        event.callEvent();
+        kitGiveEvent.callEvent();
 
         if (kitGiveEvent.isCancelled()) {
           return;
