@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -90,7 +91,11 @@ public class KitEditor implements Listener {
   }
 
   public static KitEditor getEditor(Player player) {
-    return KIT_EDITORS.getOrDefault(player, new KitEditor(player));
+    return KIT_EDITORS.get(player);
+  }
+
+  public static void unregister(Player player) {
+    KIT_EDITORS.remove(player);
   }
 
   public void open(Player player, Kit kit) {

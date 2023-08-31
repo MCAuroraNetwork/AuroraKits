@@ -6,6 +6,8 @@ import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.modules.Frame;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
+import club.aurorapvp.aurorakits.modules.kits.KitEditor;
+import club.aurorapvp.aurorakits.modules.kits.KitsGUI;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,11 +38,16 @@ public class PlayerEventListener implements Listener {
 
       event.getPlayer().sendMessage(Lang.getComponent("kit-refilled"));
     }
+
+    new KitEditor(event.getPlayer());
+    new KitsGUI(event.getPlayer());
   }
 
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
     Kit.unregister(event.getPlayer());
+    KitsGUI.unregister(event.getPlayer());
+    KitEditor.unregister(event.getPlayer());
   }
 
   @EventHandler

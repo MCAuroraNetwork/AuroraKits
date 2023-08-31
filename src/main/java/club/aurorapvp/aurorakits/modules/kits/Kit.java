@@ -224,6 +224,9 @@ public class Kit {
             yaml.getBoolean("isPublic"));
       }
     }
+
+    new KitEditor(player);
+    new KitsGUI(player);
   }
 
   public static void unregister(Player player) {
@@ -232,8 +235,6 @@ public class Kit {
         Kit.getKits().remove(kit);
       }
     }
-
-    KitsGUI.unregister(player);
   }
 
   public static Kit getLastUsedKit(Player player) {
@@ -311,8 +312,8 @@ public class Kit {
         kitsGui.addKit(this);
       }
     } else {
-      Objects.requireNonNull(KitEditor.getEditor(owner.getPlayer())).addKit(this);
-      Objects.requireNonNull(KitsGUI.getGUI(owner.getPlayer())).addKit(this);
+      KitEditor.getEditor(owner.getPlayer()).addKit(this);
+      KitsGUI.getGUI(owner.getPlayer()).addKit(this);
     }
 
     Objects.requireNonNull(owner.getPlayer()).sendMessage(Lang.getComponent("kit-created"));
@@ -373,7 +374,7 @@ public class Kit {
       return;
     }
 
-    Objects.requireNonNull(KitEditor.getEditor(player)).open(player, this);
+    KitEditor.getEditor(player).open(player, this);
   }
 
   public void reload() {
