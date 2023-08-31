@@ -369,8 +369,7 @@ public class Kit {
   }
 
   public void editKit(Player player) {
-    // TODO do this better
-    if (this.isPublic()) {
+    if (this.getOwner() == player) {
       return;
     }
 
