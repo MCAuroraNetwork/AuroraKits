@@ -171,59 +171,39 @@ public class KitsGUI implements Listener {
   }
 
   public void reload() {
-    List<Kit> kitList = new ArrayList<>(Kit.getKits(this.getPlayer(), true));
+    Set<Kit> kitSet = Kit.getKits(this.getPlayer(), true);
 
-    kitList.sort((kit1, kit2) -> {
-      int nameComparison = kit1.getName().compareTo(kit2.getName());
+    List<Kit> publicKits = new ArrayList<>();
+    List<Kit> privateKits = new ArrayList<>();
 
-      if (nameComparison == 0) {
-        if (kit1.isPublic() && !kit2.isPublic()) {
-          return -1;
-        } else if (!kit1.isPublic() && kit2.isPublic()) {
-          return 1;
-        }
-      }
-
-      return nameComparison;
-    });
-
-    Set<Kit> kitSet = new HashSet<>(kitList);
-
-    for (int i = 0; i < kitSet.size(); i++) {
-      if (i % 44 == 0 && i != 0) {
-        index++;
+    for (Kit kit : kitSet) {
+      if (kit.isPublic()) {
+        publicKits.add(kit);
+      } else {
+        privateKits.add(kit);
       }
     }
 
-    int currentPages = index + 1;
+    publicKits.sort(Comparator.comparing(Kit::getName));
+    privateKits.sort(Comparator.comparing(Kit::getName));
 
-    for (int i = 0; i < currentPages; i++) {
-      int numKits = kitSet.size() - i * 45;
-      Kit[] kits = new Kit[Math.max(numKits, 0)];
+    List<Kit> sortedKits = new ArrayList<>(publicKits);
+    sortedKits.addAll(privateKits);
 
-      Iterator<Kit> iterator = kitSet.iterator();
+    int pageSize = 45;
+    int totalPages = (int) Math.ceil((double) sortedKits.size() / pageSize);
 
-      int counter = 0;
+    for (int pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+      int start = pageIndex * pageSize;
+      int end = Math.min(start + pageSize, sortedKits.size());
 
-      while (iterator.hasNext()) {
-        if (counter < i * 45) {
-          iterator.next();
-          counter++;
-          continue;
-        }
+      List<Kit> kitsOnPage = sortedKits.subList(start, end);
+      Kit[] kitsArray = kitsOnPage.toArray(new Kit[0]);
 
-        if (counter - i * 45 >= kits.length) {
-          break;
-        }
-
-        kits[counter - i * 45] = iterator.next();
-        counter++;
-      }
-
-      pages.add(new Page(kits, this));
-      index++;
+      pages.add(new Page(kitsArray, this));
     }
   }
+
 
   public static class Page implements InventoryHolder {
 
