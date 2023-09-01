@@ -370,7 +370,8 @@ public class Kit {
   }
 
   public void editKit(Player player) {
-    if (this.getOwner() == player) {
+    if (!(this.getOwner() == player)) {
+      player.sendMessage(Lang.getComponent("not-your-kit"));
       return;
     }
 

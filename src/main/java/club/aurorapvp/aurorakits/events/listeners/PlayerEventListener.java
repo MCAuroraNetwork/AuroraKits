@@ -20,6 +20,8 @@ public class PlayerEventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.register(event.getPlayer());
+    new KitEditor(event.getPlayer());
+    new KitsGUI(event.getPlayer());
 
     if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
       Kit kit = Kit.getLastUsedKit(event.getPlayer());
@@ -38,9 +40,6 @@ public class PlayerEventListener implements Listener {
 
       event.getPlayer().sendMessage(Lang.getComponent("kit-refilled"));
     }
-
-    new KitEditor(event.getPlayer());
-    new KitsGUI(event.getPlayer());
   }
 
   @EventHandler
