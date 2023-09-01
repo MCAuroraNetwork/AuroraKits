@@ -4,7 +4,10 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -168,7 +171,23 @@ public class KitsGUI implements Listener {
   }
 
   public void reload() {
-    Set<Kit> kitSet = Kit.getKits(this.getPlayer(), true);
+    List<Kit> kitList = new ArrayList<>(Kit.getKits(this.getPlayer(), true));
+
+    kitList.sort((kit1, kit2) -> {
+      int nameComparison = kit1.getName().compareTo(kit2.getName());
+
+      if (nameComparison == 0) {
+        if (kit1.isPublic() && !kit2.isPublic()) {
+          return -1;
+        } else if (!kit1.isPublic() && kit2.isPublic()) {
+          return 1;
+        }
+      }
+
+      return nameComparison;
+    });
+
+    Set<Kit> kitSet = new HashSet<>(kitList);
 
     for (int i = 0; i < kitSet.size(); i++) {
       if (i % 44 == 0 && i != 0) {
