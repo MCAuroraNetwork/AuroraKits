@@ -23,7 +23,7 @@ public class Kit {
 
   private static final Map<OfflinePlayer, Set<Kit>> PRIVATE_KITS = new HashMap<>();
   private static final Map<OfflinePlayer, Set<Kit>> PUBLIC_KITS = new HashMap<>();
-  private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
+  public static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitDataHandler data;
   private final boolean isPublic;
   private final String name;
@@ -144,14 +144,6 @@ public class Kit {
 
   @SuppressWarnings("unused")
   public static void giveKit(Kit kit, Player player) {
-    KitGiveEvent event = new KitGiveEvent(kit, player);
-
-    event.callEvent();
-
-    if (event.isCancelled()) {
-      return;
-    }
-
     kit.giveKit(player);
   }
 
@@ -361,9 +353,7 @@ public class Kit {
 
   public void giveKit(Player player) {
     if (this.exists()) {
-      player.getInventory().setContents(this.getItemStacks());
-
-      LAST_USED_KIT.put(player, this);
+      new KitGiveEvent(this, player).callEvent();
     } else {
       player.sendMessage(Lang.getComponent("kit-not-found"));
     }

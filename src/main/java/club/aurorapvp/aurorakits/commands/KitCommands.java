@@ -1,7 +1,6 @@
 package club.aurorapvp.aurorakits.commands;
 
 import club.aurorapvp.aurorakits.config.Lang;
-import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
@@ -29,14 +28,6 @@ public class KitCommands extends BaseCommand {
   public void onGive(Player player, String name) {
     Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      KitGiveEvent event = new KitGiveEvent(kit, player);
-
-      event.callEvent();
-
-      if (event.isCancelled()) {
-        return;
-      }
-
       kit.giveKit(player);
       player.sendMessage(Lang.getComponent("kit-used"));
     } else {
