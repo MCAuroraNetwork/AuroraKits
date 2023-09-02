@@ -1,17 +1,15 @@
 package club.aurorapvp.aurorakits.data;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+// TODO this is terrible
 public class ItemStackDataType implements PersistentDataType<byte[], ItemStack> {
 
   @Override
@@ -25,33 +23,20 @@ public class ItemStackDataType implements PersistentDataType<byte[], ItemStack> 
   }
 
   @Override
-  public byte @NotNull [] toPrimitive(ItemStack complex,
-      @NotNull PersistentDataAdapterContext context) {
-    try {
-      ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-      ObjectOutputStream objectOutStream = new ObjectOutputStream(byteOutStream);
-      objectOutStream.writeObject(complex.serialize());
-      return Base64.getEncoder().encode(byteOutStream.toByteArray());
-    } catch (IOException e) {
-      throw new IllegalStateException("Failed to convert ItemStack to byte array.", e);
-    }
+  public byte @NotNull [] toPrimitive(ItemStack complex, @NotNull PersistentDataAdapterContext context) {
+    YamlConfiguration config = new YamlConfiguration();
+    config.set("item", complex.serialize());
+    return config.saveToString().getBytes(StandardCharsets.UTF_8);
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public @NotNull ItemStack fromPrimitive(byte @NotNull [] primitive,
-      @NotNull PersistentDataAdapterContext context) {
+  public @NotNull ItemStack fromPrimitive(byte @NotNull [] primitive, @NotNull PersistentDataAdapterContext context) {
+    YamlConfiguration config = new YamlConfiguration();
     try {
-      ByteArrayInputStream byteInStream = new ByteArrayInputStream(
-          Base64.getDecoder().decode(primitive));
-      ObjectInputStream objectInStream = new ObjectInputStream(byteInStream);
-      Object object = objectInStream.readObject();
-      if (object instanceof Map) {
-        return ItemStack.deserialize((Map<String, Object>) object);
-      } else {
-        throw new IllegalStateException("Data is not an ItemStack.");
-      }
-    } catch (IOException | ClassNotFoundException e) {
+      config.loadFromString(new String(primitive, StandardCharsets.UTF_8));
+      return ItemStack.deserialize((Map<String, Object>) Objects.requireNonNull(config.get("item")));
+    } catch (Exception e) {
       throw new IllegalStateException("Failed to convert byte array to ItemStack.", e);
     }
   }
