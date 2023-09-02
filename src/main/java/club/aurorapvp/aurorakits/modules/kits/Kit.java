@@ -4,6 +4,8 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.KitDataHandler;
+import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
+import club.aurorapvp.aurorakits.events.custom.KitDeleteEvent;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
 import java.io.File;
@@ -23,7 +25,7 @@ public class Kit {
 
   private static final Map<OfflinePlayer, Set<Kit>> PRIVATE_KITS = new HashMap<>();
   private static final Map<OfflinePlayer, Set<Kit>> PUBLIC_KITS = new HashMap<>();
-  public static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
+  private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitDataHandler data;
   private final boolean isPublic;
   private final String name;
@@ -85,16 +87,48 @@ public class Kit {
     AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
   }
 
+  public static Set<Kit> getPublicKits() {
+    Set<Kit> set = new HashSet<>();
+
+    for (Set<Kit> kits : PUBLIC_KITS.values()) {
+      set.addAll(kits);
+    }
+
+    return set;
+  }
+
+  @SuppressWarnings("unused")
+  public static Set<Kit> getPrivateKits() {
+    Set<Kit> set = new HashSet<>();
+
+    for (Set<Kit> kits : PRIVATE_KITS.values()) {
+      set.addAll(kits);
+    }
+
+    return set;
+  }
+
+  public static Set<Kit> getPublicKits(Player player) {
+    return PUBLIC_KITS.get(player);
+  }
+
+  public static Set<Kit> getPrivateKits(Player player) {
+    return PRIVATE_KITS.get(player);
+  }
+
+  public static void setLastUsedKit(Player player, Kit kit) {
+    LAST_USED_KIT.put(player, kit);
+  }
+
   public static int getAmount(Player player, boolean includePublic) {
     return getKits(player, includePublic).size();
   }
 
   @SuppressWarnings("unused")
   public static Kit createKit(String name, Player player) {
-    Kit kit;
+    Kit kit = new Kit(name, player, true);
 
-    kit = new Kit(name, player, true);
-    kit.create(player.getInventory().getContents());
+    new KitCreateEvent(player, kit);
 
     return kit;
   }
@@ -103,7 +137,7 @@ public class Kit {
   public static void deleteKit(String name) {
     for (Kit kit : getKits()) {
       if (Objects.equals(kit.getName(), name)) {
-        kit.delete(null, true);
+        new KitDeleteEvent(null, kit).callEvent();
       }
     }
   }
@@ -124,16 +158,6 @@ public class Kit {
     for (Set<Kit> kits : PRIVATE_KITS.values()) {
       set.addAll(kits);
     }
-
-    for (Set<Kit> kits : PUBLIC_KITS.values()) {
-      set.addAll(kits);
-    }
-
-    return set;
-  }
-
-  public static Set<Kit> getPublicKits() {
-    Set<Kit> set = new HashSet<>();
 
     for (Set<Kit> kits : PUBLIC_KITS.values()) {
       set.addAll(kits);
@@ -333,27 +357,11 @@ public class Kit {
     }
 
     data.getFile().delete();
-
-    if (isPublic) {
-      for (KitsGUI kitsGui : KitsGUI.getGuis()) {
-        kitsGui.removeKit(this);
-      }
-    } else {
-      Objects.requireNonNull(KitsGUI.getGUI(player)).removeKit(this);
-    }
-
-    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).get(player);
-
-    set.remove(this);
-
-    if (player != null) {
-      player.sendMessage(Lang.getComponent("kit-deleted"));
-    }
   }
 
   public void giveKit(Player player) {
     if (this.exists()) {
-      new KitGiveEvent(this, player).callEvent();
+      new KitGiveEvent(player, this).callEvent();
     } else {
       player.sendMessage(Lang.getComponent("kit-not-found"));
     }

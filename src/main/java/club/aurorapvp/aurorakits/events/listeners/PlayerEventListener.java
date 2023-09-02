@@ -1,16 +1,18 @@
 package club.aurorapvp.aurorakits.events.listeners;
 
-import static club.aurorapvp.aurorakits.modules.kits.Kit.LAST_USED_KIT;
-
 import club.aurorapvp.auroracombat.events.custom.PlayerKilledByPlayerEvent;
 import club.aurorapvp.aurorakits.config.Config;
 import club.aurorapvp.aurorakits.config.Lang;
+import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
+import club.aurorapvp.aurorakits.events.custom.KitDeleteEvent;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.modules.Frame;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import club.aurorapvp.aurorakits.modules.kits.KitEditor;
 import club.aurorapvp.aurorakits.modules.kits.KitsGUI;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import java.util.Objects;
+import java.util.Set;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -42,7 +44,35 @@ public class PlayerEventListener implements Listener {
   public void onKitGive(KitGiveEvent event) {
     event.getPlayer().getInventory().setContents(event.getKit().getItemStacks());
 
-    LAST_USED_KIT.put(event.getPlayer(), event.getKit());
+    Kit.setLastUsedKit(event.getPlayer(), event.getKit());
+  }
+
+  @EventHandler
+      (priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onKitCreate(KitCreateEvent event) {
+    event.getKit().create(event.getPlayer().getInventory().getContents());
+  }
+
+
+  @EventHandler
+      (priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onKitDelete(KitDeleteEvent event) {
+    if (event.getKit().isPublic()) {
+      for (KitsGUI kitsGui : KitsGUI.getGuis()) {
+        kitsGui.reload();
+      }
+    } else {
+      Objects.requireNonNull(KitsGUI.getGUI(event.getPlayer())).reload();
+    }
+
+    Set<Kit> set = (event.getKit().isPublic() ? Kit.getPublicKits(event.getPlayer())
+        : Kit.getPrivateKits(event.getPlayer()));
+
+    set.remove(event.getKit());
+
+    if (event.getPlayer() != null) {
+      event.getPlayer().sendMessage(Lang.getComponent("kit-deleted"));
+    }
   }
 
   @EventHandler

@@ -14,7 +14,7 @@ public class KitGiveEvent extends Event implements Cancellable {
   private final Kit kit;
   private boolean cancelled;
 
-  public KitGiveEvent(Kit kit, Player player) {
+  public KitGiveEvent(Player player, Kit kit) {
     this.player = player;
     this.kit = kit;
   }

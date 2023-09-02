@@ -3,7 +3,6 @@ package club.aurorapvp.aurorakits.modules.kits;
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +100,13 @@ public class KitsGUI implements Listener {
   }
 
   public static KitsGUI getGUI(Player player) {
-    return KITS_GUIS.getOrDefault(player, new KitsGUI(player));
+    KitsGUI gui = KITS_GUIS.get(player);
+
+    if (gui == null) {
+      return new KitsGUI(player);
+    }
+
+    return gui;
   }
 
   public static Set<KitsGUI> getGuis() {
@@ -119,21 +124,6 @@ public class KitsGUI implements Listener {
       new Page(kit, this);
     } else {
       lastPage.addItem(kit.getDisplayItem());
-    }
-  }
-
-  public void removeKit(Kit kit) {
-    for (Page page : pages) {
-      for (ItemStack itemStack : page.getInventory().getContents()) {
-
-        if (itemStack == null) {
-          continue;
-        }
-
-        if (itemStack.isSimilar(kit.getDisplayItem())) {
-          page.getInventory().remove(itemStack);
-        }
-      }
     }
   }
 
