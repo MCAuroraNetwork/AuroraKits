@@ -76,14 +76,14 @@ public class KitDataHandler {
     DATA_FILE.set("displayItem", kit.getDisplayItem());
 
     for (int i = 0; i < kit.getContents().length; i++) {
-      DATA_FILE.set("items.contents" + i, kit.getContents()[i]);
+      DATA_FILE.set("items.contents." + i, kit.getContents()[i]);
     }
 
     for (int i = 0; i < kit.getArmor().length; i++) {
-      DATA_FILE.set("items.armor" + i, kit.getContents()[i]);
+      DATA_FILE.set("items.armor." + i, kit.getContents()[i]);
     }
 
-    DATA_FILE.set("items.offhand", kit.getOffhand());
+    DATA_FILE.set("items.offhand.", kit.getOffhand());
 
     save();
   }
