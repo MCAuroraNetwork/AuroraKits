@@ -183,7 +183,6 @@ public class KitsGUI implements Listener {
       Kit[] kitsArray = kitsOnPage.toArray(new Kit[0]);
 
       pages.add(new Page(kitsArray, this));
-      index++;
     }
   }
 
