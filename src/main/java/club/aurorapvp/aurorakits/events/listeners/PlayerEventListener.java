@@ -59,6 +59,11 @@ public class PlayerEventListener implements Listener {
   @EventHandler
       (priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onKitDelete(KitDeleteEvent event) {
+    Set<Kit> set = (event.getKit().isPublic() ? Kit.getPublicKits(event.getPlayer())
+        : Kit.getPrivateKits(event.getPlayer()));
+
+    set.remove(event.getKit());
+
     if (event.getKit().isPublic()) {
       for (KitsGUI kitsGui : KitsGUI.getGuis()) {
         kitsGui.reload();
@@ -66,11 +71,6 @@ public class PlayerEventListener implements Listener {
     } else {
       Objects.requireNonNull(KitsGUI.getGUI(event.getPlayer())).reload();
     }
-
-    Set<Kit> set = (event.getKit().isPublic() ? Kit.getPublicKits(event.getPlayer())
-        : Kit.getPrivateKits(event.getPlayer()));
-
-    set.remove(event.getKit());
 
     if (event.getPlayer() != null) {
       event.getPlayer().sendMessage(Lang.getComponent("kit-deleted"));
