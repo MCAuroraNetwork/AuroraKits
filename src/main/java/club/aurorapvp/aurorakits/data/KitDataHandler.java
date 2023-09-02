@@ -80,7 +80,7 @@ public class KitDataHandler {
     }
 
     for (int i = 0; i < kit.getArmor().length; i++) {
-      DATA_FILE.set("items.armor." + i, kit.getContents()[i]);
+      DATA_FILE.set("items.armor." + i, kit.getArmor()[i]);
     }
 
     DATA_FILE.set("items.offhand", kit.getOffhand());

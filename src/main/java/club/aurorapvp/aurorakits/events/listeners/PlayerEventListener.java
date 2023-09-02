@@ -59,7 +59,7 @@ public class PlayerEventListener implements Listener {
   @EventHandler
       (priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onKitDelete(KitDeleteEvent event) {
-    Set<Kit> set = (event.getKit().isPublic() ? Kit.getPublicKits(event.getPlayer())
+    Set<Kit> set = (event.getKit().isPublic() ? Kit.getPublicKits()
         : Kit.getPrivateKits(event.getPlayer()));
 
     set.remove(event.getKit());
