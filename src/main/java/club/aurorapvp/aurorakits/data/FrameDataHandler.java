@@ -2,60 +2,42 @@ package club.aurorapvp.aurorakits.data;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.modules.Frame;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 
 public class FrameDataHandler {
 
-  private static final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "/frames.yml");
-  private static final YamlConfiguration framesData = YamlConfiguration.loadConfiguration(FILE);
+  private static final NamespacedKey key = new NamespacedKey(AuroraKits.INSTANCE, "frame");
   private final Frame frame;
+  private final ItemFrame itemFrame;
 
   public FrameDataHandler(Frame frame) {
     this.frame = frame;
-  }
-
-  public static YamlConfiguration get() {
-    return framesData;
+    this.itemFrame = frame.getItemFrame();
   }
 
   public boolean exists() {
-    return get().contains("frames." + frame.getName());
-  }
-
-  public Location getLocation() {
-    return get().getLocation("frames." + frame.getName() + ".location");
+    return itemFrame.getPersistentDataContainer().has(key);
   }
 
   public ItemStack getItem() {
-    return get().getItemStack("frames." + frame.getName() + ".item");
+    PersistentDataContainer container = itemFrame.getPersistentDataContainer();
+
+    return container.get(key, new ItemStackDataType());
   }
 
-  @SuppressWarnings("ResultOfMethodCallIgnored")
-  public void save() {
-    try {
-      if (!FILE.exists()) {
-        FILE.getParentFile().mkdirs();
-        FILE.createNewFile();
-      }
-      get().save(FILE);
-    } catch (IOException e) {
-      AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to save frame data", e);
-    }
-  }
 
   public void delete() {
-    get().set("frames." + frame.getName(), null);
-    save();
+    PersistentDataContainer container = itemFrame.getPersistentDataContainer();
+
+    container.remove(key);
   }
 
   public void create() {
-    get().set("frames." + frame.getName() + ".item", frame.getContents());
-    get().set("frames." + frame.getName() + ".location", frame.getLocation());
-    save();
+    PersistentDataContainer container = itemFrame.getPersistentDataContainer();
+
+    container.set(key, new ItemStackDataType(), frame.getContents());
   }
 }

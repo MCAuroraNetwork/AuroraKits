@@ -8,6 +8,7 @@ import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.PaperCommandManager;
 import java.util.ArrayList;
 import java.util.List;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 
 public class CommandManager {
@@ -39,13 +40,13 @@ public class CommandManager {
     commandCompletions.registerCompletion(
         "frames",
         c -> {
-          List<String> kitNames = new ArrayList<>();
+          List<String> frameNames = new ArrayList<>();
 
           for (Frame frame : Frame.getFrames()) {
-            kitNames.add(frame.getName());
+            frameNames.add(PlainTextComponentSerializer.plainText().serialize(frame.getName()));
           }
 
-          return kitNames;
+          return frameNames;
         });
   }
 }

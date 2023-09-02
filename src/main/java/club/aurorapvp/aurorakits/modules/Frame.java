@@ -4,17 +4,16 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.FrameDataHandler;
 import club.aurorapvp.aurorakits.util.StringUtil;
-import java.io.File;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Set;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -24,72 +23,55 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Frame {
 
-  private static final Set<Frame> frames = new HashSet<>();
-  private final String name;
+  private static final Map<ItemFrame, Frame> frames = new HashMap<>();
   private final FrameDataHandler data;
-  private Location location;
+  private final ItemFrame itemFrame;
   private ItemStack contents;
 
-  public Frame(String frameName) {
-    this.name = frameName;
+  public Frame(ItemFrame itemFrame) {
+    this.itemFrame = itemFrame;
     this.data = new FrameDataHandler(this);
-
-    frames.add(this);
 
     if (this.exists()) {
       this.reload();
+
+      frames.put(itemFrame, this);
     }
   }
 
   public static void init() {
-    File file = new File(AuroraKits.INSTANCE.getDataFolder(), "/frames.yml");
-    YamlConfiguration framesData = YamlConfiguration.loadConfiguration(file);
-    ConfigurationSection section = framesData.getConfigurationSection("frames");
-
-    if (section == null) {
-      return;
+    for (World world : Bukkit.getWorlds()) {
+      for (Entity entity : world.getEntities()) {
+        if (entity instanceof ItemFrame itemFrame) {
+          new Frame(itemFrame);
+        }
+      }
     }
-
-    for (String name : section.getKeys(false)) {
-      new Frame(name);
-    }
-    AuroraKits.INSTANCE.getLogger().info("All frames loaded!");
   }
 
   public static void reloadAll() {
-    for (Frame frame : frames) {
+    for (Frame frame : frames.values()) {
       frame.reload();
     }
     AuroraKits.INSTANCE.getLogger().info("All frames reloaded!");
   }
 
-  public static Frame getFrame(Location loc) {
-    for (Frame frame : frames) {
-      if (frame.getLocation().equals(loc)) {
-        return frame;
-      }
-    }
-    return null;
+  public static void remove(ItemFrame itemFrame) {
+    frames.remove(itemFrame);
   }
 
-  @SuppressWarnings("unused")
-  public static Frame getFrame(String frameName) {
-    for (Frame frame : frames) {
-      if (Objects.equals(frame.getName(), frameName)) {
-        return frame;
-      }
-    }
-    return null;
+  public static Frame getFrame(ItemFrame itemFrame) {
+    return frames.get(itemFrame);
   }
 
   public static Set<Frame> getFrames() {
-    return frames;
+    return Set.copyOf(frames.values());
   }
 
   public static void onClicked(PlayerInteractEntityEvent event) {
     final Entity clicked = event.getRightClicked();
-    if (clicked instanceof ItemFrame) {
-      Frame frame = Frame.getFrame(clicked.getLocation());
+    if (clicked instanceof ItemFrame itemFrame) {
+      Frame frame = Frame.getFrame(itemFrame);
       if (frame != null) {
         event.getPlayer().getInventory().addItem(frame.getContents());
         event.setCancelled(true);
@@ -118,38 +100,32 @@ public class Frame {
     return data;
   }
 
-  public String getName() {
-    return name;
+  public Component getName() {
+    return this.getContents().displayName();
   }
 
-  public Location getLocation() {
-    return location;
+  public ItemFrame getItemFrame() {
+    return itemFrame;
   }
 
   public boolean exists() {
     return this.getData().exists();
   }
 
-  public void create(Player player) {
+  public void create(Player player, String name) {
     if (name != null && player != null) {
-      Block block = player.getTargetBlockExact(10);
-      assert block != null;
-      ItemFrame frame = player.getWorld().spawn(block.getLocation(), ItemFrame.class);
-      frame.teleport(
-          block.getRelative(Objects.requireNonNull(Frame.getBlockFace(player))).getLocation());
-      frame.setFacingDirection(Objects.requireNonNull(Frame.getBlockFace(player)), true);
-
       contents = player.getInventory().getItemInMainHand();
-      location = frame.getLocation();
 
       ItemStack displayItem = player.getInventory().getItemInMainHand();
       ItemMeta meta = displayItem.getItemMeta();
-      meta.displayName(Component.text(StringUtil.convertToNormalTypedLanguage(name)));
+      meta.displayName(MiniMessage.miniMessage()
+          .deserialize(StringUtil.convertToNormalTypedLanguage(name)));
       displayItem.setItemMeta(meta);
 
-      frame.setItem(displayItem);
+      itemFrame.setItem(displayItem);
 
       this.data.create();
+      frames.put(itemFrame, this);
 
       player.sendMessage(Lang.getComponent("frame-created"));
     } else if (player != null) {
@@ -166,7 +142,6 @@ public class Frame {
   }
 
   public void reload() {
-    location = this.getData().getLocation();
     contents = this.getData().getItem();
   }
 }
