@@ -40,17 +40,34 @@ public class KitDataHandler {
     return DATA_FILE.getBoolean("isPublic");
   }
 
-  public ItemStack[] getItemStacks() {
-    ConfigurationSection section = this.get().getConfigurationSection("items");
+  public ItemStack[] getContents() {
+    ConfigurationSection section = this.get().getConfigurationSection("items.contents");
     assert section != null;
     ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
     int i = 0;
 
     for (String path : section.getKeys(false)) {
-      itemStacks[i] = this.get().getItemStack("items." + path);
+      itemStacks[i] = this.get().getItemStack("items.contents" + path);
       i++;
     }
     return itemStacks;
+  }
+
+  public ItemStack[] getArmor() {
+    ConfigurationSection section = this.get().getConfigurationSection("items.armor");
+    assert section != null;
+    ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
+    int i = 0;
+
+    for (String path : section.getKeys(false)) {
+      itemStacks[i] = this.get().getItemStack("items.armor" + path);
+      i++;
+    }
+    return itemStacks;
+  }
+
+  public ItemStack getOffhand() {
+    return this.get().getItemStack("items.offhand");
   }
 
   public void create() {
@@ -58,9 +75,15 @@ public class KitDataHandler {
     DATA_FILE.set("owner", String.valueOf(kit.getOwner().getUniqueId()));
     DATA_FILE.set("displayItem", kit.getDisplayItem());
 
-    for (int i = 0; i < kit.getItemStacks().length; i++) {
-      DATA_FILE.set("items." + i, kit.getItemStacks()[i]);
+    for (int i = 0; i < kit.getContents().length; i++) {
+      DATA_FILE.set("items.contents" + i, kit.getContents()[i]);
     }
+
+    for (int i = 0; i < kit.getArmor().length; i++) {
+      DATA_FILE.set("items.contents" + i, kit.getContents()[i]);
+    }
+
+    DATA_FILE.set("items.offhand", kit.getOffhand());
 
     save();
   }

@@ -42,7 +42,9 @@ public class PlayerEventListener implements Listener {
   @EventHandler
       (priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onKitGive(KitGiveEvent event) {
-    event.getPlayer().getInventory().setContents(event.getKit().getItemStacks());
+    event.getPlayer().getInventory().setStorageContents(event.getKit().getContents());
+    event.getPlayer().getInventory().setArmorContents(event.getKit().getArmor());
+    event.getPlayer().getInventory().setItemInOffHand(event.getKit().getOffhand());
 
     Kit.setLastUsedKit(event.getPlayer(), event.getKit());
   }
@@ -50,7 +52,7 @@ public class PlayerEventListener implements Listener {
   @EventHandler
       (priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onKitCreate(KitCreateEvent event) {
-    event.getKit().create(event.getPlayer().getInventory().getContents());
+    event.getKit().create();
   }
 
 

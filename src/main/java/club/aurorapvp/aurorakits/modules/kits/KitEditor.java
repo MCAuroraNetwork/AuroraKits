@@ -2,10 +2,8 @@ package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -123,10 +121,10 @@ public class KitEditor implements Listener {
       inventory = Bukkit.createInventory(this, 54, Component.text(kit.getName()));
       this.kit = kit;
 
-      inventory.setContents(kit.getItemStacks());
+      inventory.setContents(kit.getContents());
 
       for (int i = 0; i < 35; i++) {
-        inventory.setItem(i, kit.getItemStacks()[i]);
+        inventory.setItem(i, kit.getContents()[i]);
       }
 
       ItemStack barrier = new ItemStack(Material.BARRIER);
@@ -139,10 +137,10 @@ public class KitEditor implements Listener {
       }
 
       for (int i = 46; i < 50; i++) {
-        inventory.setItem(i, kit.getItemStacks()[i - 10]);
+        inventory.setItem(i, kit.getContents()[i - 10]);
       }
 
-      inventory.setItem(51, kit.getItemStacks()[40]);
+      inventory.setItem(51, kit.getContents()[40]);
     }
 
     public Kit getKit() {

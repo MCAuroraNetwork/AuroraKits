@@ -41,12 +41,8 @@ public class KitCommands extends BaseCommand {
   @Description("Creates a private kit")
   @SuppressWarnings("unused")
   public void onCreate(Player player, @Optional String name) {
-    new Kit(
-        Objects.requireNonNullElseGet(
-            name, () -> "Kit" + Math.addExact(Kit.getAmount(player, false), 1)),
-        player,
-        false)
-        .create(player.getInventory().getContents());
+    new Kit(Objects.requireNonNullElseGet(name,
+        () -> "Kit" + Math.addExact(Kit.getAmount(player, false), 1)), player, false).create();
   }
 
   @Subcommand("delete|remove")
@@ -70,7 +66,7 @@ public class KitCommands extends BaseCommand {
   @Description("Creates a public kit")
   @SuppressWarnings("unused")
   public void onCreatePublic(Player player, String name) {
-    new Kit(name, player, true).create(player.getInventory().getContents());
+    new Kit(name, player, true).create();
   }
 
   @Subcommand("deletepublic|removepublic")
@@ -103,6 +99,8 @@ public class KitCommands extends BaseCommand {
     }
   }
 
+  // TODO
+  /*
   @Subcommand("copy")
   @Syntax("<name>")
   @Description("Copies a kit")
@@ -110,13 +108,13 @@ public class KitCommands extends BaseCommand {
   public void onCopy(Player player, String name, String newName) {
     Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      new Kit(newName, player, false).create(kit.getItemStacks());
+      new Kit(newName, player, false).create(kit.getContents());
     } else {
       player.sendMessage(Lang.getComponent("kit-not-found"));
     }
   }
+   */
 
-  // TODO
   @CatchUnknown
   @Subcommand("help")
   @SuppressWarnings("unused")

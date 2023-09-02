@@ -32,7 +32,9 @@ public class Kit {
   private final String path;
   private final OfflinePlayer owner;
   private boolean publicKit;
-  private ItemStack[] itemStacks;
+  private ItemStack[] contents;
+  private ItemStack[] armor;
+  private ItemStack offhand;
   private ItemStack displayItem;
 
   public Kit(String kitName, OfflinePlayer owner, boolean isPublic) {
@@ -51,22 +53,6 @@ public class Kit {
     if (this.exists()) {
       this.reload();
     }
-  }
-
-  public Kit(String kitName, OfflinePlayer owner, boolean isPublic, ItemStack[] contents) {
-    this.owner = owner;
-    this.isPublic = isPublic;
-    this.path = isPublic ? "public" : String.valueOf(owner.getUniqueId());
-    this.name = kitName;
-    this.data = new KitDataHandler(this);
-
-    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner, new HashSet<>());
-
-    set.add(this);
-
-    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).put(owner, set);
-
-    this.create(contents);
   }
 
   public static void init() {
@@ -269,9 +255,13 @@ public class Kit {
     return displayItem;
   }
 
-  public ItemStack[] getItemStacks() {
-    return itemStacks;
+  public ItemStack[] getContents() {
+    return contents;
   }
+
+  public ItemStack[] getArmor() { return armor; }
+
+  public ItemStack getOffhand() { return offhand; }
 
   public boolean isPublic() {
     return publicKit;
@@ -293,7 +283,7 @@ public class Kit {
     return this.getData().getFile().exists();
   }
 
-  public void create(ItemStack[] contents) {
+  public void create() {
     this.publicKit = isPublic;
 
     if (this.exists()) {
@@ -315,11 +305,9 @@ public class Kit {
             owner.getName(),
             isPublic);
 
-    itemStacks = new ItemStack[contents.length];
-
-    for (int i = 0; i < contents.length; i++) {
-      itemStacks[i] = contents[i] == null ? null : contents[i].clone();
-    }
+    this.contents = owner.getPlayer().getInventory().getStorageContents();
+    this.armor = owner.getPlayer().getInventory().getArmorContents();
+    this.offhand = owner.getPlayer().getInventory().getItemInOffHand();
 
     data.create();
 
@@ -336,11 +324,7 @@ public class Kit {
   }
 
   public void edit(Player player, ItemStack[] newContents) {
-    itemStacks = new ItemStack[newContents.length];
-
-    for (int i = 0; i < newContents.length; i++) {
-      itemStacks[i] = newContents[i] == null ? null : newContents[i].clone();
-    }
+    contents = newContents;
 
     data.create();
 
@@ -377,7 +361,9 @@ public class Kit {
   }
 
   public void reload() {
-    this.itemStacks = this.getData().getItemStacks();
+    this.contents = this.getData().getContents();
+    this.armor = this.getData().getArmor();
+    this.offhand = this.getData().getOffhand();
     this.publicKit = this.getData().isPublic();
     this.displayItem = this.getData().getDisplayItem();
   }
