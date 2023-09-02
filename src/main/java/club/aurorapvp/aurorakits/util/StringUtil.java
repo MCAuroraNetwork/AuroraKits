@@ -8,7 +8,7 @@ public class StringUtil {
     for (int i = 0; i < camelCaseString.length(); i++) {
       char currentChar = camelCaseString.charAt(i);
 
-      if (Character.isUpperCase(currentChar) && i != 1) {
+      if (Character.isUpperCase(currentChar) && i != 0) {
         normalTypedLanguage.append(" ");
       }
 
