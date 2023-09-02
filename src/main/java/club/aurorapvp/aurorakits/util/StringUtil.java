@@ -15,6 +15,6 @@ public class StringUtil {
       normalTypedLanguage.append(currentChar);
     }
 
-    return normalTypedLanguage.toString().toLowerCase();
+    return normalTypedLanguage.toString();
   }
 }
