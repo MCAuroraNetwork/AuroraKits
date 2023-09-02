@@ -135,7 +135,7 @@ public class Frame {
 
   public void delete(Player player) {
     this.getData().delete();
-    frames.remove(this);
+    frames.remove(this.getItemFrame());
     if (player != null) {
       player.sendMessage(Lang.getComponent("frame-deleted"));
     }
