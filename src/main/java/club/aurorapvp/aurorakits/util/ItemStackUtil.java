@@ -17,20 +17,20 @@ public class ItemStackUtil {
 
     meta.displayName(
         MiniMessage.miniMessage()
-            .deserialize("<gradient:#FFAA00:#FF55FF><bold>" + name)
+            .deserialize("<yellow><bold>" + name)
             .decoration(TextDecoration.ITALIC, false));
 
     if (isPublic) {
       meta.lore(
           List.of(
               MiniMessage.miniMessage()
-                  .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator),
+                  .deserialize("<aqua>Created by " + creator),
               MiniMessage.miniMessage().deserialize("This is a Public Kit")));
     } else {
       meta.lore(
           List.of(
               MiniMessage.miniMessage()
-                  .deserialize("<gradient:#FFAA00:#FF55FF>Created by " + creator),
+                  .deserialize("<aqua>Created by " + creator),
               Component.text("This is a Private Kit"),
               Component.text("Right click to edit")));
     }

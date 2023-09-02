@@ -83,7 +83,7 @@ public class KitDataHandler {
       DATA_FILE.set("items.armor." + i, kit.getContents()[i]);
     }
 
-    DATA_FILE.set("items.offhand.", kit.getOffhand());
+    DATA_FILE.set("items.offhand", kit.getOffhand());
 
     save();
   }

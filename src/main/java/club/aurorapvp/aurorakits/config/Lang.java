@@ -36,7 +36,7 @@ public class Lang {
     DEFAULTS.put("frame-created", "prefix <green>Frame created!");
     DEFAULTS.put("frame-deleted", "prefix <red>Frame deleted");
     DEFAULTS.put("frame-invalid", "prefix <red>Invalid frame name");
-    DEFAULTS.put("GUIName", "<yellow>KitGUI");
+    DEFAULTS.put("kit-gui", "<yellow><bold>Kits");
     DEFAULTS.put("kit-created",
         "prefix <green>Kit created! Use <bold>/kits<reset><green> to get it!");
     DEFAULTS.put("kit-updated",
