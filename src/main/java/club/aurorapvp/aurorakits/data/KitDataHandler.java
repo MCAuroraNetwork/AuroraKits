@@ -47,7 +47,7 @@ public class KitDataHandler {
     int i = 0;
 
     for (String path : section.getKeys(false)) {
-      itemStacks[i] = this.get().getItemStack("items.contents" + path);
+      itemStacks[i] = this.get().getItemStack("items.contents." + path);
       i++;
     }
     return itemStacks;
@@ -60,7 +60,7 @@ public class KitDataHandler {
     int i = 0;
 
     for (String path : section.getKeys(false)) {
-      itemStacks[i] = this.get().getItemStack("items.armor" + path);
+      itemStacks[i] = this.get().getItemStack("items.armor." + path);
       i++;
     }
     return itemStacks;
@@ -80,7 +80,7 @@ public class KitDataHandler {
     }
 
     for (int i = 0; i < kit.getArmor().length; i++) {
-      DATA_FILE.set("items.contents" + i, kit.getContents()[i]);
+      DATA_FILE.set("items.armor" + i, kit.getContents()[i]);
     }
 
     DATA_FILE.set("items.offhand", kit.getOffhand());
