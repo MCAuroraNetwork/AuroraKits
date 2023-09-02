@@ -116,7 +116,7 @@ public class Frame {
     if (name != null && player != null) {
       contents = player.getInventory().getItemInMainHand();
 
-      ItemStack displayItem = player.getInventory().getItemInMainHand();
+      ItemStack displayItem = player.getInventory().getItemInMainHand().clone();
       ItemMeta meta = displayItem.getItemMeta();
       meta.displayName(MiniMessage.miniMessage()
           .deserialize(StringUtil.convertToNormalTypedLanguage(name)));
