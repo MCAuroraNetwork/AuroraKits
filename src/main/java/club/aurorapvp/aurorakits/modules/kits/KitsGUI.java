@@ -190,6 +190,7 @@ public class KitsGUI implements Listener {
       Kit[] kitsArray = kitsOnPage.toArray(new Kit[0]);
 
       pages.add(new Page(kitsArray, this));
+      index++;
     }
   }
 
@@ -221,6 +222,7 @@ public class KitsGUI implements Listener {
 
       inventory.setItem(45, previousPage);
       inventory.setItem(53, nextPage);
+      gui.index++;
     }
 
     private Page(Kit kit, KitsGUI gui) {
@@ -243,6 +245,7 @@ public class KitsGUI implements Listener {
 
       inventory.setItem(45, nextPage);
       inventory.setItem(53, nextPage);
+      gui.index++;
     }
 
     public KitsGUI getGui() {
