@@ -15,7 +15,7 @@ public class WorldEventListener implements Listener {
   public void onWorldLoad(WorldLoadEvent event) {
     for (Entity entity : event.getWorld().getEntities()) {
       if (entity instanceof ItemFrame itemFrame) {
-        new Frame(itemFrame);
+        Frame.register(itemFrame);
       }
     }
   }
@@ -23,7 +23,7 @@ public class WorldEventListener implements Listener {
   @EventHandler
   public void onEntityLoad(EntityAddToWorldEvent event) {
     if (event.getEntity() instanceof ItemFrame itemFrame) {
-      new Frame(itemFrame);
+      Frame.register(itemFrame);
     }
   }
 

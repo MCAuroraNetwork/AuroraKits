@@ -50,10 +50,23 @@ public class Frame {
   }
 
   public static void reloadAll() {
-    for (Frame frame : frames.values()) {
-      frame.reload();
+    frames.clear();
+
+    for (World world : Bukkit.getWorlds()) {
+      for (Entity entity : world.getEntities()) {
+        if (entity instanceof ItemFrame itemFrame) {
+          new Frame(itemFrame);
+        }
+      }
     }
+
     AuroraKits.INSTANCE.getLogger().info("All frames reloaded!");
+  }
+
+  public static void register(ItemFrame itemFrame) {
+    if (frames.containsKey(itemFrame)) {
+      frames.replace(itemFrame, new Frame(itemFrame));
+    }
   }
 
   public static void remove(ItemFrame itemFrame) {
