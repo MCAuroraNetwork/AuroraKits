@@ -94,6 +94,7 @@ public class Kit {
     return set;
   }
 
+  @SuppressWarnings("unused")
   public static Set<Kit> getPublicKits(Player player) {
     return PUBLIC_KITS.get(player);
   }
@@ -332,8 +333,10 @@ public class Kit {
     Objects.requireNonNull(owner.getPlayer()).sendMessage(Lang.getComponent("kit-created"));
   }
 
-  public void edit(Player player, ItemStack[] newContents) {
-    contents = newContents;
+  public void edit(Player player, ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
+    this.contents = contents;
+    this.armor = armor;
+    this.offhand = offhand;
 
     data.create();
 

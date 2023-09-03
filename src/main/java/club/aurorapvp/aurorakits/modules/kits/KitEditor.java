@@ -73,19 +73,22 @@ public class KitEditor implements Listener {
 
     Player player = (Player) event.getPlayer();
 
-    ItemStack[] itemStacks = new ItemStack[41];
+    ItemStack[] contents = new ItemStack[36];
+    ItemStack[] armor = new ItemStack[4];
+    ItemStack offhand;
 
     for (int i = 0; i <= 36; i++) {
-      itemStacks[i] = inventory.getContents()[i];
+      contents[i] = inventory.getContents()[i];
     }
 
+    int o = 0;
     for (int i = 46; i <= 50; i++) {
-      itemStacks[i - 10] = inventory.getContents()[i];
+      armor[o] = inventory.getContents()[i];
     }
 
-    itemStacks[40] = inventory.getContents()[51];
+    offhand = inventory.getContents()[51];
 
-    editPage.getKit().edit(player, itemStacks);
+    editPage.getKit().edit(player, contents, armor, offhand);
   }
 
   public static KitEditor getEditor(Player player) {
@@ -136,11 +139,13 @@ public class KitEditor implements Listener {
         inventory.setItem(i, barrier);
       }
 
+      int o = 0;
       for (int i = 46; i < 50; i++) {
-        inventory.setItem(i, kit.getContents()[i - 10]);
+        inventory.setItem(i, kit.getArmor()[o]);
+        o++;
       }
 
-      inventory.setItem(51, kit.getContents()[40]);
+      inventory.setItem(51, kit.getOffhand());
     }
 
     public Kit getKit() {
