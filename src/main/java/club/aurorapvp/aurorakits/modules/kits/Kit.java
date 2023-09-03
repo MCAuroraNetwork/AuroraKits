@@ -236,9 +236,6 @@ public class Kit {
             yaml.getBoolean("isPublic"));
       }
     }
-
-    new KitEditor(player);
-    new KitsGUI(player);
   }
 
   public static void unregister(Player player) {
