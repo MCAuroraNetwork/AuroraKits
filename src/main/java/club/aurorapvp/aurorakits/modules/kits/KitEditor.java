@@ -74,8 +74,6 @@ public class KitEditor implements Listener {
 
     Player player = (Player) event.getPlayer();
 
-    AuroraKits.INSTANCE.getLogger().log(Level.INFO, String.valueOf(this == KIT_EDITORS.get(player)));
-
     ItemStack[] contents = new ItemStack[36];
     ItemStack[] armor = new ItemStack[4];
     ItemStack offhand;

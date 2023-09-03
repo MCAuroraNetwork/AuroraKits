@@ -3,6 +3,7 @@ package club.aurorapvp.aurorakits.events.listeners;
 import club.aurorapvp.aurorakits.modules.Frame;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +13,11 @@ public class WorldEventListener implements Listener {
 
   @EventHandler
   public void onWorldLoad(WorldLoadEvent event) {
-    Frame.reloadAll();
+    for (Entity entity : event.getWorld().getEntities()) {
+      if (entity instanceof ItemFrame itemFrame) {
+        new Frame(itemFrame);
+      }
+    }
   }
 
   @EventHandler
