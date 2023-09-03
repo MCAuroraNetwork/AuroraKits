@@ -52,12 +52,7 @@ public class KitCommands extends BaseCommand {
   @Description("Deletes a private kit")
   @SuppressWarnings("unused")
   public void onDelete(Player player, String name) {
-    Kit kit = Kit.getKit(player, name);
-    if (kit != null) {
-      kit.delete(player, false);
-    } else {
-      player.sendMessage(Lang.getComponent("kit-invalid-name"));
-    }
+    Kit.deleteKit(player, name, false);
   }
 
   @Subcommand("createpublic|savepublic")
@@ -76,12 +71,7 @@ public class KitCommands extends BaseCommand {
   @Description("Deletes a public kit")
   @SuppressWarnings("unused")
   public void onDeletePublic(Player player, String name) {
-    Kit kit = Kit.getKit(player, name);
-    if (kit != null) {
-      kit.delete(player, true);
-    } else {
-      player.sendMessage(Lang.getComponent("kit-invalid-name"));
-    }
+    Kit.deleteKit(player, name, true);
   }
 
   @Subcommand("edit")

@@ -64,6 +64,8 @@ public class PlayerEventListener implements Listener {
 
     set.remove(event.getKit());
 
+    event.getKit().delete();
+
     if (event.getKit().isPublic()) {
       KitsGUI.reloadAll();
     } else {

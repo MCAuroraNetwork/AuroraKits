@@ -120,11 +120,20 @@ public class Kit {
   }
 
   @SuppressWarnings("unused")
-  public static void deleteKit(String name) {
+  public static void deleteKit(String name, boolean isPublic) {
     for (Kit kit : getKits()) {
       if (Objects.equals(kit.getName(), name)) {
         new KitDeleteEvent(null, kit).callEvent();
       }
+    }
+  }
+
+  public static void deleteKit(Player player, String name, boolean isPublic) {
+    Kit kit = Kit.getKit(player, name);
+    if (kit != null && kit.isPublic() == isPublic) {
+      new KitDeleteEvent(player, kit).callEvent();
+    } else {
+      player.sendMessage(Lang.getComponent("kit-invalid-name"));
     }
   }
 
@@ -332,14 +341,7 @@ public class Kit {
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public void delete(Player player, boolean isPublic) {
-    if (!Objects.equals(this.isPublic(), isPublic)) {
-      if (player != null) {
-        player.sendMessage(Lang.getComponent("kit-not-found"));
-      }
-      return;
-    }
-
+  public void delete() {
     data.getFile().delete();
   }
 
