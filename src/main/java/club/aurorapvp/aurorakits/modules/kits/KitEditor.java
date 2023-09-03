@@ -4,6 +4,7 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -73,17 +74,20 @@ public class KitEditor implements Listener {
 
     Player player = (Player) event.getPlayer();
 
+    AuroraKits.INSTANCE.getLogger().log(Level.INFO, String.valueOf(this == KIT_EDITORS.get(player)));
+
     ItemStack[] contents = new ItemStack[36];
     ItemStack[] armor = new ItemStack[4];
     ItemStack offhand;
 
-    for (int i = 0; i <= 36; i++) {
+    for (int i = 0; i <= 35; i++) {
       contents[i] = inventory.getContents()[i];
     }
 
     int o = 0;
-    for (int i = 46; i <= 50; i++) {
+    for (int i = 46; i <= 49; i++) {
       armor[o] = inventory.getContents()[i];
+      o++;
     }
 
     offhand = inventory.getContents()[51];
@@ -124,9 +128,7 @@ public class KitEditor implements Listener {
       inventory = Bukkit.createInventory(this, 54, Component.text(kit.getName()));
       this.kit = kit;
 
-      inventory.setContents(kit.getContents());
-
-      for (int i = 0; i < 35; i++) {
+      for (int i = 0; i <= kit.getContents().length - 1; i++) {
         inventory.setItem(i, kit.getContents()[i]);
       }
 
@@ -135,14 +137,18 @@ public class KitEditor implements Listener {
       meta.displayName(Component.text(""));
       barrier.setItemMeta(meta);
 
-      for (int i = 36; i < 54; i++) {
+      for (int i = 36; i <= 53; i++) {
         inventory.setItem(i, barrier);
       }
 
       int o = 0;
-      for (int i = 46; i < 50; i++) {
+      for (int i = 46; i <= 45 + kit.getArmor().length; i++) {
         inventory.setItem(i, kit.getArmor()[o]);
         o++;
+      }
+
+      for (int i = 46 + kit.getArmor().length; i <= 49; i++) {
+        inventory.clear(i);
       }
 
       inventory.setItem(51, kit.getOffhand());
