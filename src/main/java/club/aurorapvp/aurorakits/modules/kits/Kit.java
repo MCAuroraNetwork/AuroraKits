@@ -135,7 +135,7 @@ public class Kit {
     if (kit != null && kit.isPublic() == isPublic) {
       new KitDeleteEvent(player, kit).callEvent();
     } else {
-      player.sendMessage(Lang.getComponent("kit-invalid-name"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-invalid-name"));
     }
   }
 
@@ -252,7 +252,7 @@ public class Kit {
       return LAST_USED_KIT.get(player);
     }
 
-    return Kit.getKit(Config.get().getString("kits.give-last-kit.default-kit"));
+    return Kit.getKit(AuroraKits.INSTANCE.getConfig().getString("kits.give-last-kit.default-kit"));
   }
 
   public static void refillKit(Player player) {
@@ -300,13 +300,13 @@ public class Kit {
 
     if (this.exists()) {
       Objects.requireNonNull(owner.getPlayer())
-          .sendMessage(Lang.getComponent("kit-already-exists"));
+          .sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-already-exists"));
       return;
     }
 
     if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
         == null) {
-      Objects.requireNonNull(owner.getPlayer()).sendMessage(Lang.getComponent("kit-invalid-item"));
+      Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-invalid-item"));
       return;
     }
 
@@ -332,7 +332,7 @@ public class Kit {
       KitsGUI.getGUI(owner.getPlayer()).addKit(this);
     }
 
-    Objects.requireNonNull(owner.getPlayer()).sendMessage(Lang.getComponent("kit-created"));
+    Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-created"));
   }
 
   public void edit(Player player, ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
@@ -342,7 +342,7 @@ public class Kit {
 
     data.create();
 
-    player.sendMessage(Lang.getComponent("kit-updated"));
+    player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-updated"));
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -354,13 +354,13 @@ public class Kit {
     if (this.exists()) {
       new KitGiveEvent(player, this).callEvent();
     } else {
-      player.sendMessage(Lang.getComponent("kit-not-found"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-not-found"));
     }
   }
 
   public void editKit(Player player) {
     if (!(this.getOwner() == player)) {
-      player.sendMessage(Lang.getComponent("not-your-kit"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("not-your-kit"));
       return;
     }
 

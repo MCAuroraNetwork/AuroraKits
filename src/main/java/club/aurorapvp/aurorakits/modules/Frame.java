@@ -140,9 +140,9 @@ public class Frame {
       this.data.create();
       frames.put(itemFrame, this);
 
-      player.sendMessage(Lang.getComponent("frame-created"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("frame-created"));
     } else if (player != null) {
-      player.sendMessage(Lang.getComponent("frame-invalid"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("frame-invalid"));
     }
   }
 
@@ -150,7 +150,7 @@ public class Frame {
     this.getData().delete();
     frames.remove(this.getItemFrame());
     if (player != null) {
-      player.sendMessage(Lang.getComponent("frame-deleted"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("frame-deleted"));
     }
   }
 

@@ -12,16 +12,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Lang {
 
-  private static final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
-  private static final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "lang.yml");
-  private static YamlConfiguration lang;
+  private final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
+  private final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "lang.yml");
+  private YamlConfiguration lang;
 
-  public static void init() {
-    Lang.reload();
-    Lang.generateDefaults();
+  public Lang() {
+    this.reload();
+    this.generateDefaults();
   }
 
-  public static void generateDefaults() {
+  public void generateDefaults() {
     final HashMap<String, String> DEFAULTS = new HashMap<>();
 
     for (Object path : get().getKeys(false).toArray()) {
@@ -85,34 +85,7 @@ public class Lang {
     }
   }
 
-  @SuppressWarnings("unused")
-  public static String getString(String message) {
-    String pathString = get().getString(message);
-    for (String placeholder : PLACEHOLDERS.keySet()) {
-      assert pathString != null;
-      if (pathString.contains(placeholder)) {
-        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
-      }
-    }
-    return pathString;
-  }
-
-  @SuppressWarnings("unused")
-  public static Component formatComponent(String message, Object... args) {
-    String pathString = get().getString(message);
-    assert pathString != null;
-    for (String placeholder : PLACEHOLDERS.keySet()) {
-      if (pathString.contains(placeholder)) {
-        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
-      }
-    }
-
-    pathString = String.format(pathString, args);
-
-    return MiniMessage.miniMessage().deserialize(pathString);
-  }
-
-  public static Component getComponent(String message) {
+  public Component getComponent(String message) {
     String pathString = get().getString(message);
     assert pathString != null;
 
@@ -124,12 +97,12 @@ public class Lang {
     return MiniMessage.miniMessage().deserialize(pathString);
   }
 
-  public static YamlConfiguration get() {
+  public YamlConfiguration get() {
     return lang;
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public static void reload() {
+  public void reload() {
     if (!FILE.exists()) {
       try {
         FILE.getParentFile().mkdirs();
@@ -137,7 +110,7 @@ public class Lang {
 
         lang = YamlConfiguration.loadConfiguration(FILE);
 
-        Lang.generateDefaults();
+        this.generateDefaults();
       } catch (IOException e) {
         AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to generate lang file", e);
       }

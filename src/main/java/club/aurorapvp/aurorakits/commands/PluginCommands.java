@@ -27,11 +27,11 @@ public class PluginCommands extends BaseCommand {
   public void onReload(Player player) {
     long startTime = System.currentTimeMillis();
 
+    AuroraKits.INSTANCE.reloadConfig();
+    AuroraKits.INSTANCE.getLang().reload();
     Frame.reloadAll();
     Kit.reloadAll();
-    Config.reload();
     KitsGUI.reloadAll();
-    Lang.reload();
 
     AuroraKits.INSTANCE
         .getLogger()
@@ -45,6 +45,6 @@ public class PluginCommands extends BaseCommand {
   @CatchUnknown
   @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
-    sender.sendMessage(Lang.getComponent("help-command"));
+    sender.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("help-command"));
   }
 }

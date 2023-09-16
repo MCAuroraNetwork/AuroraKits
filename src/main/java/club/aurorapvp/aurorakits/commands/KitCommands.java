@@ -1,5 +1,6 @@
 package club.aurorapvp.aurorakits.commands;
 
+import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import co.aikar.commands.BaseCommand;
@@ -30,7 +31,7 @@ public class KitCommands extends BaseCommand {
     if (kit != null) {
       kit.giveKit(player);
     } else {
-      player.sendMessage(Lang.getComponent("kit-not-found"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-not-found"));
     }
   }
 
@@ -84,7 +85,7 @@ public class KitCommands extends BaseCommand {
     if (kit != null) {
       kit.editKit(player);
     } else {
-      player.sendMessage(Lang.getComponent("kit-not-found"));
+      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-not-found"));
     }
   }
 
@@ -108,6 +109,6 @@ public class KitCommands extends BaseCommand {
   @Subcommand("help")
   @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
-    sender.sendMessage(Lang.getComponent("unknown-kit-command"));
+    sender.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("unknown-kit-command"));
   }
 }
