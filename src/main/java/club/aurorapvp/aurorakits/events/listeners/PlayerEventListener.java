@@ -6,6 +6,7 @@ import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
 import club.aurorapvp.aurorakits.events.custom.KitDeleteEvent;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
+import club.aurorapvp.aurorakits.events.custom.KitRefillEvent;
 import club.aurorapvp.aurorakits.modules.Frame;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import club.aurorapvp.aurorakits.modules.kits.KitEditor;
@@ -29,13 +30,7 @@ public class PlayerEventListener implements Listener {
     new KitsGUI(event.getPlayer());
 
     if (Config.get().getBoolean("kits.give-last-kit.enabled")) {
-      Kit kit = Kit.getLastUsedKit(event.getPlayer());
-
-      if (kit != null) {
-        kit.giveKit(event.getPlayer());
-      }
-
-      event.getPlayer().sendMessage(Lang.getComponent("kit-refilled"));
+      Kit.refillKit(event.getPlayer());
     }
   }
 
@@ -47,6 +42,18 @@ public class PlayerEventListener implements Listener {
     event.getPlayer().getInventory().setItemInOffHand(event.getKit().getOffhand().clone());
 
     Kit.setLastUsedKit(event.getPlayer(), event.getKit());
+
+    event.getPlayer().sendMessage(Lang.getComponent("kit-used"));
+  }
+
+  @EventHandler
+      (priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onKitRefill(KitRefillEvent event) {
+    event.getPlayer().getInventory().setStorageContents(event.getKit().getContents().clone());
+    event.getPlayer().getInventory().setArmorContents(event.getKit().getArmor().clone());
+    event.getPlayer().getInventory().setItemInOffHand(event.getKit().getOffhand().clone());
+
+    event.getPlayer().sendMessage(Lang.getComponent("kit-refilled"));
   }
 
   @EventHandler
@@ -95,13 +102,7 @@ public class PlayerEventListener implements Listener {
       return;
     }
 
-    Kit kit = Kit.getLastUsedKit(event.getPlayer());
-
-    if (kit != null) {
-      kit.giveKit(event.getPlayer());
-
-      event.getPlayer().sendMessage(Lang.getComponent("kit-refilled"));
-    }
+    Kit.refillKit(event.getPlayer());
   }
 
   @EventHandler
@@ -110,12 +111,6 @@ public class PlayerEventListener implements Listener {
       return;
     }
 
-    Kit kit = Kit.getLastUsedKit(event.getKiller());
-
-    if (kit != null) {
-      kit.giveKit(event.getKiller());
-
-      event.getKiller().sendMessage(Lang.getComponent("kit-refilled"));
-    }
+    Kit.refillKit(event.getKiller());
   }
 }

@@ -94,7 +94,6 @@ public class KitsGUI implements Listener {
         kit.editKit(player);
       } else {
         kit.giveKit(player);
-        player.sendMessage(Lang.getComponent("kit-used"));
       }
     }
   }

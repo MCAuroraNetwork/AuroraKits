@@ -7,6 +7,7 @@ import club.aurorapvp.aurorakits.data.KitDataHandler;
 import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
 import club.aurorapvp.aurorakits.events.custom.KitDeleteEvent;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
+import club.aurorapvp.aurorakits.events.custom.KitRefillEvent;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
 import java.io.File;
 import java.util.HashMap;
@@ -252,6 +253,10 @@ public class Kit {
     }
 
     return Kit.getKit(Config.get().getString("kits.give-last-kit.default-kit"));
+  }
+
+  public static void refillKit(Player player) {
+    new KitRefillEvent(player).callEvent();
   }
 
   public String getPath() {
