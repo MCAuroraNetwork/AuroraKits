@@ -312,9 +312,9 @@ public class Kit {
             owner.getName(),
             isPublic);
 
-    this.contents = owner.getPlayer().getInventory().getStorageContents();
-    this.armor = owner.getPlayer().getInventory().getArmorContents();
-    this.offhand = owner.getPlayer().getInventory().getItemInOffHand();
+    this.contents = owner.getPlayer().getInventory().getStorageContents().clone();
+    this.armor = owner.getPlayer().getInventory().getArmorContents().clone();
+    this.offhand = owner.getPlayer().getInventory().getItemInOffHand().clone();
 
     data.create();
 

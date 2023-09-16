@@ -86,7 +86,7 @@ public class Frame {
     if (clicked instanceof ItemFrame itemFrame) {
       Frame frame = Frame.getFrame(itemFrame);
       if (frame != null) {
-        event.getPlayer().getInventory().addItem(frame.getContents());
+        event.getPlayer().getInventory().addItem(frame.getContents().clone());
         event.setCancelled(true);
       }
     }
@@ -127,7 +127,7 @@ public class Frame {
 
   public void create(Player player, String name) {
     if (name != null && player != null) {
-      contents = player.getInventory().getItemInMainHand();
+      contents = player.getInventory().getItemInMainHand().clone();
 
       ItemStack displayItem = player.getInventory().getItemInMainHand().clone();
       ItemMeta meta = displayItem.getItemMeta();

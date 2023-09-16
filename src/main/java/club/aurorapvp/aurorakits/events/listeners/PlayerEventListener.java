@@ -42,9 +42,9 @@ public class PlayerEventListener implements Listener {
   @EventHandler
       (priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onKitGive(KitGiveEvent event) {
-    event.getPlayer().getInventory().setStorageContents(event.getKit().getContents());
-    event.getPlayer().getInventory().setArmorContents(event.getKit().getArmor());
-    event.getPlayer().getInventory().setItemInOffHand(event.getKit().getOffhand());
+    event.getPlayer().getInventory().setStorageContents(event.getKit().getContents().clone());
+    event.getPlayer().getInventory().setArmorContents(event.getKit().getArmor().clone());
+    event.getPlayer().getInventory().setItemInOffHand(event.getKit().getOffhand().clone());
 
     Kit.setLastUsedKit(event.getPlayer(), event.getKit());
   }
