@@ -117,7 +117,7 @@ public class KitsGUI implements Listener {
   }
 
   public void addKit(Kit kit) {
-    Inventory lastPage = pages.get(index - 1).getInventory();
+    Inventory lastPage = pages.get(index).getInventory();
 
     if (lastPage.getContents()[44] != null) {
       new Page(kit, this);
@@ -127,7 +127,7 @@ public class KitsGUI implements Listener {
   }
 
   public void nextPage() {
-    if (currentPage <= index) {
+    if (currentPage < index) {
       currentPage++;
     } else {
       currentPage = 0;
@@ -151,7 +151,7 @@ public class KitsGUI implements Listener {
   public void reload() {
     Set<Kit> kitSet = Kit.getKits(this.getPlayer(), true);
 
-    index = 0;
+    index = -1;
     pages.clear();
 
     List<Kit> publicKits = new ArrayList<>();
