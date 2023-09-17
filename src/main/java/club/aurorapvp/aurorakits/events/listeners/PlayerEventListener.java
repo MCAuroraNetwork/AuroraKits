@@ -108,7 +108,7 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerKilled(PlayerKilledByPlayerEvent event) {
-    if (!AuroraKits.isAuroraCombatInstalled()) {
+    if (!AuroraKits.getInstance().isAuroraCombatInstalled()) {
       return;
     }
 

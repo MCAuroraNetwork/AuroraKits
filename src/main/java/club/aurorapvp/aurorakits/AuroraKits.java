@@ -14,14 +14,14 @@ import org.jetbrains.annotations.NotNull;
 public final class AuroraKits extends JavaPlugin {
 
   private static AuroraKits INSTANCE;
-  private static boolean auroraCombatInstalled;
+  private boolean auroraCombatInstalled;
   private Config config;
   private Lang lang;
 
   public static AuroraKits getInstance() {
     return INSTANCE;
   }
-  public static boolean isAuroraCombatInstalled() {
+  public boolean isAuroraCombatInstalled() {
     return auroraCombatInstalled;
   }
 
