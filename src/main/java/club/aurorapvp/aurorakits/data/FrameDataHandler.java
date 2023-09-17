@@ -9,7 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 public class FrameDataHandler {
 
-  private static final NamespacedKey key = new NamespacedKey(AuroraKits.INSTANCE, "frame");
+  private static final NamespacedKey key = new NamespacedKey(AuroraKits.getInstance(), "frame");
   private final Frame frame;
   private final ItemFrame itemFrame;
 

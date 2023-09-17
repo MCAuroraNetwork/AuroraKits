@@ -30,7 +30,7 @@ public class PlayerEventListener implements Listener {
     new KitEditor(event.getPlayer());
     new KitsGUI(event.getPlayer());
 
-    if (AuroraKits.INSTANCE.getConfig().getBoolean("kits.give-last-kit.enabled")) {
+    if (AuroraKits.getInstance().getConfig().getBoolean("kits.give-last-kit.enabled")) {
       Kit.refillKit(event.getPlayer());
     }
   }
@@ -44,7 +44,7 @@ public class PlayerEventListener implements Listener {
 
     Kit.setLastUsedKit(event.getPlayer(), event.getKit());
 
-    event.getPlayer().sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-used"));
+    event.getPlayer().sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-used"));
   }
 
   @EventHandler
@@ -54,7 +54,7 @@ public class PlayerEventListener implements Listener {
     event.getPlayer().getInventory().setArmorContents(event.getKit().getArmor().clone());
     event.getPlayer().getInventory().setItemInOffHand(event.getKit().getOffhand().clone());
 
-    event.getPlayer().sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-refilled"));
+    event.getPlayer().sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-refilled"));
   }
 
   @EventHandler
@@ -81,7 +81,7 @@ public class PlayerEventListener implements Listener {
     }
 
     if (event.getPlayer() != null) {
-      event.getPlayer().sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-deleted"));
+      event.getPlayer().sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-deleted"));
     }
   }
 
@@ -99,7 +99,7 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerRespawn(PlayerPostRespawnEvent event) {
-    if (!AuroraKits.INSTANCE.getConfig().getBoolean("kits.give-last-kit.enabled")) {
+    if (!AuroraKits.getInstance().getConfig().getBoolean("kits.give-last-kit.enabled")) {
       return;
     }
 
@@ -112,7 +112,7 @@ public class PlayerEventListener implements Listener {
       return;
     }
 
-    if (!AuroraKits.INSTANCE.getConfig().getBoolean("kits.give-last-kit.enabled")) {
+    if (!AuroraKits.getInstance().getConfig().getBoolean("kits.give-last-kit.enabled")) {
       return;
     }
 

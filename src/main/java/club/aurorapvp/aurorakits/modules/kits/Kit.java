@@ -57,7 +57,7 @@ public class Kit {
   }
 
   public static void init() {
-    File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/public/");
+    File dir = new File(AuroraKits.getInstance().getDataFolder(), "/kits/public/");
 
     if (dir.exists()) {
       for (File file : Objects.requireNonNull(dir.listFiles())) {
@@ -71,7 +71,7 @@ public class Kit {
       }
     }
 
-    AuroraKits.INSTANCE.getLogger().info("All kits loaded!");
+    AuroraKits.getInstance().getLogger().info("All kits loaded!");
   }
 
   public static Set<Kit> getPublicKits() {
@@ -135,7 +135,7 @@ public class Kit {
     if (kit != null && kit.isPublic() == isPublic) {
       new KitDeleteEvent(player, kit).callEvent();
     } else {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-invalid-name"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-name"));
     }
   }
 
@@ -182,7 +182,7 @@ public class Kit {
       kit.reload();
     }
 
-    AuroraKits.INSTANCE.getLogger().info("All kits reloaded!");
+    AuroraKits.getInstance().getLogger().info("All kits reloaded!");
   }
 
   public static Set<Kit> getKits(Player player, boolean includePublic) {
@@ -224,7 +224,7 @@ public class Kit {
   }
 
   public static void register(Player player) {
-    File dir = new File(AuroraKits.INSTANCE.getDataFolder(), "/kits/" + player.getUniqueId());
+    File dir = new File(AuroraKits.getInstance().getDataFolder(), "/kits/" + player.getUniqueId());
 
     if (dir.exists()) {
       for (File file : Objects.requireNonNull(dir.listFiles())) {
@@ -252,7 +252,7 @@ public class Kit {
       return LAST_USED_KIT.get(player);
     }
 
-    return Kit.getKit(AuroraKits.INSTANCE.getConfig().getString("kits.give-last-kit.default-kit"));
+    return Kit.getKit(AuroraKits.getInstance().getConfig().getString("kits.give-last-kit.default-kit"));
   }
 
   public static void refillKit(Player player) {
@@ -300,13 +300,13 @@ public class Kit {
 
     if (this.exists()) {
       Objects.requireNonNull(owner.getPlayer())
-          .sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-already-exists"));
+          .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-already-exists"));
       return;
     }
 
     if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
         == null) {
-      Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-invalid-item"));
+      Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-item"));
       return;
     }
 
@@ -332,7 +332,7 @@ public class Kit {
       KitsGUI.getGUI(owner.getPlayer()).addKit(this);
     }
 
-    Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-created"));
+    Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
   }
 
   public void edit(Player player, ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
@@ -342,7 +342,7 @@ public class Kit {
 
     data.create();
 
-    player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-updated"));
+    player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-updated"));
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -354,13 +354,13 @@ public class Kit {
     if (this.exists()) {
       new KitGiveEvent(player, this).callEvent();
     } else {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-not-found"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-not-found"));
     }
   }
 
   public void editKit(Player player) {
     if (!(this.getOwner() == player)) {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("not-your-kit"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("not-your-kit"));
       return;
     }
 

@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class CommandManager {
 
-  public static PaperCommandManager MANAGER = new PaperCommandManager(AuroraKits.INSTANCE);
+  public static PaperCommandManager MANAGER = new PaperCommandManager(AuroraKits.getInstance());
 
   public static void init() {
     MANAGER.registerCommand(new PluginCommands());

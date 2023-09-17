@@ -13,7 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Lang {
 
   private final HashMap<String, String> PLACEHOLDERS = new HashMap<>();
-  private final File FILE = new File(AuroraKits.INSTANCE.getDataFolder(), "lang.yml");
+  private final File FILE = new File(AuroraKits.getInstance().getDataFolder(), "lang.yml");
   private YamlConfiguration lang;
 
   public Lang() {
@@ -24,11 +24,11 @@ public class Lang {
   public void generateDefaults() {
     final HashMap<String, String> DEFAULTS = new HashMap<>();
 
-    for (Object path : get().getKeys(false).toArray()) {
-      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~")
-          && Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
+    for (Object path : getYaml().getKeys(false).toArray()) {
+      if (Objects.requireNonNull(getYaml().getString((String) path)).startsWith("~")
+          && Objects.requireNonNull(getYaml().getString((String) path)).endsWith("~")) {
         PLACEHOLDERS.put(
-            (String) path, Objects.requireNonNull(get().getString((String) path)).replace("~", ""));
+            (String) path, Objects.requireNonNull(getYaml().getString((String) path)).replace("~", ""));
       }
     }
 
@@ -38,9 +38,9 @@ public class Lang {
     DEFAULTS.put("frame-invalid", "prefix <red>Invalid frame name");
     DEFAULTS.put("kit-gui", "<yellow><bold>Kits");
     DEFAULTS.put("kit-created",
-        "prefix <green>Kit created! Use <bold>/kits<reset><green> to get it!");
+        "prefix <green>Kit created! Use <bold>/kits<reset><green> to getYaml it!");
     DEFAULTS.put("kit-updated",
-        "prefix <green>Kit updated! Use <bold>/kits<reset><green> to get it!");
+        "prefix <green>Kit updated! Use <bold>/kits<reset><green> to getYaml it!");
     DEFAULTS.put("kit-used", "prefix <green>Kit used!");
     DEFAULTS.put("kit-refilled", "prefix <green>Kit refilled!");
     DEFAULTS.put("kit-deleted", "prefix <red>Kit deleted");
@@ -65,28 +65,28 @@ public class Lang {
             """);
 
     for (String path : DEFAULTS.keySet()) {
-      if (!get().contains(path) || get().getString(path) == null) {
-        get().set(path, DEFAULTS.get(path));
+      if (!getYaml().contains(path) || getYaml().getString(path) == null) {
+        getYaml().set(path, DEFAULTS.get(path));
       }
     }
 
     try {
-      get().save(FILE);
+      getYaml().save(FILE);
     } catch (IOException e) {
-      AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to save lang file", e);
+      AuroraKits.getInstance().getLogger().log(Level.SEVERE, "Failed to save lang file", e);
     }
 
-    for (Object path : get().getKeys(false).toArray()) {
-      if (Objects.requireNonNull(get().getString((String) path)).startsWith("~")
-          && Objects.requireNonNull(get().getString((String) path)).endsWith("~")) {
+    for (Object path : getYaml().getKeys(false).toArray()) {
+      if (Objects.requireNonNull(getYaml().getString((String) path)).startsWith("~")
+          && Objects.requireNonNull(getYaml().getString((String) path)).endsWith("~")) {
         PLACEHOLDERS.put(
-            (String) path, Objects.requireNonNull(get().getString((String) path)).replace("~", ""));
+            (String) path, Objects.requireNonNull(getYaml().getString((String) path)).replace("~", ""));
       }
     }
   }
 
   public Component getComponent(String message) {
-    String pathString = get().getString(message);
+    String pathString = getYaml().getString(message);
     assert pathString != null;
 
     for (String placeholder : PLACEHOLDERS.keySet()) {
@@ -97,7 +97,7 @@ public class Lang {
     return MiniMessage.miniMessage().deserialize(pathString);
   }
 
-  public YamlConfiguration get() {
+  public YamlConfiguration getYaml() {
     return lang;
   }
 
@@ -112,10 +112,10 @@ public class Lang {
 
         this.generateDefaults();
       } catch (IOException e) {
-        AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to generate lang file", e);
+        AuroraKits.getInstance().getLogger().log(Level.SEVERE, "Failed to generate lang file", e);
       }
     }
     lang = YamlConfiguration.loadConfiguration(FILE);
-    AuroraKits.INSTANCE.getLogger().info("Lang reloaded!");
+    AuroraKits.getInstance().getLogger().info("Lang reloaded!");
   }
 }

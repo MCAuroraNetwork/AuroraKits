@@ -36,14 +36,14 @@ public class KitsGUI implements Listener {
 
     KITS_GUIS.put(player, this);
 
-    Bukkit.getPluginManager().registerEvents(this, AuroraKits.INSTANCE);
+    Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
   }
 
   public static void reloadAll() {
     for (KitsGUI kitsGui : KITS_GUIS.values()) {
       kitsGui.reload();
     }
-    AuroraKits.INSTANCE.getLogger().info("GUIs Reloaded!");
+    AuroraKits.getInstance().getLogger().info("GUIs Reloaded!");
   }
 
   public static void unregister(Player player) {
@@ -81,7 +81,7 @@ public class KitsGUI implements Listener {
     }
 
     if (event.getCurrentItem().getItemMeta().displayName() == null) {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-invalid-name"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-name"));
     } else {
       String itemName =
           PlainTextComponentSerializer.plainText().serialize(event.getCurrentItem().displayName());
@@ -192,7 +192,7 @@ public class KitsGUI implements Listener {
     private final KitsGUI gui;
 
     private Page(Kit[] kits, KitsGUI gui) {
-      inventory = Bukkit.createInventory(this, 54, AuroraKits.INSTANCE.getLang().getComponent("kit-gui"));
+      inventory = Bukkit.createInventory(this, 54, AuroraKits.getInstance().getLang().getComponent("kit-gui"));
       this.gui = gui;
 
       for (Kit kit : kits) {
@@ -203,12 +203,12 @@ public class KitsGUI implements Listener {
 
       ItemStack nextPage = new ItemStack(Material.PAPER);
       meta = nextPage.getItemMeta();
-      meta.displayName(AuroraKits.INSTANCE.getLang().getComponent("next-page"));
+      meta.displayName(AuroraKits.getInstance().getLang().getComponent("next-page"));
       nextPage.setItemMeta(meta);
 
       ItemStack previousPage = new ItemStack(Material.PAPER);
       meta = previousPage.getItemMeta();
-      meta.displayName(AuroraKits.INSTANCE.getLang().getComponent("previous-page"));
+      meta.displayName(AuroraKits.getInstance().getLang().getComponent("previous-page"));
       previousPage.setItemMeta(meta);
 
       inventory.setItem(45, previousPage);
@@ -217,7 +217,7 @@ public class KitsGUI implements Listener {
     }
 
     private Page(Kit kit, KitsGUI gui) {
-      inventory = Bukkit.createInventory(this, 54, AuroraKits.INSTANCE.getLang().getComponent("kit-gui"));
+      inventory = Bukkit.createInventory(this, 54, AuroraKits.getInstance().getLang().getComponent("kit-gui"));
       this.gui = gui;
 
       inventory.addItem(kit.getDisplayItem());
@@ -226,12 +226,12 @@ public class KitsGUI implements Listener {
 
       ItemStack nextPage = new ItemStack(Material.PAPER);
       meta = nextPage.getItemMeta();
-      meta.displayName(AuroraKits.INSTANCE.getLang().getComponent("next-page"));
+      meta.displayName(AuroraKits.getInstance().getLang().getComponent("next-page"));
       nextPage.setItemMeta(meta);
 
       ItemStack previousPage = new ItemStack(Material.PAPER);
       meta = previousPage.getItemMeta();
-      meta.displayName(AuroraKits.INSTANCE.getLang().getComponent("previous-page"));
+      meta.displayName(AuroraKits.getInstance().getLang().getComponent("previous-page"));
       previousPage.setItemMeta(meta);
 
       inventory.setItem(45, nextPage);

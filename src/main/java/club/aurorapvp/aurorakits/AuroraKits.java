@@ -9,19 +9,23 @@ import club.aurorapvp.aurorakits.modules.kits.Kit;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public final class AuroraKits extends JavaPlugin {
 
-  public static AuroraKits INSTANCE;
+  private static AuroraKits INSTANCE;
   private static boolean auroraCombatInstalled;
   private Config config;
   private Lang lang;
 
+  public static AuroraKits getInstance() {
+    return INSTANCE;
+  }
   public static boolean isAuroraCombatInstalled() {
     return auroraCombatInstalled;
   }
 
-  public YamlConfiguration getConfig() {
+  public @NotNull YamlConfiguration getConfig() {
     return config.getYaml();
   }
 

@@ -32,7 +32,7 @@ public class KitEditor implements Listener {
 
     KIT_EDITORS.put(player, this);
 
-    Bukkit.getPluginManager().registerEvents(this, AuroraKits.INSTANCE);
+    Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
   }
 
   @EventHandler

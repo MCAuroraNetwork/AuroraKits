@@ -19,7 +19,7 @@ public class KitDataHandler {
     this.kit = kit;
     this.FILE =
         new File(
-            AuroraKits.INSTANCE.getDataFolder(),
+            AuroraKits.getInstance().getDataFolder(),
             "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
     DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
   }
@@ -97,7 +97,7 @@ public class KitDataHandler {
       }
       DATA_FILE.save(FILE);
     } catch (IOException e) {
-      AuroraKits.INSTANCE.getLogger().log(Level.SEVERE, "Failed to save kit data", e);
+      AuroraKits.getInstance().getLogger().log(Level.SEVERE, "Failed to save kit data", e);
     }
   }
 }

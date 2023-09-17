@@ -31,7 +31,7 @@ public class KitCommands extends BaseCommand {
     if (kit != null) {
       kit.giveKit(player);
     } else {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-not-found"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-not-found"));
     }
   }
 
@@ -85,7 +85,7 @@ public class KitCommands extends BaseCommand {
     if (kit != null) {
       kit.editKit(player);
     } else {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("kit-not-found"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-not-found"));
     }
   }
 
@@ -109,6 +109,6 @@ public class KitCommands extends BaseCommand {
   @Subcommand("help")
   @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
-    sender.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("unknown-kit-command"));
+    sender.sendMessage(AuroraKits.getInstance().getLang().getComponent("unknown-kit-command"));
   }
 }

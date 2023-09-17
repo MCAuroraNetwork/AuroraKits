@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 public class EventManager {
 
   public static void init() {
-    Bukkit.getPluginManager().registerEvents(new PlayerEventListener(), AuroraKits.INSTANCE);
-    Bukkit.getPluginManager().registerEvents(new WorldEventListener(), AuroraKits.INSTANCE);
+    Bukkit.getPluginManager().registerEvents(new PlayerEventListener(), AuroraKits.getInstance());
+    Bukkit.getPluginManager().registerEvents(new WorldEventListener(), AuroraKits.getInstance());
   }
 }

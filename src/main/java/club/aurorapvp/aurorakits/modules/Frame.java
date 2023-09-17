@@ -60,7 +60,7 @@ public class Frame {
       }
     }
 
-    AuroraKits.INSTANCE.getLogger().info("All frames reloaded!");
+    AuroraKits.getInstance().getLogger().info("All frames reloaded!");
   }
 
   public static void register(ItemFrame itemFrame) {
@@ -140,9 +140,9 @@ public class Frame {
       this.data.create();
       frames.put(itemFrame, this);
 
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("frame-created"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("frame-created"));
     } else if (player != null) {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("frame-invalid"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("frame-invalid"));
     }
   }
 
@@ -150,7 +150,7 @@ public class Frame {
     this.getData().delete();
     frames.remove(this.getItemFrame());
     if (player != null) {
-      player.sendMessage(AuroraKits.INSTANCE.getLang().getComponent("frame-deleted"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("frame-deleted"));
     }
   }
 
