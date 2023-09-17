@@ -4,7 +4,6 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -36,7 +35,7 @@ public class KitEditor implements Listener {
   }
 
   @EventHandler
-  public void inventoryClicked(InventoryClickEvent event) {
+  public void onInventoryClick(InventoryClickEvent event) {
     if (!(event.getInventory().getHolder() instanceof EditPage)) {
       return;
     }

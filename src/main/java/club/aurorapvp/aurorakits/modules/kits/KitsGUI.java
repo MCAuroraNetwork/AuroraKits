@@ -1,7 +1,7 @@
 package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.config.Lang;
+import club.aurorapvp.aurorakits.events.custom.KitSelectEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -72,6 +72,11 @@ public class KitsGUI implements Listener {
     } else if (event.getSlot() == 53) {
       gui.nextPage();
       return;
+    } else if (event.getSlot() == 49) {
+      player.closeInventory();
+
+      new KitSelectEvent(player, null).callEvent();
+      return;
     }
 
     final ItemStack clickedItem = event.getCurrentItem();
@@ -93,7 +98,7 @@ public class KitsGUI implements Listener {
       if (event.isRightClick() && !kit.isPublic()) {
         kit.editKit(player);
       } else {
-        kit.giveKit(player);
+        new KitSelectEvent(player, kit).callEvent();
       }
     }
   }
@@ -192,7 +197,8 @@ public class KitsGUI implements Listener {
     private final KitsGUI gui;
 
     private Page(Kit[] kits, KitsGUI gui) {
-      inventory = Bukkit.createInventory(this, 54, AuroraKits.getInstance().getLang().getComponent("kit-gui"));
+      inventory = Bukkit.createInventory(this, 54,
+          AuroraKits.getInstance().getLang().getComponent("kit-gui"));
       this.gui = gui;
 
       for (Kit kit : kits) {
@@ -211,13 +217,20 @@ public class KitsGUI implements Listener {
       meta.displayName(AuroraKits.getInstance().getLang().getComponent("previous-page"));
       previousPage.setItemMeta(meta);
 
-      inventory.setItem(45, previousPage);
+      ItemStack noKit = new ItemStack(Material.BARRIER);
+      meta = noKit.getItemMeta();
+      meta.displayName(AuroraKits.getInstance().getLang().getComponent("no-kit"));
+      noKit.setItemMeta(meta);
+
+      inventory.setItem(49, noKit);
+      inventory.setItem(45, nextPage);
       inventory.setItem(53, nextPage);
       gui.index++;
     }
 
     private Page(Kit kit, KitsGUI gui) {
-      inventory = Bukkit.createInventory(this, 54, AuroraKits.getInstance().getLang().getComponent("kit-gui"));
+      inventory = Bukkit.createInventory(this, 54,
+          AuroraKits.getInstance().getLang().getComponent("kit-gui"));
       this.gui = gui;
 
       inventory.addItem(kit.getDisplayItem());

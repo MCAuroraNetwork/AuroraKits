@@ -2,12 +2,11 @@ package club.aurorapvp.aurorakits.events.listeners;
 
 import club.aurorapvp.auroracombat.events.custom.PlayerKilledByPlayerEvent;
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.config.Config;
-import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
 import club.aurorapvp.aurorakits.events.custom.KitDeleteEvent;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.events.custom.KitRefillEvent;
+import club.aurorapvp.aurorakits.events.custom.KitSelectEvent;
 import club.aurorapvp.aurorakits.modules.Frame;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import club.aurorapvp.aurorakits.modules.kits.KitEditor;
@@ -55,6 +54,12 @@ public class PlayerEventListener implements Listener {
     event.getPlayer().getInventory().setItemInOffHand(event.getKit().getOffhand().clone());
 
     event.getPlayer().sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-refilled"));
+  }
+
+  @EventHandler
+      (priority = EventPriority.MONITOR, ignoreCancelled = true)
+  public void onKitSelect(KitSelectEvent event) {
+    event.getKit().giveKit(event.getPlayer());
   }
 
   @EventHandler
