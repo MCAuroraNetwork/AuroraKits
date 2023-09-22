@@ -89,8 +89,6 @@ public class KitCommands extends BaseCommand {
     }
   }
 
-  // TODO
-  /*
   @Subcommand("copy")
   @Syntax("<name>")
   @Description("Copies a kit")
@@ -98,12 +96,11 @@ public class KitCommands extends BaseCommand {
   public void onCopy(Player player, String name, String newName) {
     Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      new Kit(newName, player, false).create(kit.getContents());
+      new Kit(newName, player, false).create(kit.getContents(), kit.getArmor(), kit.getOffhand());
     } else {
-      player.sendMessage(Lang.getComponent("kit-not-found"));
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-not-found"));
     }
   }
-   */
 
   @CatchUnknown
   @Subcommand("help")

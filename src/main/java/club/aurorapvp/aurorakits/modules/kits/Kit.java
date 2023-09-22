@@ -336,6 +336,46 @@ public class Kit {
         .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
   }
 
+  public void create(ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
+    if (this.exists()) {
+      Objects.requireNonNull(owner.getPlayer())
+          .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-already-exists"));
+      return;
+    }
+
+    if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
+        == null) {
+      Objects.requireNonNull(owner.getPlayer())
+          .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-item"));
+      return;
+    }
+
+    displayItem =
+        ItemStackUtil.createDisplayItem(
+            owner.getPlayer().getInventory().getItemInMainHand().getType(),
+            name,
+            owner.getName(),
+            isPublic);
+
+    this.contents = contents;
+    this.armor = armor;
+    this.offhand = offhand;
+
+    data.create();
+
+    if (isPublic) {
+      for (KitsGUI kitsGui : KitsGUI.getGuis()) {
+        kitsGui.addKit(this);
+      }
+    } else {
+      KitEditor.getEditor(owner.getPlayer()).addKit(this);
+      KitsGUI.getGUI(owner.getPlayer()).addKit(this);
+    }
+
+    Objects.requireNonNull(owner.getPlayer())
+        .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
+  }
+
   public void edit(Player player, ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
     this.contents = contents;
     this.armor = armor;
