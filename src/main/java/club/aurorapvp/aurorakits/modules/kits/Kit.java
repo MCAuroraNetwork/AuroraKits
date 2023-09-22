@@ -22,8 +22,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class Kit {
 
-  private static final Map<OfflinePlayer, Set<Kit>> PRIVATE_KITS = new HashMap<>();
-  private static final Map<OfflinePlayer, Set<Kit>> PUBLIC_KITS = new HashMap<>();
+  private static final Map<UUID, Set<Kit>> PRIVATE_KITS = new HashMap<>();
+  private static final Map<UUID, Set<Kit>> PUBLIC_KITS = new HashMap<>();
   private static final HashMap<UUID, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitDataHandler data;
   private final boolean isPublic;
@@ -43,11 +43,11 @@ public class Kit {
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
-    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner, new HashSet<>());
+    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner.getUniqueId(), new HashSet<>());
 
     set.add(this);
 
-    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).put(owner, set);
+    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).put(owner.getUniqueId(), set);
 
     if (this.exists()) {
       this.reload();
@@ -95,11 +95,11 @@ public class Kit {
 
   @SuppressWarnings("unused")
   public static Set<Kit> getPublicKits(Player player) {
-    return PUBLIC_KITS.get(player);
+    return PUBLIC_KITS.get(player.getUniqueId());
   }
 
   public static Set<Kit> getPrivateKits(Player player) {
-    return PRIVATE_KITS.get(player);
+    return PRIVATE_KITS.get(player.getUniqueId());
   }
 
   public static void setLastUsedKit(Player player, Kit kit) {
@@ -186,8 +186,8 @@ public class Kit {
   public static Set<Kit> getKits(Player player, boolean includePublic) {
     Set<Kit> playerKits = new HashSet<>();
 
-    if (PRIVATE_KITS.containsKey(player)) {
-      playerKits.addAll(PRIVATE_KITS.get(player));
+    if (PRIVATE_KITS.containsKey(player.getUniqueId())) {
+      playerKits.addAll(PRIVATE_KITS.get(player.getUniqueId()));
     }
 
     if (includePublic) {
@@ -204,8 +204,8 @@ public class Kit {
   }
 
   public static Kit getKit(Player player, String kitName) {
-    if (PRIVATE_KITS.containsKey(player)) {
-      for (Kit kit : PRIVATE_KITS.get(player)) {
+    if (PRIVATE_KITS.containsKey(player.getUniqueId())) {
+      for (Kit kit : PRIVATE_KITS.get(player.getUniqueId())) {
         if (Objects.equals(kit.getName(), kitName)) {
           return kit;
         }
