@@ -98,6 +98,10 @@ public class KitEditor implements Listener {
     return KIT_EDITORS.getOrDefault(player.getUniqueId(), new KitEditor(player));
   }
 
+  public static void unregister(Player player) {
+    KIT_EDITORS.remove(player.getUniqueId());
+  }
+
   public void open(Player player, Kit kit) {
     player.openInventory(kitEditors.get(kit).getInventory());
   }

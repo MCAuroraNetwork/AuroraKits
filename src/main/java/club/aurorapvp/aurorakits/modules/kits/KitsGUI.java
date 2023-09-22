@@ -104,6 +104,10 @@ public class KitsGUI implements Listener {
     return KITS_GUIS.getOrDefault(player.getUniqueId(), new KitsGUI(player));
   }
 
+  public static void unregister(Player player) {
+    KITS_GUIS.remove(player.getUniqueId());
+  }
+
   public static Set<KitsGUI> getGuis() {
     return Set.copyOf(KITS_GUIS.values());
   }

@@ -35,6 +35,8 @@ public class PlayerEventListener implements Listener {
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
     Kit.unregister(event.getPlayer());
+    KitsGUI.unregister(event.getPlayer());
+    KitEditor.unregister(event.getPlayer());
   }
 
   @EventHandler
