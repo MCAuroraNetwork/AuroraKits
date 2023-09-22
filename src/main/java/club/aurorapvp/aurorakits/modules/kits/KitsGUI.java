@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class KitsGUI implements Listener {
 
-  private static final Map<Player, KitsGUI> KITS_GUIS = new HashMap<>();
+  private static final Map<UUID, KitsGUI> KITS_GUIS = new HashMap<>();
   private final Player player;
   private final List<Page> pages = new ArrayList<>();
   private int currentPage = 0;
@@ -34,7 +35,7 @@ public class KitsGUI implements Listener {
 
     reload();
 
-    KITS_GUIS.put(player, this);
+    KITS_GUIS.put(player.getUniqueId(), this);
 
     Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
   }
@@ -44,10 +45,6 @@ public class KitsGUI implements Listener {
       kitsGui.reload();
     }
     AuroraKits.getInstance().getLogger().info("GUIs Reloaded!");
-  }
-
-  public static void unregister(Player player) {
-    KITS_GUIS.remove(player);
   }
 
   @EventHandler
@@ -104,13 +101,7 @@ public class KitsGUI implements Listener {
   }
 
   public static KitsGUI getGUI(Player player) {
-    KitsGUI gui = KITS_GUIS.get(player);
-
-    if (gui == null) {
-      return new KitsGUI(player);
-    }
-
-    return gui;
+    return KITS_GUIS.getOrDefault(player.getUniqueId(), new KitsGUI(player));
   }
 
   public static Set<KitsGUI> getGuis() {

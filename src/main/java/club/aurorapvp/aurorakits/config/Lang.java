@@ -52,6 +52,7 @@ public class Lang {
     DEFAULTS.put("not-your-kit", "prefix <red>That's not your kit!");
     DEFAULTS.put("next-page", "<yellow><bold>Next");
     DEFAULTS.put("previous-page", "<yellow><bold>Previous");
+    DEFAULTS.put("no-kit", "<yellow><bold>No Kit");
     DEFAULTS.put("unknown-kit-command", "prefix <red>Unknown Kit Command! Use /help");
     DEFAULTS.put(
         "help-command",

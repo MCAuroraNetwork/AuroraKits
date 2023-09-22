@@ -26,12 +26,15 @@ public class PlayerEventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.register(event.getPlayer());
-    new KitEditor(event.getPlayer());
-    new KitsGUI(event.getPlayer());
 
     if (AuroraKits.getInstance().getConfig().getBoolean("kits.give-last-kit.enabled")) {
       Kit.refillKit(event.getPlayer());
     }
+  }
+
+  @EventHandler
+  public void onPlayerQuit(PlayerQuitEvent event) {
+    Kit.unregister(event.getPlayer());
   }
 
   @EventHandler
@@ -88,13 +91,6 @@ public class PlayerEventListener implements Listener {
     if (event.getPlayer() != null) {
       event.getPlayer().sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-deleted"));
     }
-  }
-
-  @EventHandler
-  public void onPlayerQuit(PlayerQuitEvent event) {
-    Kit.unregister(event.getPlayer());
-    KitsGUI.unregister(event.getPlayer());
-    KitEditor.unregister(event.getPlayer());
   }
 
   @EventHandler

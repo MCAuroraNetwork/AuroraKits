@@ -4,6 +4,8 @@ import club.aurorapvp.aurorakits.AuroraKits;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class KitEditor implements Listener {
 
-  private static final Map<Player, KitEditor> KIT_EDITORS = new HashMap<>();
+  private static final Map<UUID, KitEditor> KIT_EDITORS = new HashMap<>();
   private final Player player;
   private final Map<Kit, EditPage> kitEditors = new HashMap<>();
 
@@ -29,7 +31,7 @@ public class KitEditor implements Listener {
 
     reload();
 
-    KIT_EDITORS.put(player, this);
+    KIT_EDITORS.put(player.getUniqueId(), this);
 
     Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
   }
@@ -64,7 +66,7 @@ public class KitEditor implements Listener {
   }
 
   @EventHandler
-  public void inventoryClosed(InventoryCloseEvent event) {
+  public void onInventoryClose(InventoryCloseEvent event) {
     Inventory inventory = event.getInventory();
 
     if (!(inventory.getHolder() instanceof EditPage editPage)) {
@@ -93,11 +95,7 @@ public class KitEditor implements Listener {
   }
 
   public static KitEditor getEditor(Player player) {
-    return KIT_EDITORS.get(player);
-  }
-
-  public static void unregister(Player player) {
-    KIT_EDITORS.remove(player);
+    return KIT_EDITORS.getOrDefault(player.getUniqueId(), new KitEditor(player));
   }
 
   public void open(Player player, Kit kit) {

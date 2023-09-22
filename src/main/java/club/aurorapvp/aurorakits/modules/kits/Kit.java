@@ -1,8 +1,6 @@
 package club.aurorapvp.aurorakits.modules.kits;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.config.Config;
-import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.data.KitDataHandler;
 import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
 import club.aurorapvp.aurorakits.events.custom.KitDeleteEvent;
@@ -26,7 +24,7 @@ public class Kit {
 
   private static final Map<OfflinePlayer, Set<Kit>> PRIVATE_KITS = new HashMap<>();
   private static final Map<OfflinePlayer, Set<Kit>> PUBLIC_KITS = new HashMap<>();
-  private static final HashMap<Player, Kit> LAST_USED_KIT = new HashMap<>();
+  private static final HashMap<UUID, Kit> LAST_USED_KIT = new HashMap<>();
   private final KitDataHandler data;
   private final boolean isPublic;
   private final String name;
@@ -105,7 +103,7 @@ public class Kit {
   }
 
   public static void setLastUsedKit(Player player, Kit kit) {
-    LAST_USED_KIT.put(player, kit);
+    LAST_USED_KIT.put(player.getUniqueId(), kit);
   }
 
   public static int getAmount(Player player, boolean includePublic) {
@@ -248,11 +246,12 @@ public class Kit {
   }
 
   public static Kit getLastUsedKit(Player player) {
-    if (LAST_USED_KIT.containsKey(player)) {
-      return LAST_USED_KIT.get(player);
+    if (LAST_USED_KIT.containsKey(player.getUniqueId())) {
+      return LAST_USED_KIT.get(player.getUniqueId());
     }
 
-    return Kit.getKit(AuroraKits.getInstance().getConfig().getString("kits.give-last-kit.default-kit"));
+    return Kit.getKit(
+        AuroraKits.getInstance().getConfig().getString("kits.give-last-kit.default-kit"));
   }
 
   public static void refillKit(Player player) {
@@ -271,9 +270,13 @@ public class Kit {
     return contents;
   }
 
-  public ItemStack[] getArmor() { return armor; }
+  public ItemStack[] getArmor() {
+    return armor;
+  }
 
-  public ItemStack getOffhand() { return offhand; }
+  public ItemStack getOffhand() {
+    return offhand;
+  }
 
   public boolean isPublic() {
     return publicKit;
@@ -306,7 +309,8 @@ public class Kit {
 
     if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
         == null) {
-      Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-item"));
+      Objects.requireNonNull(owner.getPlayer())
+          .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-item"));
       return;
     }
 
@@ -332,7 +336,8 @@ public class Kit {
       KitsGUI.getGUI(owner.getPlayer()).addKit(this);
     }
 
-    Objects.requireNonNull(owner.getPlayer()).sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
+    Objects.requireNonNull(owner.getPlayer())
+        .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
   }
 
   public void edit(Player player, ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
