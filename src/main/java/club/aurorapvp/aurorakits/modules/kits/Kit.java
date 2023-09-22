@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Kit {
-
   private static final Map<UUID, Set<Kit>> PRIVATE_KITS = new HashMap<>();
   private static final Map<UUID, Set<Kit>> PUBLIC_KITS = new HashMap<>();
   private static final HashMap<UUID, Kit> LAST_USED_KIT = new HashMap<>();
@@ -30,7 +29,6 @@ public class Kit {
   private final String name;
   private final String path;
   private final OfflinePlayer owner;
-  private boolean publicKit;
   private ItemStack[] contents;
   private ItemStack[] armor;
   private ItemStack offhand;
@@ -279,7 +277,7 @@ public class Kit {
   }
 
   public boolean isPublic() {
-    return publicKit;
+    return isPublic;
   }
 
   public OfflinePlayer getOwner() {
@@ -299,8 +297,6 @@ public class Kit {
   }
 
   public void create() {
-    this.publicKit = isPublic;
-
     if (this.exists()) {
       Objects.requireNonNull(owner.getPlayer())
           .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-already-exists"));
@@ -376,7 +372,6 @@ public class Kit {
     this.contents = this.getData().getContents();
     this.armor = this.getData().getArmor();
     this.offhand = this.getData().getOffhand();
-    this.publicKit = this.getData().isPublic();
     this.displayItem = this.getData().getDisplayItem();
   }
 }
