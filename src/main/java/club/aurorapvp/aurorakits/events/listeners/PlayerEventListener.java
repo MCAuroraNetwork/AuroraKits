@@ -63,6 +63,8 @@ public class PlayerEventListener implements Listener {
       (priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onKitSelect(KitSelectEvent event) {
     event.getKit().giveKit(event.getPlayer());
+
+    event.getPlayer().closeInventory();
   }
 
   @EventHandler
