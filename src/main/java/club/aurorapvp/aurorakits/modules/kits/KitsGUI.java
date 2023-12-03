@@ -71,8 +71,6 @@ public class KitsGUI implements Listener {
       return;
     } else if (event.getSlot() == 49) {
       player.closeInventory();
-
-      new KitSelectEvent(player, null).callEvent();
       return;
     }
 
@@ -94,8 +92,10 @@ public class KitsGUI implements Listener {
       assert kit != null;
       if (event.isRightClick() && !kit.isPublic()) {
         kit.editKit(player);
-      } else {
-        new KitSelectEvent(player, kit).callEvent();
+      } else if (new KitSelectEvent(player, kit).callEvent()) {
+        kit.giveKit(player);
+
+        player.closeInventory();
       }
     }
   }

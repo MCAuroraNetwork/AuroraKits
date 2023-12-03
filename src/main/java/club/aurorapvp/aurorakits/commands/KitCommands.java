@@ -2,6 +2,7 @@ package club.aurorapvp.aurorakits.commands;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.config.Lang;
+import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;

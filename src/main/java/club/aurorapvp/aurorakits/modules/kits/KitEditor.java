@@ -51,7 +51,7 @@ public class KitEditor implements Listener {
 
     ItemStack cursorItem = event.getCursor();
 
-    if (cursorItem == null || cursorItem.getType().isAir()) {
+    if (cursorItem.getType().isAir()) {
       return;
     }
 

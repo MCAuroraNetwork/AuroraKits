@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Kit {
+
   private static final Map<UUID, Set<Kit>> PRIVATE_KITS = new HashMap<>();
   private static final Map<UUID, Set<Kit>> PUBLIC_KITS = new HashMap<>();
   private static final HashMap<UUID, Kit> LAST_USED_KIT = new HashMap<>();
@@ -41,7 +42,8 @@ public class Kit {
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
-    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner.getUniqueId(), new HashSet<>());
+    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner.getUniqueId(),
+        new HashSet<>());
 
     set.add(this);
 
@@ -100,6 +102,10 @@ public class Kit {
     return PRIVATE_KITS.get(player.getUniqueId());
   }
 
+  public static Set<Kit> getPrivateKits(UUID uuid) {
+    return PRIVATE_KITS.get(uuid);
+  }
+
   public static void setLastUsedKit(Player player, Kit kit) {
     LAST_USED_KIT.put(player.getUniqueId(), kit);
   }
@@ -112,7 +118,7 @@ public class Kit {
   public static Kit createKit(String name, Player player) {
     Kit kit = new Kit(name, player, true);
 
-    new KitCreateEvent(player, kit);
+    kit.create();
 
     return kit;
   }
@@ -121,7 +127,7 @@ public class Kit {
   public static void deleteKit(String name, boolean isPublic) {
     for (Kit kit : getKits()) {
       if (Objects.equals(kit.getName(), name)) {
-        new KitDeleteEvent(null, kit).callEvent();
+        kit.delete();
       }
     }
   }
@@ -129,7 +135,7 @@ public class Kit {
   public static void deleteKit(Player player, String name, boolean isPublic) {
     Kit kit = Kit.getKit(player, name);
     if (kit != null && kit.isPublic() == isPublic) {
-      new KitDeleteEvent(player, kit).callEvent();
+      kit.delete();
     } else {
       player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-name"));
     }
@@ -253,7 +259,15 @@ public class Kit {
   }
 
   public static void refillKit(Player player) {
-    new KitRefillEvent(player).callEvent();
+    if (!new KitRefillEvent(player).callEvent()) {
+      return;
+    }
+
+    player.getInventory().setStorageContents(Kit.getLastUsedKit(player).getContents().clone());
+    player.getInventory().setArmorContents(Kit.getLastUsedKit(player).getArmor().clone());
+    player.getInventory().setItemInOffHand(Kit.getLastUsedKit(player).getOffhand().clone());
+
+    player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-refilled"));
   }
 
   public String getPath() {
@@ -297,6 +311,10 @@ public class Kit {
   }
 
   public void create() {
+    if (!new KitCreateEvent(owner.getPlayer(), this).callEvent()) {
+      return;
+    }
+
     if (this.exists()) {
       Objects.requireNonNull(owner.getPlayer())
           .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-already-exists"));
@@ -387,13 +405,43 @@ public class Kit {
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public void delete() {
-    data.getFile().delete();
+  public void delete(Player player) {
+    if (!new KitDeleteEvent(player, this).callEvent()) {
+      return;
+    }
+
+    Set<Kit> set;
+    if (this.isPublic()) {
+      set = (Kit.getPublicKits());
+    } else {
+      set = (Kit.getPrivateKits(this.getOwner().getUniqueId()));
+    }
+
+    set.remove(this);
+
+    if (this.isPublic()) {
+      KitsGUI.reloadAll();
+    } else if (this.getOwner().isOnline()) {
+      Objects.requireNonNull(KitsGUI.getGUI(Objects.requireNonNull(this.getOwner().getPlayer())))
+          .reload();
+    }
+
+    this.getData().getFile().delete();
   }
 
   public void giveKit(Player player) {
-    if (this.exists()) {
-      new KitGiveEvent(player, this).callEvent();
+    if (!this.exists()) {
+      if (!new KitGiveEvent(player, this).callEvent()) {
+        return;
+      }
+
+      player.getInventory().setStorageContents(this.getContents().clone());
+      player.getInventory().setArmorContents(this.getArmor().clone());
+      player.getInventory().setItemInOffHand(this.getOffhand().clone());
+
+      Kit.setLastUsedKit(player, this);
+
+      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-used"));
     } else {
       player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-not-found"));
     }
