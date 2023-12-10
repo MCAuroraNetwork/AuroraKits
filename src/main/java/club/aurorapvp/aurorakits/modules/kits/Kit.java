@@ -127,7 +127,7 @@ public class Kit {
   public static void deleteKit(String name, boolean isPublic) {
     for (Kit kit : getKits()) {
       if (Objects.equals(kit.getName(), name)) {
-        kit.delete();
+        kit.delete(null);
       }
     }
   }
@@ -135,7 +135,7 @@ public class Kit {
   public static void deleteKit(Player player, String name, boolean isPublic) {
     Kit kit = Kit.getKit(player, name);
     if (kit != null && kit.isPublic() == isPublic) {
-      kit.delete();
+      kit.delete(player);
     } else {
       player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-name"));
     }
