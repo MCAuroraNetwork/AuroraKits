@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,7 +23,7 @@ public class KitEditor implements Listener {
 
   private static final Map<UUID, KitEditor> KIT_EDITORS = new HashMap<>();
   private final Player player;
-  private final Map<Kit, EditPage> kitEditors = new HashMap<>();
+  private final Map<Kit, EditPage> editPages = new HashMap<>();
 
   public KitEditor(Player player) {
     this.player = player;
@@ -103,18 +102,18 @@ public class KitEditor implements Listener {
   }
 
   public void open(Player player, Kit kit) {
-    player.openInventory(kitEditors.get(kit).getInventory());
+    player.openInventory(editPages.get(kit).getInventory());
   }
 
   public void addKit(Kit kit) {
-    kitEditors.put(kit, new EditPage(kit));
+    editPages.put(kit, new EditPage(kit));
   }
 
   public void reload() {
     Set<Kit> kitSet = Kit.getKits(player, false);
 
     for (Kit kit : kitSet) {
-      kitEditors.put(kit, new EditPage(kit));
+      editPages.put(kit, new EditPage(kit));
     }
   }
 
