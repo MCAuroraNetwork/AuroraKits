@@ -25,12 +25,12 @@ public final class AuroraKits extends JavaPlugin {
     return auroraCombatInstalled;
   }
 
-  public @NotNull YamlConfiguration getConfig() {
-    return config.getYaml();
-  }
-
   public Lang getLang() {
     return lang;
+  }
+
+  public @NotNull YamlConfiguration getConfig() {
+    return config.getYaml();
   }
 
   @Override
@@ -51,7 +51,7 @@ public final class AuroraKits extends JavaPlugin {
 
     // Check soft depends
     if (Bukkit.getPluginManager().getPlugin("AuroraCombat") != null) {
-      if (getConfig().getBoolean("optional-plugins.auroracombat-compatibility")) {
+      if (this.getConfig().getBoolean("optional-plugins.auroracombat-compatibility")) {
         auroraCombatInstalled = true;
       }
     }

@@ -33,6 +33,7 @@ public class Lang {
     }
 
     DEFAULTS.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraKits ><reset>~");
+    DEFAULTS.put("reloaded", "prefix <green>Reloaded");
     DEFAULTS.put("frame-created", "prefix <green>Frame created!");
     DEFAULTS.put("frame-deleted", "prefix <red>Frame deleted");
     DEFAULTS.put("frame-invalid", "prefix <red>Invalid frame name");

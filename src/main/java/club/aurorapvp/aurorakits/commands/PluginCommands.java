@@ -33,6 +33,8 @@ public class PluginCommands extends BaseCommand {
     Kit.reloadAll();
     KitsGUI.reloadAll();
 
+    player.sendMessage(AuroraKits.getInstance().getLang().getComponent("reloaded"));
+
     AuroraKits.getInstance()
         .getLogger()
         .info("AuroraKits reloaded in " + (System.currentTimeMillis() - startTime) + "ms");
