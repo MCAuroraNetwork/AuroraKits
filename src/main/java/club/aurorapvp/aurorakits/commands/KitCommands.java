@@ -102,11 +102,4 @@ public class KitCommands extends BaseCommand {
       player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-not-found"));
     }
   }
-
-  @CatchUnknown
-  @Subcommand("help")
-  @SuppressWarnings("unused")
-  public void onUnknown(CommandSender sender) {
-    sender.sendMessage(AuroraKits.getInstance().getLang().getComponent("unknown-kit-command"));
-  }
 }

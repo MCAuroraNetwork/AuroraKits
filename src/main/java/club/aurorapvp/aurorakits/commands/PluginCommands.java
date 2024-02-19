@@ -40,11 +40,10 @@ public class PluginCommands extends BaseCommand {
         .info("AuroraKits reloaded in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
-  @Default
+  @CatchUnknown
   @Subcommand("help")
   @CommandPermission("aurorakits.command.aurorakits.help")
   @Description("Lists all available plugin commands and their function")
-  @CatchUnknown
   @SuppressWarnings("unused")
   public void onUnknown(CommandSender sender) {
     sender.sendMessage(AuroraKits.getInstance().getLang().getComponent("help-command"));
