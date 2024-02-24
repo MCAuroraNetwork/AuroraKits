@@ -430,7 +430,7 @@ public class Kit {
   }
 
   public void giveKit(Player player) {
-    if (!this.exists()) {
+    if (this.exists()) {
       if (!new KitGiveEvent(player, this).callEvent()) {
         return;
       }
