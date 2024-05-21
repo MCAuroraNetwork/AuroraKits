@@ -59,9 +59,13 @@ public class Lang {
         """
             prefix <yellow><bold>All Commands:
                     
+                    
             <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
+            
             <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
+            
             <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit
+            
             <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit
             """);
 
