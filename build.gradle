@@ -25,7 +25,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.bstats:bstats-bukkit:3.0.0'
     implementation "co.aikar:acf-paper:0.5.1-SNAPSHOT"
 
     compileOnly 'io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT'
@@ -39,7 +38,6 @@ build {
 shadowJar {
     minimize()
     archiveFileName.set("${project.name}-${project.version}.jar")
-    relocate 'org.bstats', 'club.aurorapvp.aurorakits.shaded.bstats'
     relocate 'co.aikar.commands', 'club.aurorapvp.aurorakits.shaded.acf'
     relocate 'co.aikar.locales', 'club.aurorapvp.aurorakits.shaded.locales'
 }
