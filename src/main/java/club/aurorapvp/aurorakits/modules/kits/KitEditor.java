@@ -13,10 +13,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.checkerframework.checker.units.qual.K;
 import org.jetbrains.annotations.NotNull;
 
 public class KitEditor implements Listener {
@@ -29,8 +31,6 @@ public class KitEditor implements Listener {
     this.player = player;
 
     reload();
-
-    KIT_EDITORS.put(player.getUniqueId(), this);
 
     Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
   }
@@ -94,7 +94,11 @@ public class KitEditor implements Listener {
   }
 
   public static KitEditor getEditor(Player player) {
-    return KIT_EDITORS.getOrDefault(player.getUniqueId(), new KitEditor(player));
+    return KIT_EDITORS.get(player.getUniqueId());
+  }
+
+  public static void register(Player player) {
+    KIT_EDITORS.put(player.getUniqueId(), new KitEditor(player));
   }
 
   public static void unregister(Player player) {

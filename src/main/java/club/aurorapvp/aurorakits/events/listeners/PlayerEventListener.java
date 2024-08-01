@@ -18,6 +18,7 @@ public class PlayerEventListener implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     Kit.register(event.getPlayer());
+    KitEditor.register(event.getPlayer());
 
     if (AuroraKits.getInstance().getConfig().getBoolean("kits.give-last-kit.enabled")) {
       Kit.refillKit(event.getPlayer());
