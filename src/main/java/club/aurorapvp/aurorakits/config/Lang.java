@@ -39,9 +39,9 @@ public class Lang {
     DEFAULTS.put("frame-invalid", "prefix <red>Invalid frame name");
     DEFAULTS.put("kit-gui", "<yellow><bold>Kits");
     DEFAULTS.put("kit-created",
-        "prefix <green>Kit created! Use <bold>/kits<reset><green> to getYaml it!");
+        "prefix <green>Kit created! Use <bold>/kits<reset><green> to get it!");
     DEFAULTS.put("kit-updated",
-        "prefix <green>Kit updated! Use <bold>/kits<reset><green> to getYaml it!");
+        "prefix <green>Kit updated! Use <bold>/kits<reset><green> to get it!");
     DEFAULTS.put("kit-used", "prefix <green>Kit used!");
     DEFAULTS.put("kit-refilled", "prefix <green>Kit refilled!");
     DEFAULTS.put("kit-deleted", "prefix <red>Kit deleted");
