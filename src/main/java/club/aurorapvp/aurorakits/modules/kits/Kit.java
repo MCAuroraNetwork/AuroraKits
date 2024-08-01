@@ -115,15 +115,6 @@ public class Kit {
   }
 
   @SuppressWarnings("unused")
-  public static Kit createKit(String name, Player player) {
-    Kit kit = new Kit(name, player, true);
-
-    kit.create();
-
-    return kit;
-  }
-
-  @SuppressWarnings("unused")
   public static void deleteKit(String name, boolean isPublic) {
     for (Kit kit : getKits()) {
       if (Objects.equals(kit.getName(), name)) {
