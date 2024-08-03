@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public final class AuroraKits extends JavaPlugin {
 
   private static AuroraKits INSTANCE;
+  private boolean luckPermsInstalled = false;
   private boolean auroraCombatInstalled;
   private Config config;
   private Lang lang;
@@ -21,6 +22,11 @@ public final class AuroraKits extends JavaPlugin {
   public static AuroraKits getInstance() {
     return INSTANCE;
   }
+
+  public boolean isLuckPermsInstalled() {
+    return luckPermsInstalled;
+  }
+
   public boolean isAuroraCombatInstalled() {
     return auroraCombatInstalled;
   }
@@ -50,6 +56,11 @@ public final class AuroraKits extends JavaPlugin {
     Kit.init();
 
     // Check soft depends
+    if ((Bukkit.getPluginManager().getPlugin("LuckPerms") != null)
+            && getConfig().getBoolean("optional-plugins.luckperms-compatibility")) {
+      luckPermsInstalled = true;
+    }
+
     if (Bukkit.getPluginManager().getPlugin("AuroraCombat") != null) {
       if (this.getConfig().getBoolean("optional-plugins.auroracombat-compatibility")) {
         auroraCombatInstalled = true;

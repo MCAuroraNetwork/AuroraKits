@@ -50,6 +50,7 @@ public class Lang {
     DEFAULTS.put("kit-invalid-item", "prefix <red>Invalid kit item");
     DEFAULTS.put("kit-not-found", "prefix <red>Kit not found");
     DEFAULTS.put("kit-already-exists", "prefix <red>Kit already exists");
+    DEFAULTS.put("too-many-kits", "prefix <red>You have reached your maximum amount of kits!");
     DEFAULTS.put("not-your-kit", "prefix <red>That's not your kit!");
     DEFAULTS.put("next-page", "<yellow><bold>Next");
     DEFAULTS.put("previous-page", "<yellow><bold>Previous");

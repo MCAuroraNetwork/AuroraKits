@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,8 +45,8 @@ public class Kit {
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
-    Set<Kit> set = (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner.getUniqueId(),
-        new HashSet<>());
+    Set<Kit> set =
+        (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner.getUniqueId(), new HashSet<>());
 
     set.add(this);
 
@@ -301,22 +304,46 @@ public class Kit {
     return this.getData().getFile().exists();
   }
 
-  public void create() {
+  public boolean create() {
     if (!new KitCreateEvent(owner.getPlayer(), this).callEvent()) {
-      return;
+      return false;
     }
 
     if (this.exists()) {
       Objects.requireNonNull(owner.getPlayer())
           .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-already-exists"));
-      return;
+      return false;
     }
 
     if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
         == null) {
       Objects.requireNonNull(owner.getPlayer())
           .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-item"));
-      return;
+      return false;
+    }
+
+    int max = Integer.MAX_VALUE;
+
+    if (AuroraKits.getInstance().isLuckPermsInstalled()) {
+      LuckPerms luckPerms =
+          Objects.requireNonNull(Bukkit.getServicesManager().getRegistration(LuckPerms.class))
+              .getProvider();
+
+      User user = luckPerms.getPlayerAdapter(Player.class).getUser(owner.getPlayer());
+
+      String meta = user.getCachedData().getMetaData().getMetaValue("max-kits");
+      if (meta != null) {
+        max = Integer.parseInt(meta);
+      }
+    }
+
+    int kitAmount =
+        Kit.getAmount(Objects.requireNonNull(owner.getPlayer()), false)
+            + Kit.getPublicKits(owner.getPlayer()).size();
+
+    if (kitAmount >= max) {
+      owner.getPlayer().sendMessage(AuroraKits.getInstance().getLang().getComponent("too-many-kits"));
+      return false;
     }
 
     displayItem =
@@ -343,6 +370,8 @@ public class Kit {
 
     Objects.requireNonNull(owner.getPlayer())
         .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
+
+    return true;
   }
 
   public void create(ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
