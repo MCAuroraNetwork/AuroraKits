@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -101,6 +103,41 @@ public class Lang {
       }
     }
     return MiniMessage.miniMessage().deserialize(pathString);
+  }
+
+  public Component getformattedComponentCommand(String message, String hover, String command, Object... args) {
+    String pathString = getYaml().getString(message);
+    assert pathString != null;
+    for (String placeholder : PLACEHOLDERS.keySet()) {
+      if (pathString.contains(placeholder)) {
+        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
+      }
+    }
+
+    pathString = String.format(pathString, args);
+
+    Component component = MiniMessage.miniMessage().deserialize(pathString);
+
+    return component
+            .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command))
+            .hoverEvent(HoverEvent.showText(Component.text(hover)));
+  }
+
+  public Component getComponentCommand(String message, String hover, String command) {
+    String pathString = getYaml().getString(message);
+    assert pathString != null;
+
+    for (String placeholder : PLACEHOLDERS.keySet()) {
+      if (pathString.contains(placeholder)) {
+        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
+      }
+    }
+
+    Component component = MiniMessage.miniMessage().deserialize(pathString);
+
+    return component
+            .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command))
+            .hoverEvent(HoverEvent.showText(Component.text(hover)));
   }
 
   public YamlConfiguration getYaml() {

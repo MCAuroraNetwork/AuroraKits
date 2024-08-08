@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
@@ -342,7 +341,9 @@ public class Kit {
             + Kit.getPublicKits(owner.getPlayer()).size();
 
     if (kitAmount >= max) {
-      owner.getPlayer().sendMessage(AuroraKits.getInstance().getLang().getComponent("too-many-kits"));
+      owner
+          .getPlayer()
+          .sendMessage(AuroraKits.getInstance().getLang().getComponent("too-many-kits"));
       return false;
     }
 
@@ -369,7 +370,10 @@ public class Kit {
     }
 
     Objects.requireNonNull(owner.getPlayer())
-        .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
+        .sendMessage(
+            AuroraKits.getInstance()
+                .getLang()
+                .getComponentCommand("kit-created", "Click to Open Kit", "/kit " + this.getName()));
 
     return true;
   }
@@ -421,7 +425,7 @@ public class Kit {
 
     data.create();
 
-    player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-updated"));
+    player.sendMessage(AuroraKits.getInstance().getLang().getComponentCommand("kit-updated", "Click to Open Kit", "/kit " + this.getName()));
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
