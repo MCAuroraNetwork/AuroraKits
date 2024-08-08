@@ -63,11 +63,16 @@ public class Kit {
       for (File file : Objects.requireNonNull(dir.listFiles())) {
         String kitName = file.getName().replace(".yml", "");
         YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
-        new Kit(
-            kitName,
-            Bukkit.getOfflinePlayer(
-                UUID.fromString(Objects.requireNonNull(yaml.getString("owner")))),
-            yaml.getBoolean("isPublic"));
+
+        UUID owner = UUID.fromString(Objects.requireNonNull(yaml.getString("owner")));
+
+        if (!PUBLIC_KITS.containsKey(owner)) {
+          PUBLIC_KITS.put(owner, new HashSet<>());
+        }
+
+        PUBLIC_KITS
+            .get(owner)
+            .add(new Kit(kitName, Bukkit.getOfflinePlayer(owner), yaml.getBoolean("isPublic")));
       }
     }
 
@@ -187,10 +192,6 @@ public class Kit {
       playerKits.addAll(PRIVATE_KITS.get(player.getUniqueId()));
     }
 
-    if (includePublic) {
-      playerKits.addAll(Kit.getPublicKits());
-    }
-
     for (Kit kit : Kit.getKits()) {
       if (kit.getOwner() == player || (kit.isPublic() && includePublic)) {
         playerKits.add(kit);
@@ -221,6 +222,12 @@ public class Kit {
   public static void register(Player player) {
     File dir = new File(AuroraKits.getInstance().getDataFolder(), "/kits/" + player.getUniqueId());
 
+    PRIVATE_KITS.put(player.getUniqueId(), new HashSet<>());
+
+    if (!PUBLIC_KITS.containsKey(player.getUniqueId())) {
+      PUBLIC_KITS.put(player.getUniqueId(), new HashSet<>());
+    }
+
     if (dir.exists()) {
       for (File file : Objects.requireNonNull(dir.listFiles())) {
         String kitName = file.getName().replace(".yml", "");
@@ -235,15 +242,15 @@ public class Kit {
   }
 
   public static void unregister(Player player) {
-    for (Kit kit : getKits(player, true)) {
-      if (!kit.isPublic()) {
-        Kit.getKits().remove(kit);
-      }
+    PRIVATE_KITS.remove(player.getUniqueId());
+
+    if (PUBLIC_KITS.get(player.getUniqueId()).isEmpty()) {
+      PUBLIC_KITS.remove(player.getUniqueId());
     }
   }
 
   public static Kit getLastUsedKit(Player player) {
-    if (LAST_USED_KIT.containsKey(player.getUniqueId())) {
+    if (LAST_USED_KIT.get(player.getUniqueId()) != null) {
       return LAST_USED_KIT.get(player.getUniqueId());
     }
 

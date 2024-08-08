@@ -149,7 +149,9 @@ public class KitsGUI implements Listener {
   }
 
   public void reload() {
-    Set<Kit> kitSet = Kit.getKits(this.getPlayer(), true);
+    Set<Kit> kitSet = Kit.getKits(this.getPlayer(), false);
+
+    kitSet.addAll(Kit.getPublicKits());
 
     index = -1;
     pages.clear();
