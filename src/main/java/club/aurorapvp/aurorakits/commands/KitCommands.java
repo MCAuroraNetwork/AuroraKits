@@ -1,11 +1,8 @@
 package club.aurorapvp.aurorakits.commands;
 
 import club.aurorapvp.aurorakits.AuroraKits;
-import club.aurorapvp.aurorakits.config.Lang;
-import club.aurorapvp.aurorakits.events.custom.KitCreateEvent;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
@@ -15,7 +12,6 @@ import co.aikar.commands.annotation.Optional;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
 import java.util.Objects;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("kit")
@@ -42,8 +38,12 @@ public class KitCommands extends BaseCommand {
   @Description("Creates a private kit")
   @SuppressWarnings("unused")
   public void onCreate(Player player, @Optional String name) {
-    new Kit(Objects.requireNonNullElseGet(name,
-        () -> "Kit" + Math.addExact(Kit.getAmount(player, false), 1)), player, false).create();
+    new Kit(
+            Objects.requireNonNullElseGet(
+                name, () -> "Kit" + Math.addExact(Kit.getAmount(player, false), 1)),
+            player,
+            false)
+        .create();
   }
 
   @Subcommand("delete|remove")
@@ -97,7 +97,8 @@ public class KitCommands extends BaseCommand {
   public void onCopy(Player player, String name, String newName) {
     Kit kit = Kit.getKit(player, name);
     if (kit != null) {
-      new Kit(newName, player, false).create(kit.getContents(), kit.getArmor(), kit.getOffhand());
+      new Kit(newName, player, false)
+          .create(kit.getContents().clone(), kit.getArmor().clone(), kit.getOffhand().clone());
     } else {
       player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-not-found"));
     }

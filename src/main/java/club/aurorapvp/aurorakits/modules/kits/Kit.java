@@ -303,22 +303,22 @@ public class Kit {
     return this.getData().getFile().exists();
   }
 
-  public boolean create() {
+  public void create() {
     if (!new KitCreateEvent(owner.getPlayer(), this).callEvent()) {
-      return false;
+      return;
     }
 
     if (this.exists()) {
       Objects.requireNonNull(owner.getPlayer())
           .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-already-exists"));
-      return false;
+      return;
     }
 
     if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
         == null) {
       Objects.requireNonNull(owner.getPlayer())
           .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-item"));
-      return false;
+      return;
     }
 
     int max = Integer.MAX_VALUE;
@@ -344,7 +344,7 @@ public class Kit {
       owner
           .getPlayer()
           .sendMessage(AuroraKits.getInstance().getLang().getComponent("too-many-kits"));
-      return false;
+      return;
     }
 
     displayItem =
@@ -375,7 +375,7 @@ public class Kit {
                 .getLang()
                 .getComponentCommand("kit-created", "Click to Open Kit", "/kit " + this.getName()));
 
-    return true;
+    this.reload();
   }
 
   public void create(ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
@@ -416,16 +416,23 @@ public class Kit {
 
     Objects.requireNonNull(owner.getPlayer())
         .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
+
+    this.reload();
   }
 
   public void edit(Player player, ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
-    this.contents = contents;
-    this.armor = armor;
-    this.offhand = offhand;
+    this.contents = contents.clone();
+    this.armor = armor.clone();
+    this.offhand = offhand.clone();
 
     data.create();
 
-    player.sendMessage(AuroraKits.getInstance().getLang().getComponentCommand("kit-updated", "Click to Open Kit", "/kit " + this.getName()));
+    player.sendMessage(
+        AuroraKits.getInstance()
+            .getLang()
+            .getComponentCommand("kit-updated", "Click to Open Kit", "/kit " + this.getName()));
+
+    this.reload();
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -481,9 +488,9 @@ public class Kit {
   }
 
   public void reload() {
-    this.contents = this.getData().getContents();
-    this.armor = this.getData().getArmor();
-    this.offhand = this.getData().getOffhand();
-    this.displayItem = this.getData().getDisplayItem();
+    this.contents = this.getData().getContents().clone();
+    this.armor = this.getData().getArmor().clone();
+    this.offhand = this.getData().getOffhand().clone();
+    this.displayItem = this.getData().getDisplayItem().clone();
   }
 }
