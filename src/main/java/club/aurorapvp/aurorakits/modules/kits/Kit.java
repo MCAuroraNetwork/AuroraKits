@@ -44,12 +44,7 @@ public class Kit {
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
-    Set<Kit> set =
-        (isPublic ? PUBLIC_KITS : PRIVATE_KITS).getOrDefault(owner.getUniqueId(), new HashSet<>());
-
-    set.add(this);
-
-    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).put(owner.getUniqueId(), set);
+    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).get(owner.getUniqueId()).add(this);
 
     if (this.exists()) {
       this.reload();
@@ -383,6 +378,10 @@ public class Kit {
                 .getComponentCommand("kit-created", "Click to Open Kit", "/kit " + this.getName()));
 
     this.reload();
+
+    owner.getPlayer().getInventory().clear();
+
+    this.giveKit(owner.getPlayer());
   }
 
   public void create(ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {

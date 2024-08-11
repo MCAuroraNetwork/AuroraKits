@@ -70,7 +70,8 @@ public class KitsGUI implements Listener {
       gui.nextPage();
       return;
     } else if (event.getSlot() == 49) {
-      player.closeInventory();
+      new KitSelectEvent(player, null).callEvent();
+      
       return;
     }
 
