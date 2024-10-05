@@ -55,7 +55,11 @@ public class KitDataHandler {
 
   public ItemStack[] getArmor() {
     ConfigurationSection section = this.get().getConfigurationSection("items.armor");
-    assert section != null;
+
+    if (section == null) {
+      return new ItemStack[0];
+    }
+
     ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
     int i = 0;
 
