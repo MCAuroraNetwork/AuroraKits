@@ -188,7 +188,7 @@ public class Kit {
     }
 
     for (Kit kit : Kit.getKits()) {
-      if (kit.getOwner() == player || (kit.isPublic() && includePublic)) {
+      if (kit.getOwner().equals(player) || (kit.isPublic() && includePublic)) {
         playerKits.add(kit);
       }
     }
@@ -485,7 +485,7 @@ public class Kit {
   }
 
   public void editKit(Player player) {
-    if (!(this.getOwner() == player)) {
+    if (!(this.getOwner().equals(player))) {
       player.sendMessage(AuroraKits.getInstance().getLang().getComponent("not-your-kit"));
       return;
     }

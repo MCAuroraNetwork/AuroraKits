@@ -13,12 +13,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.checkerframework.checker.units.qual.K;
 import org.jetbrains.annotations.NotNull;
 
 public class KitEditor implements Listener {
@@ -43,7 +41,7 @@ public class KitEditor implements Listener {
 
     final ItemStack clickedItem = event.getCurrentItem();
 
-    if (clickedItem != null && event.getCurrentItem().getType() == Material.BARRIER) {
+    if (clickedItem != null && event.getCurrentItem().getType().equals(Material.BARRIER)) {
       event.setCancelled(true);
       return;
     }
