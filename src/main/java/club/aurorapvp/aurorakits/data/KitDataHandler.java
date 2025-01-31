@@ -2,106 +2,124 @@ package club.aurorapvp.aurorakits.data;
 
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.bson.Document;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
 public class KitDataHandler {
 
-  private final YamlConfiguration DATA_FILE;
-  private final File FILE;
+  private final MongoCollection<Document> collection;
   private final Kit kit;
+  private final String kitId;
 
   public KitDataHandler(Kit kit) {
     this.kit = kit;
-    this.FILE =
-        new File(
-            AuroraKits.getInstance().getDataFolder(),
-            "/kits/" + kit.getPath() + "/" + kit.getName() + ".yml");
-    DATA_FILE = YamlConfiguration.loadConfiguration(FILE);
+    this.collection = AuroraKits.getInstance().getDatabase().getCollection("kits");
+    this.kitId = kit.getOwner().getUniqueId() + "-" + kit.getName();
   }
 
   public ItemStack getDisplayItem() {
-    return DATA_FILE.getItemStack("displayItem");
-  }
-
-  public File getFile() {
-    return FILE;
-  }
-
-  public YamlConfiguration get() {
-    return DATA_FILE;
+    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
+    if (kitData != null) {
+      Map<String, Object> data = getMap(kitData, "displayItem");
+      return deserializeItemStack(data);
+    }
+    return null;
   }
 
   public boolean isPublic() {
-    return DATA_FILE.getBoolean("isPublic");
+    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
+    return kitData != null && kitData.getBoolean("isPublic", false);
   }
 
   public ItemStack[] getContents() {
-    ConfigurationSection section = this.get().getConfigurationSection("items.contents");
-    assert section != null;
-    ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
-    int i = 0;
-
-    for (String path : section.getKeys(false)) {
-      itemStacks[i] = this.get().getItemStack("items.contents." + path);
-      i++;
+    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
+    if (kitData != null) {
+      Map<String, Object> data = getMap(kitData, "contents");
+      return deserializeItemArray(data);
     }
-    return itemStacks;
+    return new ItemStack[0];
   }
 
   public ItemStack[] getArmor() {
-    ConfigurationSection section = this.get().getConfigurationSection("items.armor");
-
-    if (section == null) {
-      return new ItemStack[0];
+    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
+    if (kitData != null) {
+      Map<String, Object> data = getMap(kitData, "armor");
+      return deserializeItemArray(data);
     }
-
-    ItemStack[] itemStacks = new ItemStack[section.getKeys(false).size()];
-    int i = 0;
-
-    for (String path : section.getKeys(false)) {
-      itemStacks[i] = this.get().getItemStack("items.armor." + path);
-      i++;
-    }
-    return itemStacks;
+    return new ItemStack[0];
   }
 
   public ItemStack getOffhand() {
-    return this.get().getItemStack("items.offhand");
+    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
+    if (kitData != null) {
+      Map<String, Object> data = getMap(kitData, "offhand");
+      return deserializeItemStack(data);
+    }
+    return null;
   }
 
   public void create() {
-    DATA_FILE.set("isPublic", kit.isPublic());
-    DATA_FILE.set("owner", String.valueOf(kit.getOwner().getUniqueId()));
-    DATA_FILE.set("displayItem", kit.getDisplayItem());
+    Document kitData = new Document()
+            .append("_id", kitId)
+            .append("isPublic", kit.isPublic())
+            .append("owner", kit.getOwner().getUniqueId().toString())
+            .append("displayItem", serializeItemStack(kit.getDisplayItem()))
+            .append("contents", serializeItemArray(kit.getContents()))
+            .append("armor", serializeItemArray(kit.getArmor()))
+            .append("offhand", serializeItemStack(kit.getOffhand()));
 
-    for (int i = 0; i < kit.getContents().length; i++) {
-      DATA_FILE.set("items.contents." + i, kit.getContents()[i]);
-    }
-
-    for (int i = 0; i < kit.getArmor().length; i++) {
-      DATA_FILE.set("items.armor." + i, kit.getArmor()[i]);
-    }
-
-    DATA_FILE.set("items.offhand", kit.getOffhand());
-
-    save();
+    collection.updateOne(
+            Filters.eq("_id", kitId),
+            new Document("$set", kitData),
+            new com.mongodb.client.model.UpdateOptions().upsert(true)
+    );
   }
 
-  @SuppressWarnings("ResultOfMethodCallIgnored")
-  public void save() {
-    try {
-      if (!FILE.exists()) {
-        FILE.getParentFile().mkdirs();
-        FILE.createNewFile();
-      }
-      DATA_FILE.save(FILE);
-    } catch (IOException e) {
-      AuroraKits.getInstance().getLogger().log(Level.SEVERE, "Failed to save kit data", e);
+  private Map<String, Object> serializeItemStack(ItemStack item) {
+    return item != null ? ((ConfigurationSerializable) item).serialize() : null;
+  }
+
+  private ItemStack deserializeItemStack(Map<String, Object> data) {
+    return data != null ? ItemStack.deserialize(data) : null;
+  }
+
+  private Map<String, Object> serializeItemArray(ItemStack[] items) {
+    return items != null
+            ? java.util.stream.IntStream.range(0, items.length)
+            .boxed()
+            .collect(Collectors.toMap(String::valueOf, i -> serializeItemStack(items[i])))
+            : null;
+  }
+
+  private ItemStack[] deserializeItemArray(Map<String, Object> data) {
+    if (data == null) {
+      return new ItemStack[0];
     }
+    return data.values().stream()
+            .map(obj -> {
+              if (obj instanceof Map<?, ?>) {
+                // Centralize unchecked cast here
+                @SuppressWarnings("unchecked")
+                Map<String, Object> map = (Map<String, Object>) obj;
+                return deserializeItemStack(map);
+              }
+              return null;
+            })
+            .toArray(ItemStack[]::new);
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> getMap(Document doc, String key) {
+    Object obj = doc.get(key);
+    if (obj instanceof Map) {
+      return new HashMap<>((Map<String, Object>) obj);
+    }
+    return null;
   }
 }

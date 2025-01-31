@@ -7,6 +7,7 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
+// TODO migrate to mongo
 public class FrameDataHandler {
 
   private static final NamespacedKey key = new NamespacedKey(AuroraKits.getInstance(), "frame");

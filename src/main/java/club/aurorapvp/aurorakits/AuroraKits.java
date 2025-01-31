@@ -6,6 +6,9 @@ import club.aurorapvp.aurorakits.config.Lang;
 import club.aurorapvp.aurorakits.events.EventManager;
 import club.aurorapvp.aurorakits.modules.Frame;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +21,9 @@ public final class AuroraKits extends JavaPlugin {
   private boolean auroraCombatInstalled;
   private Config config;
   private Lang lang;
+
+  private MongoClient mongoClient;
+  private MongoDatabase mongoDatabase;
 
   public static AuroraKits getInstance() {
     return INSTANCE;
@@ -37,6 +43,10 @@ public final class AuroraKits extends JavaPlugin {
 
   public @NotNull YamlConfiguration getConfig() {
     return config.getYaml();
+  }
+
+  public MongoDatabase getDatabase() {
+    return mongoDatabase;
   }
 
   @Override
@@ -67,12 +77,26 @@ public final class AuroraKits extends JavaPlugin {
       }
     }
 
+    String connectionString =
+            this.getConfig().getString("mongodb.address", "mongodb://localhost:27017");
+    String databaseName = this.getConfig().getString("mongodb.database-name", "aurora_combat");
+
+    mongoClient = MongoClients.create(connectionString);
+    mongoDatabase = mongoClient.getDatabase(databaseName);
+
+    getLogger().info("Connected to MongoDB database: " + databaseName);
+
     getLogger().info("AuroraKits enabled in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
   public void onDisable() {
     long startTime = System.currentTimeMillis();
+
+    if (mongoClient != null) {
+      mongoClient.close();
+      getLogger().info("MongoDB connection closed.");
+    }
 
     getLogger().info("AuroraKits disabled in " + (System.currentTimeMillis() - startTime) + "ms");
   }
