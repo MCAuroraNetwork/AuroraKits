@@ -302,7 +302,7 @@ public class Kit {
   }
 
   public boolean exists() {
-    return this.getData().getFile().exists();
+    return this.getData().exists();
   }
 
   public void create() {
@@ -441,7 +441,6 @@ public class Kit {
     this.reload();
   }
 
-  @SuppressWarnings("ResultOfMethodCallIgnored")
   public void delete(Player player) {
     if (!new KitDeleteEvent(player, this).callEvent()) {
       return;
@@ -463,7 +462,7 @@ public class Kit {
           .reload();
     }
 
-    this.getData().getFile().delete();
+    this.getData().delete();
   }
 
   public void giveKit(Player player) {

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'AuroraKits'
-version = '1.8.1'
+version = '1.8.2'
 
 repositories {
     mavenCentral()
@@ -28,9 +28,9 @@ dependencies {
     implementation "co.aikar:acf-paper:0.5.1-SNAPSHOT"
     implementation 'org.mongodb:mongodb-driver-sync:5.2.0'
 
-    compileOnly 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
-    compileOnly ':AuroraCombat:1.8.1'
+    compileOnly ':AuroraCombat:1.8.8'
 }
 
 build {

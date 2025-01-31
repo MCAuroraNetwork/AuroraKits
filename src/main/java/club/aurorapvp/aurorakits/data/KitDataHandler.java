@@ -81,6 +81,14 @@ public class KitDataHandler {
     );
   }
 
+  public boolean exists() {
+    return collection.find(Filters.eq("_id", kitId)).first() != null;
+  }
+
+  public void delete() {
+    collection.deleteOne(Filters.eq("_id", kitId));
+  }
+
   private Map<String, Object> serializeItemStack(ItemStack item) {
     return item != null ? ((ConfigurationSerializable) item).serialize() : null;
   }
@@ -104,7 +112,6 @@ public class KitDataHandler {
     return data.values().stream()
             .map(obj -> {
               if (obj instanceof Map<?, ?>) {
-                // Centralize unchecked cast here
                 @SuppressWarnings("unchecked")
                 Map<String, Object> map = (Map<String, Object>) obj;
                 return deserializeItemStack(map);
