@@ -23,6 +23,8 @@ public class Config {
     DEFAULTS.put("kits.give-last-kit.enabled", false);
     DEFAULTS.put("kits.give-last-kit.default-kit", "Default");
     DEFAULTS.put("optional-plugins.auroracombat-compatibility", true);
+    DEFAULTS.put("mongodb.address", "mongodb://localhost:27017");
+    DEFAULTS.put("mongodb.database-name", "aurora_kits");
 
     for (String path : DEFAULTS.keySet()) {
       if (!getYaml().isSet(path) || getYaml().getString(path) == null) {

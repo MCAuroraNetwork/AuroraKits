@@ -59,6 +59,15 @@ public final class AuroraKits extends JavaPlugin {
     config = new Config();
     lang = new Lang();
 
+    String connectionString =
+            this.getConfig().getString("mongodb.address", "mongodb://localhost:27017");
+    String databaseName = this.getConfig().getString("mongodb.database-name", "aurora_kits");
+
+    mongoClient = MongoClients.create(connectionString);
+    mongoDatabase = mongoClient.getDatabase(databaseName);
+
+    getLogger().info("Connected to MongoDB database: " + databaseName);
+
     // Setup classes
     CommandManager.init();
     EventManager.init();
@@ -76,15 +85,6 @@ public final class AuroraKits extends JavaPlugin {
         auroraCombatInstalled = true;
       }
     }
-
-    String connectionString =
-            this.getConfig().getString("mongodb.address", "mongodb://localhost:27017");
-    String databaseName = this.getConfig().getString("mongodb.database-name", "aurora_combat");
-
-    mongoClient = MongoClients.create(connectionString);
-    mongoDatabase = mongoClient.getDatabase(databaseName);
-
-    getLogger().info("Connected to MongoDB database: " + databaseName);
 
     getLogger().info("AuroraKits enabled in " + (System.currentTimeMillis() - startTime) + "ms");
   }
