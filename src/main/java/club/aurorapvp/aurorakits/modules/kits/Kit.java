@@ -14,8 +14,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
+import com.mongodb.client.MongoCollection;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,7 +33,6 @@ public class Kit {
   private final KitDataHandler data;
   private final boolean isPublic;
   private final String name;
-  private final String path;
   private final OfflinePlayer owner;
   private ItemStack[] contents;
   private ItemStack[] armor;
@@ -40,7 +42,6 @@ public class Kit {
   public Kit(String kitName, OfflinePlayer owner, boolean isPublic) {
     this.owner = owner;
     this.isPublic = isPublic;
-    this.path = isPublic ? "public" : String.valueOf(owner.getUniqueId());
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
@@ -52,26 +53,19 @@ public class Kit {
   }
 
   public static void init() {
-    File dir = new File(AuroraKits.getInstance().getDataFolder(), "/kits/public/");
+    MongoCollection<Document> collection = AuroraKits.getInstance().getDatabase().getCollection("kits.public");
 
-    if (dir.exists()) {
-      for (File file : Objects.requireNonNull(dir.listFiles())) {
-        String kitName = file.getName().replace(".yml", "");
-        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+    for (Document doc : collection.find()) {
+      UUID owner = UUID.fromString(doc.getString("owner"));
+      String kitName = doc.getString("_id");
+      boolean isPublic = doc.getBoolean("isPublic", true);
 
-        UUID owner = UUID.fromString(Objects.requireNonNull(yaml.getString("owner")));
-
-        if (!PUBLIC_KITS.containsKey(owner)) {
-          PUBLIC_KITS.put(owner, new HashSet<>());
-        }
-
-        PUBLIC_KITS
-            .get(owner)
-            .add(new Kit(kitName, Bukkit.getOfflinePlayer(owner), yaml.getBoolean("isPublic")));
-      }
+      PUBLIC_KITS.computeIfAbsent(owner, k -> new HashSet<>());
+      OfflinePlayer player = Bukkit.getOfflinePlayer(owner);
+      PUBLIC_KITS.get(owner).add(new Kit(kitName, player, isPublic));
     }
 
-    AuroraKits.getInstance().getLogger().info("All kits loaded!");
+    AuroraKits.getInstance().getLogger().info("All public kits loaded from MongoDB!");
   }
 
   public static Set<Kit> getPublicKits() {
@@ -263,10 +257,6 @@ public class Kit {
     player.getInventory().setItemInOffHand(Kit.getLastUsedKit(player).getOffhand().clone());
 
     player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-refilled"));
-  }
-
-  public String getPath() {
-    return path;
   }
 
   public ItemStack getDisplayItem() {

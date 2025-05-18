@@ -3,70 +3,49 @@ package club.aurorapvp.aurorakits.data;
 import club.aurorapvp.aurorakits.AuroraKits;
 import club.aurorapvp.aurorakits.modules.kits.Kit;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.bson.Document;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+
+import java.io.*;
+import java.util.*;
+import java.util.Base64;
+import java.util.stream.Collectors;
 
 public class KitDataHandler {
 
-  private final MongoCollection<Document> collection;
   private final Kit kit;
-  private final String kitId;
+  private final MongoCollection<Document> collection; // resolved per‑kit
+  private final String kitId;                         // = kitName, unique per collection
 
   public KitDataHandler(Kit kit) {
     this.kit = kit;
-    this.collection = AuroraKits.getInstance().getDatabase().getCollection("kits");
-    this.kitId = kit.getOwner().getUniqueId() + "-" + kit.getName();
+
+    MongoDatabase db = AuroraKits.getInstance().getDatabase();
+    String collName = kit.isPublic() ? "kits.public" : "kits." + kit.getOwner().getUniqueId();
+    this.collection = db.getCollection(collName);
+
+    this.kitId = kit.getName();
   }
 
-  public ItemStack getDisplayItem() {
-    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
-    if (kitData != null) {
-      Map<String, Object> data = getMap(kitData, "displayItem");
-      return deserializeItemStack(data);
-    }
-    return null;
-  }
+  private Document fetch() { return collection.find(Filters.eq("_id", kitId)).first(); }
 
-  public boolean isPublic() {
-    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
-    return kitData != null && kitData.getBoolean("isPublic", false);
-  }
-
-  public ItemStack[] getContents() {
-    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
-    if (kitData != null) {
-      Map<String, Object> data = getMap(kitData, "contents");
-      return deserializeItemArray(data);
-    }
-    return new ItemStack[0];
-  }
-
-  public ItemStack[] getArmor() {
-    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
-    if (kitData != null) {
-      Map<String, Object> data = getMap(kitData, "armor");
-      return deserializeItemArray(data);
-    }
-    return new ItemStack[0];
-  }
-
-  public ItemStack getOffhand() {
-    Document kitData = collection.find(Filters.eq("_id", kitId)).first();
-    if (kitData != null) {
-      Map<String, Object> data = getMap(kitData, "offhand");
-      return deserializeItemStack(data);
-    }
-    return null;
-  }
+  public ItemStack getDisplayItem() { Document d = fetch(); return d != null ? deserializeItemStack(d.get("displayItem")) : null; }
+  public boolean   isPublic()       { return kit.isPublic(); }
+  public ItemStack[] getContents()  { Document d = fetch(); return d != null ? deserializeItemArray(d.get("contents")) : new ItemStack[0]; }
+  public ItemStack[] getArmor()     { Document d = fetch(); return d != null ? deserializeItemArray(d.get("armor")) : new ItemStack[0]; }
+  public ItemStack   getOffhand()   { Document d = fetch(); return d != null ? deserializeItemStack(d.get("offhand")) : null; }
 
   public void create() {
-    Document kitData = new Document()
-            .append("_id", kitId)
+    if (collection.countDocuments(Filters.eq("_id", kitId)) > 0) {
+      throw new IllegalStateException("Kit named " + kitId + " already exists in this scope.");
+    }
+
+    Document doc = new Document("_id", kitId)
+            .append("name", kit.getName())
             .append("isPublic", kit.isPublic())
             .append("owner", kit.getOwner().getUniqueId().toString())
             .append("displayItem", serializeItemStack(kit.getDisplayItem()))
@@ -74,59 +53,59 @@ public class KitDataHandler {
             .append("armor", serializeItemArray(kit.getArmor()))
             .append("offhand", serializeItemStack(kit.getOffhand()));
 
-    collection.updateOne(
-            Filters.eq("_id", kitId),
-            new Document("$set", kitData),
-            new com.mongodb.client.model.UpdateOptions().upsert(true)
-    );
+    collection.insertOne(doc);
   }
 
-  public boolean exists() {
-    return collection.find(Filters.eq("_id", kitId)).first() != null;
-  }
+  public boolean exists() { return collection.find(Filters.eq("_id", kitId)).first() != null; }
+  public void delete()    { collection.deleteOne(Filters.eq("_id", kitId)); }
 
-  public void delete() {
-    collection.deleteOne(Filters.eq("_id", kitId));
-  }
-
-  private Map<String, Object> serializeItemStack(ItemStack item) {
-    return item != null ? ((ConfigurationSerializable) item).serialize() : null;
-  }
-
-  private ItemStack deserializeItemStack(Map<String, Object> data) {
-    return data != null ? ItemStack.deserialize(data) : null;
-  }
-
-  private Map<String, Object> serializeItemArray(ItemStack[] items) {
-    return items != null
-            ? java.util.stream.IntStream.range(0, items.length)
-            .boxed()
-            .collect(Collectors.toMap(String::valueOf, i -> serializeItemStack(items[i])))
-            : null;
-  }
-
-  private ItemStack[] deserializeItemArray(Map<String, Object> data) {
-    if (data == null) {
-      return new ItemStack[0];
+  private String serializeItemStack(ItemStack item) {
+    if (item == null) return null;
+    try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+         BukkitObjectOutputStream oos = new BukkitObjectOutputStream(bos)) {
+      oos.writeObject(item);
+      return Base64.getEncoder().encodeToString(bos.toByteArray());
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
-    return data.values().stream()
-            .map(obj -> {
-              if (obj instanceof Map<?, ?>) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> map = (Map<String, Object>) obj;
-                return deserializeItemStack(map);
-              }
-              return null;
-            })
-            .toArray(ItemStack[]::new);
   }
 
-  @SuppressWarnings("unchecked")
-  private Map<String, Object> getMap(Document doc, String key) {
-    Object obj = doc.get(key);
-    if (obj instanceof Map) {
-      return new HashMap<>((Map<String, Object>) obj);
+  private ItemStack deserializeItemStack(Object data) {
+    if (data == null) return null;
+    if (data instanceof String s) {
+      try (ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(s));
+           BukkitObjectInputStream ois = new BukkitObjectInputStream(bis)) {
+        return (ItemStack) ois.readObject();
+      } catch (IOException | ClassNotFoundException ex) {
+        ex.printStackTrace();
+        return null;
+      }
+    }
+    if (data instanceof Map<?, ?> map) { // legacy YAML support
+      @SuppressWarnings("unchecked") Map<String, Object> legacy = (Map<String, Object>) map;
+      return ItemStack.deserialize(legacy);
     }
     return null;
+  }
+
+  private List<Object> serializeItemArray(ItemStack[] items) {
+    if (items == null) return null;
+    return Arrays.stream(items).map(this::serializeItemStack).collect(Collectors.toList());
+  }
+
+  private ItemStack[] deserializeItemArray(Object data) {
+    if (data == null) return new ItemStack[0];
+    if (data instanceof List<?> list) {
+      return list.stream().map(this::deserializeItemStack).toArray(ItemStack[]::new);
+    }
+    if (data instanceof Map<?, ?> map) { // legacy path
+      List<ItemStack> ordered = new ArrayList<>();
+      map.entrySet().stream()
+              .sorted(Comparator.comparingInt(e -> Integer.parseInt(e.getKey().toString())))
+              .forEachOrdered(e -> ordered.add(deserializeItemStack(e.getValue())));
+      return ordered.toArray(new ItemStack[0]);
+    }
+    return new ItemStack[0];
   }
 }
