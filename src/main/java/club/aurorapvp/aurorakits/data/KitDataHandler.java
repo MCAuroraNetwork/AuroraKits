@@ -13,6 +13,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import java.io.*;
 import java.util.*;
 import java.util.Base64;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class KitDataHandler {
@@ -92,26 +93,31 @@ public class KitDataHandler {
       oos.writeObject(item);
       return Base64.getEncoder().encodeToString(bos.toByteArray());
     } catch (IOException e) {
-      e.printStackTrace();
+      AuroraKits.getInstance().getLogger().log(Level.WARNING, "Failed to serialize ItemStack", e);
       return null;
     }
   }
 
   private ItemStack deserializeItemStack(Object data) {
-    if (data == null) return null;
-    if (data instanceof String s) {
-      try (ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(s));
-          BukkitObjectInputStream ois = new BukkitObjectInputStream(bis)) {
-        return (ItemStack) ois.readObject();
-      } catch (IOException | ClassNotFoundException ex) {
-        ex.printStackTrace();
+    switch (data) {
+      case null -> {
         return null;
       }
-    }
-    if (data instanceof Map<?, ?> map) { // legacy YAML support
-      @SuppressWarnings("unchecked")
-      Map<String, Object> legacy = (Map<String, Object>) map;
-      return ItemStack.deserialize(legacy);
+      case String s -> {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(s));
+            BukkitObjectInputStream ois = new BukkitObjectInputStream(bis)) {
+          return (ItemStack) ois.readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+          ex.printStackTrace();
+          return null;
+        }
+      }
+      case Map<?, ?> map -> {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> legacy = (Map<String, Object>) map;
+        return ItemStack.deserialize(legacy);
+      }
+      default -> {}
     }
     return null;
   }
