@@ -7,7 +7,6 @@ import club.aurorapvp.aurorakits.events.custom.KitDeleteEvent;
 import club.aurorapvp.aurorakits.events.custom.KitGiveEvent;
 import club.aurorapvp.aurorakits.events.custom.KitRefillEvent;
 import club.aurorapvp.aurorakits.util.ItemStackUtil;
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,7 +20,6 @@ import net.luckperms.api.model.user.User;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -139,11 +137,7 @@ public class Kit {
   }
 
   public static Set<Kit> getKits() {
-    Set<Kit> set = new HashSet<>();
-
-    for (Set<Kit> kits : PRIVATE_KITS.values()) {
-      set.addAll(kits);
-    }
+    Set<Kit> set = getPrivateKits();
 
     for (Set<Kit> kits : PUBLIC_KITS.values()) {
       set.addAll(kits);
@@ -209,25 +203,33 @@ public class Kit {
   }
 
   public static void register(Player player) {
-    File dir = new File(AuroraKits.getInstance().getDataFolder(), "/kits/" + player.getUniqueId());
+    UUID playerId = player.getUniqueId();
+    MongoCollection<Document> collection =
+            AuroraKits.getInstance()
+                    .getDatabase()
+                    .getCollection("kits." + playerId);
 
-    PRIVATE_KITS.put(player.getUniqueId(), new HashSet<>());
+    PRIVATE_KITS.put(playerId, new HashSet<>());
+    PUBLIC_KITS.computeIfAbsent(playerId, k -> new HashSet<>());
 
-    if (!PUBLIC_KITS.containsKey(player.getUniqueId())) {
-      PUBLIC_KITS.put(player.getUniqueId(), new HashSet<>());
-    }
+    for (Document doc : collection.find()) {
+      String kitName   = doc.getString("_id");
+      boolean isPublic = doc.getBoolean("isPublic", false);
+      OfflinePlayer owner = Bukkit.getOfflinePlayer(
+              UUID.fromString(doc.getString("owner")));
 
-    if (dir.exists()) {
-      for (File file : Objects.requireNonNull(dir.listFiles())) {
-        String kitName = file.getName().replace(".yml", "");
-        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
-        new Kit(
-            kitName,
-            Bukkit.getOfflinePlayer(
-                UUID.fromString(Objects.requireNonNull(yaml.getString("owner")))),
-            yaml.getBoolean("isPublic"));
+      Kit kit = new Kit(kitName, owner, isPublic);
+
+      if (isPublic) {
+        PUBLIC_KITS.get(playerId).add(kit);
+      } else {
+        PRIVATE_KITS.get(playerId).add(kit);
       }
     }
+
+    AuroraKits.getInstance()
+            .getLogger()
+            .info("All kits loaded from MongoDB for player " + player.getName() + "!");
   }
 
   public static void unregister(Player player) {
@@ -421,6 +423,7 @@ public class Kit {
     this.armor = armor.clone();
     this.offhand = offhand.clone();
 
+    data.delete();
     data.create();
 
     player.sendMessage(
@@ -438,9 +441,9 @@ public class Kit {
 
     Set<Kit> set;
     if (this.isPublic()) {
-      set = (Kit.getPublicKits());
+      set = Kit.getPublicKits();
     } else {
-      set = (Kit.getPrivateKits(this.getOwner().getUniqueId()));
+      set = Kit.getPrivateKits(this.getOwner().getUniqueId());
     }
 
     set.remove(this);
@@ -453,6 +456,8 @@ public class Kit {
     }
 
     this.getData().delete();
+
+    player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-deleted"));
   }
 
   public void giveKit(Player player) {
