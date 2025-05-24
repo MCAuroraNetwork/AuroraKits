@@ -419,9 +419,15 @@ public class Kit {
   }
 
   public void edit(Player player, ItemStack[] contents, ItemStack[] armor, ItemStack offhand) {
-    this.contents = contents.clone();
-    this.armor = armor.clone();
-    this.offhand = offhand.clone();
+    if (contents != null) {
+      this.contents = contents.clone();
+    }
+    if (armor != null) {
+      this.armor = armor.clone();
+    }
+    if (offhand != null) {
+      this.offhand = offhand.clone();
+    }
 
     data.delete();
     data.create();
