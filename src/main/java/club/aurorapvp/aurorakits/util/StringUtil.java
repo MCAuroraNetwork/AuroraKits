@@ -12,6 +12,10 @@ public class StringUtil {
         normalTypedLanguage.append(" ");
       }
 
+      if (Character.isDigit(currentChar) && i != 0) {
+        normalTypedLanguage.append(" ");
+      }
+
       normalTypedLanguage.append(currentChar);
     }
 
