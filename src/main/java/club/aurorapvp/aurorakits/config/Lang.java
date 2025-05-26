@@ -30,7 +30,8 @@ public class Lang {
       if (Objects.requireNonNull(getYaml().getString((String) path)).startsWith("~")
           && Objects.requireNonNull(getYaml().getString((String) path)).endsWith("~")) {
         PLACEHOLDERS.put(
-            (String) path, Objects.requireNonNull(getYaml().getString((String) path)).replace("~", ""));
+            (String) path,
+            Objects.requireNonNull(getYaml().getString((String) path)).replace("~", ""));
       }
     }
 
@@ -40,10 +41,10 @@ public class Lang {
     DEFAULTS.put("frame-deleted", "prefix <red>Frame deleted");
     DEFAULTS.put("frame-invalid", "prefix <red>Invalid frame name");
     DEFAULTS.put("kit-gui", "<yellow><bold>Kits");
-    DEFAULTS.put("kit-created",
-        "prefix <green>Kit created! Use <bold>/kits<reset><green> to get it!");
-    DEFAULTS.put("kit-updated",
-        "prefix <green>Kit updated! Use <bold>/kits<reset><green> to get it!");
+    DEFAULTS.put(
+        "kit-created", "prefix <green>Kit created! Use <bold>/kits<reset><green> to get it!");
+    DEFAULTS.put(
+        "kit-updated", "prefix <green>Kit updated! Use <bold>/kits<reset><green> to get it!");
     DEFAULTS.put("kit-used", "prefix <green>Kit used!");
     DEFAULTS.put("kit-refilled", "prefix <green>Kit refilled!");
     DEFAULTS.put("kit-deleted", "prefix <red>Kit deleted");
@@ -57,20 +58,23 @@ public class Lang {
     DEFAULTS.put("next-page", "<yellow><bold>Next");
     DEFAULTS.put("previous-page", "<yellow><bold>Previous");
     DEFAULTS.put("no-kit", "<yellow><bold>No Kit");
+    DEFAULTS.put("public-kits", "<green><bold>Public Kits");
+    DEFAULTS.put("private-kits", "<blue><bold>Private Kits");
+    DEFAULTS.put("no-kits-available", "<red><bold>No Kits Available");
     DEFAULTS.put(
         "help-command",
         """
-            prefix <yellow><bold>All Commands:
-                    
-                    
-            <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
-            
-            <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
-            
-            <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit
-            
-            <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit
-            """);
+                prefix <yellow><bold>All Commands:
+
+
+                <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
+
+                <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
+
+                <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit
+
+                <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit
+                """);
 
     for (String path : DEFAULTS.keySet()) {
       if (!getYaml().contains(path) || getYaml().getString(path) == null) {
@@ -88,7 +92,8 @@ public class Lang {
       if (Objects.requireNonNull(getYaml().getString((String) path)).startsWith("~")
           && Objects.requireNonNull(getYaml().getString((String) path)).endsWith("~")) {
         PLACEHOLDERS.put(
-            (String) path, Objects.requireNonNull(getYaml().getString((String) path)).replace("~", ""));
+            (String) path,
+            Objects.requireNonNull(getYaml().getString((String) path)).replace("~", ""));
       }
     }
   }
@@ -105,7 +110,8 @@ public class Lang {
     return MiniMessage.miniMessage().deserialize(pathString);
   }
 
-  public Component getformattedComponentCommand(String message, String hover, String command, Object... args) {
+  public Component getformattedComponentCommand(
+      String message, String hover, String command, Object... args) {
     String pathString = getYaml().getString(message);
     assert pathString != null;
     for (String placeholder : PLACEHOLDERS.keySet()) {
@@ -119,8 +125,8 @@ public class Lang {
     Component component = MiniMessage.miniMessage().deserialize(pathString);
 
     return component
-            .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command))
-            .hoverEvent(HoverEvent.showText(Component.text(hover)));
+        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command))
+        .hoverEvent(HoverEvent.showText(Component.text(hover)));
   }
 
   public Component getComponentCommand(String message, String hover, String command) {
@@ -136,8 +142,8 @@ public class Lang {
     Component component = MiniMessage.miniMessage().deserialize(pathString);
 
     return component
-            .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command))
-            .hoverEvent(HoverEvent.showText(Component.text(hover)));
+        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command))
+        .hoverEvent(HoverEvent.showText(Component.text(hover)));
   }
 
   public YamlConfiguration getYaml() {

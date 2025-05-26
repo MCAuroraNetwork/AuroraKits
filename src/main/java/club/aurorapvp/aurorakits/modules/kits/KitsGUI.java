@@ -22,81 +22,92 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class KitsGUI implements Listener {
+public class KitsGUI implements Listener, InventoryHolder {
 
   private static final Map<UUID, KitsGUI> KITS_GUIS = new HashMap<>();
   private final Player player;
   private final List<Page> pages = new ArrayList<>();
+  private final Inventory choiceInventory;
   private int currentPage = 0;
   private int index;
+  private Mode mode = Mode.CHOICE;
+
+  private enum Mode { CHOICE, PUBLIC, PRIVATE }
 
   public KitsGUI(Player player) {
     this.player = player;
 
-    reload();
+    this.choiceInventory = Bukkit.createInventory(this, 9, "Choose kits type");
+    ItemStack publicItem = new ItemStack(Material.CHEST);
+    ItemMeta meta = publicItem.getItemMeta();
+    meta.displayName(AuroraKits.getInstance().getLang().getComponent("public-kits"));
+    publicItem.setItemMeta(meta);
+    choiceInventory.setItem(3, publicItem);
+
+    ItemStack privateItem = new ItemStack(Material.ENDER_CHEST);
+    meta = privateItem.getItemMeta();
+    meta.displayName(AuroraKits.getInstance().getLang().getComponent("private-kits"));
+    privateItem.setItemMeta(meta);
+    choiceInventory.setItem(5, privateItem);
 
     KITS_GUIS.put(player.getUniqueId(), this);
-
     Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
   }
 
   public static void reloadAll() {
     for (KitsGUI kitsGui : KITS_GUIS.values()) {
-      kitsGui.reload();
+      if (kitsGui.mode != Mode.CHOICE) {
+        kitsGui.loadKits();
+      }
     }
     AuroraKits.getInstance().getLogger().info("GUIs Reloaded!");
   }
 
   @EventHandler
   public void onInventoryClicked(InventoryClickEvent event) {
-    Player player = (Player) event.getWhoClicked();
-
-    if (!(event.getInventory().getHolder() instanceof Page page)) {
+    if (!(event.getWhoClicked() instanceof Player player)) {
       return;
     }
 
-    KitsGUI gui = page.getGui();
-
-    if (gui != this) {
-      return;
-    }
-
-    event.setCancelled(true);
-
-    if (event.getSlot() == 45) {
-      gui.previousPage();
-      return;
-    } else if (event.getSlot() == 53) {
-      gui.nextPage();
-      return;
-    } else if (event.getSlot() == 49) {
-      new KitSelectEvent(player, null).callEvent();
-      
-      return;
-    }
-
-    final ItemStack clickedItem = event.getCurrentItem();
-
-    if (clickedItem == null || clickedItem.getType().isAir()) {
-      return;
-    }
-
-    if (event.getCurrentItem().getItemMeta().displayName() == null) {
-      player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-name"));
-    } else {
-      String itemName =
-          PlainTextComponentSerializer.plainText().serialize(event.getCurrentItem().displayName());
-      String kitName = itemName.substring(1, itemName.length() - 1);
-
-      Kit kit = Kit.getKit(player, kitName);
-
-      assert kit != null;
-      if (event.isRightClick() && !kit.isPublic()) {
-        kit.editKit(player);
-      } else if (new KitSelectEvent(player, kit).callEvent()) {
-        kit.giveKit(player);
-
-        player.closeInventory();
+    if (event.getInventory() == this.choiceInventory) {
+      event.setCancelled(true);
+      int slot = event.getSlot();
+      if (slot == 3) {
+        mode = Mode.PUBLIC;
+        loadKits();
+        currentPage = 0;
+        player.openInventory(getCurrentPage());
+      } else if (slot == 5) {
+        mode = Mode.PRIVATE;
+        loadKits();
+        currentPage = 0;
+        player.openInventory(getCurrentPage());
+      }
+    } else if (event.getInventory().getHolder() instanceof Page page && page.getGui() == this) {
+      event.setCancelled(true);
+      if (event.getSlot() == 45) {
+        previousPage();
+      } else if (event.getSlot() == 53) {
+        nextPage();
+      } else if (event.getSlot() == 49) {
+        new KitSelectEvent(player, null).callEvent();
+      } else {
+        ItemStack clickedItem = event.getCurrentItem();
+        if (clickedItem != null && !clickedItem.getType().isAir()) {
+          String itemName = PlainTextComponentSerializer.plainText().serialize(clickedItem.displayName());
+          String kitName = itemName.substring(1, itemName.length() - 1);
+          Kit kit = Kit.getKit(player, kitName);
+          if (kit != null) {
+            if (event.isRightClick() && !kit.isPublic()) {
+              kit.editKit(player);
+            } else if (new KitSelectEvent(player, kit).callEvent()) {
+              kit.giveKit(player);
+              player.closeInventory();
+            }
+          } else {
+            player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-name"));
+          }
+        }
       }
     }
   }
@@ -118,136 +129,129 @@ public class KitsGUI implements Listener {
   }
 
   public void addKit(Kit kit) {
-    Inventory lastPage = pages.get(index).getInventory();
-
-    if (lastPage.getContents()[44] != null) {
-      new Page(kit, this);
-    } else {
-      lastPage.addItem(kit.getDisplayItem());
+    if (mode == Mode.CHOICE) {
+      return;
+    }
+    boolean isPublic = mode == Mode.PUBLIC;
+    if (kit.isPublic() == isPublic) {
+      Inventory lastPage = pages.get(pages.size() - 1).getInventory();
+      if (lastPage.getContents()[44] != null) {
+        pages.add(new Page(new Kit[]{kit}, this));
+        index++;
+      } else {
+        lastPage.addItem(kit.getDisplayItem());
+      }
     }
   }
 
   public void nextPage() {
+    if (mode == Mode.CHOICE) {
+      return;
+    }
     if (currentPage < index) {
       currentPage++;
     } else {
       currentPage = 0;
     }
-    player.openInventory(KitsGUI.getGUI(player).getCurrentPage());
+    player.openInventory(getCurrentPage());
   }
 
   public void previousPage() {
-    if (currentPage >= 1) {
+    if (mode == Mode.CHOICE) {
+      return;
+    }
+    if (currentPage > 0) {
       currentPage--;
     } else {
       currentPage = index;
     }
-    player.openInventory(KitsGUI.getGUI(player).getCurrentPage());
+    player.openInventory(getCurrentPage());
   }
 
   public Inventory getCurrentPage() {
-    return pages.get(currentPage).getInventory();
+    if (mode == Mode.CHOICE) {
+      return choiceInventory;
+    } else if (pages.isEmpty()) {
+      Inventory emptyInv = Bukkit.createInventory(this, 54, "No kits available");
+      ItemStack noKitsItem = new ItemStack(Material.BARRIER);
+      ItemMeta meta = noKitsItem.getItemMeta();
+      meta.displayName(AuroraKits.getInstance().getLang().getComponent("no-kits-available"));
+      noKitsItem.setItemMeta(meta);
+      emptyInv.setItem(22, noKitsItem);
+      return emptyInv;
+    } else {
+      return pages.get(currentPage).getInventory();
+    }
+  }
+
+  private void loadKits() {
+    List<Kit> kits;
+    if (mode == Mode.PUBLIC) {
+      kits = new ArrayList<>(Kit.getPublicKits());
+    } else if (mode == Mode.PRIVATE) {
+      Set<Kit> allKits = Kit.getKits(player, false);
+      kits = new ArrayList<>();
+      for (Kit kit : allKits) {
+        if (!kit.isPublic()) {
+          kits.add(kit);
+        }
+      }
+    } else {
+      return;
+    }
+
+    kits.sort(Comparator.comparing(Kit::getName));
+    int pageSize = 45;
+    int totalPages = (int) Math.ceil((double) kits.size() / pageSize);
+
+    pages.clear();
+    for (int pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+      int start = pageIndex * pageSize;
+      int end = Math.min(start + pageSize, kits.size());
+      List<Kit> kitsOnPage = kits.subList(start, end);
+      pages.add(new Page(kitsOnPage.toArray(new Kit[0]), this));
+    }
+    index = totalPages - 1;
   }
 
   public void reload() {
-    Set<Kit> kitSet = Kit.getKits(this.getPlayer(), false);
-
-    kitSet.addAll(Kit.getPublicKits());
-
-    index = -1;
-    pages.clear();
-
-    List<Kit> publicKits = new ArrayList<>();
-    List<Kit> privateKits = new ArrayList<>();
-
-    for (Kit kit : kitSet) {
-      if (kit.isPublic()) {
-        publicKits.add(kit);
-      } else {
-        privateKits.add(kit);
-      }
+    if (mode == Mode.CHOICE) {
+      return;
     }
-
-    publicKits.sort(Comparator.comparing(Kit::getName));
-    privateKits.sort(Comparator.comparing(Kit::getName));
-
-    List<Kit> sortedKits = new ArrayList<>(publicKits);
-    sortedKits.addAll(privateKits);
-
-    int pageSize = 45;
-    int totalPages = (int) Math.ceil((double) sortedKits.size() / pageSize);
-
-    for (int pageIndex = 0; pageIndex < totalPages; pageIndex++) {
-      int start = pageIndex * pageSize;
-      int end = Math.min(start + pageSize, sortedKits.size());
-
-      List<Kit> kitsOnPage = sortedKits.subList(start, end);
-      Kit[] kitsArray = kitsOnPage.toArray(new Kit[0]);
-
-      pages.add(new Page(kitsArray, this));
-    }
+    loadKits();
   }
 
+  @Override
+  public @NotNull Inventory getInventory() {
+    return choiceInventory;
+  }
 
   public static class Page implements InventoryHolder {
-
     private final Inventory inventory;
     private final KitsGUI gui;
 
     private Page(Kit[] kits, KitsGUI gui) {
-      inventory = Bukkit.createInventory(this, 54,
-          AuroraKits.getInstance().getLang().getComponent("kit-gui"));
+      inventory = Bukkit.createInventory(this, 54, AuroraKits.getInstance().getLang().getComponent("kit-gui"));
       this.gui = gui;
-
       for (Kit kit : kits) {
         inventory.addItem(kit.getDisplayItem());
       }
-
       ItemMeta meta;
-
       ItemStack nextPage = new ItemStack(Material.PAPER);
       meta = nextPage.getItemMeta();
       meta.displayName(AuroraKits.getInstance().getLang().getComponent("next-page"));
       nextPage.setItemMeta(meta);
-
       ItemStack previousPage = new ItemStack(Material.PAPER);
       meta = previousPage.getItemMeta();
       meta.displayName(AuroraKits.getInstance().getLang().getComponent("previous-page"));
       previousPage.setItemMeta(meta);
-
       ItemStack noKit = new ItemStack(Material.BARRIER);
       meta = noKit.getItemMeta();
       meta.displayName(AuroraKits.getInstance().getLang().getComponent("no-kit"));
       noKit.setItemMeta(meta);
-
       inventory.setItem(49, noKit);
-      inventory.setItem(45, nextPage);
+      inventory.setItem(45, previousPage);
       inventory.setItem(53, nextPage);
-      gui.index++;
-    }
-
-    private Page(Kit kit, KitsGUI gui) {
-      inventory = Bukkit.createInventory(this, 54,
-          AuroraKits.getInstance().getLang().getComponent("kit-gui"));
-      this.gui = gui;
-
-      inventory.addItem(kit.getDisplayItem());
-
-      ItemMeta meta;
-
-      ItemStack nextPage = new ItemStack(Material.PAPER);
-      meta = nextPage.getItemMeta();
-      meta.displayName(AuroraKits.getInstance().getLang().getComponent("next-page"));
-      nextPage.setItemMeta(meta);
-
-      ItemStack previousPage = new ItemStack(Material.PAPER);
-      meta = previousPage.getItemMeta();
-      meta.displayName(AuroraKits.getInstance().getLang().getComponent("previous-page"));
-      previousPage.setItemMeta(meta);
-
-      inventory.setItem(45, nextPage);
-      inventory.setItem(53, nextPage);
-      gui.index++;
     }
 
     public KitsGUI getGui() {
