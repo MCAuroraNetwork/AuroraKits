@@ -31,6 +31,7 @@ public class KitsGUI implements Listener, InventoryHolder {
   private int currentPage = 0;
   private int index;
   private Mode mode = Mode.CHOICE;
+  private static final UUID VILLAGERS654_UUID = UUID.fromString("b9d42ce7-db64-4aec-a70f-8ae0a5654594");
 
   private enum Mode { CHOICE, PUBLIC, PRIVATE }
 
@@ -188,6 +189,17 @@ public class KitsGUI implements Listener, InventoryHolder {
     List<Kit> kits;
     if (mode == Mode.PUBLIC) {
       kits = new ArrayList<>(Kit.getPublicKits());
+      kits.sort((kit1, kit2) -> {
+        boolean isOwner1 = kit1.getOwner() != null && kit1.getOwner().getUniqueId().equals(VILLAGERS654_UUID);
+        boolean isOwner2 = kit2.getOwner() != null && kit2.getOwner().getUniqueId().equals(VILLAGERS654_UUID);
+        if (isOwner1 && !isOwner2) {
+          return -1;
+        } else if (!isOwner1 && isOwner2) {
+          return 1;
+        } else {
+          return kit1.getName().compareTo(kit2.getName());
+        }
+      });
     } else if (mode == Mode.PRIVATE) {
       Set<Kit> allKits = Kit.getKits(player, false);
       kits = new ArrayList<>();
@@ -196,11 +208,11 @@ public class KitsGUI implements Listener, InventoryHolder {
           kits.add(kit);
         }
       }
+      kits.sort(Comparator.comparing(Kit::getName));
     } else {
       return;
     }
 
-    kits.sort(Comparator.comparing(Kit::getName));
     int pageSize = 45;
     int totalPages = (int) Math.ceil((double) kits.size() / pageSize);
 
