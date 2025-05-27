@@ -16,6 +16,6 @@ public class KitsGUICommand extends BaseCommand {
   @Description("Opens the kit GUI")
   @SuppressWarnings("unused")
   public void onGUIOpen(Player player) {
-    player.openInventory(KitsGUI.getGUI(player).getCurrentPage());
+    player.openInventory(KitsGUI.getGUI(player).getChoiceGUI(false));
   }
 }

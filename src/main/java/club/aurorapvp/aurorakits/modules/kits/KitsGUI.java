@@ -31,14 +31,22 @@ public class KitsGUI implements Listener, InventoryHolder {
   private int currentPage = 0;
   private int index;
   private Mode mode = Mode.CHOICE;
-  private static final UUID VILLAGERS654_UUID = UUID.fromString("b9d42ce7-db64-4aec-a70f-8ae0a5654594");
+  private boolean showNoKitOption;
 
   private enum Mode { CHOICE, PUBLIC, PRIVATE }
 
   public KitsGUI(Player player) {
     this.player = player;
+    this.showNoKitOption = false;
 
     this.choiceInventory = Bukkit.createInventory(this, 9, "Choose kits type");
+    updateChoiceInventory(false);
+
+    Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
+  }
+
+  private void updateChoiceInventory(boolean includeNoKit) {
+    choiceInventory.clear();
     ItemStack publicItem = new ItemStack(Material.CHEST);
     ItemMeta meta = publicItem.getItemMeta();
     meta.displayName(AuroraKits.getInstance().getLang().getComponent("public-kits"));
@@ -51,8 +59,13 @@ public class KitsGUI implements Listener, InventoryHolder {
     privateItem.setItemMeta(meta);
     choiceInventory.setItem(5, privateItem);
 
-    KITS_GUIS.put(player.getUniqueId(), this);
-    Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
+    if (includeNoKit) {
+      ItemStack noKitItem = new ItemStack(Material.BARRIER);
+      meta = noKitItem.getItemMeta();
+      meta.displayName(AuroraKits.getInstance().getLang().getComponent("no-kit"));
+      noKitItem.setItemMeta(meta);
+      choiceInventory.setItem(4, noKitItem);
+    }
   }
 
   public static void reloadAll() {
@@ -72,6 +85,7 @@ public class KitsGUI implements Listener, InventoryHolder {
 
     if (event.getInventory() == this.choiceInventory) {
       event.setCancelled(true);
+
       int slot = event.getSlot();
       if (slot == 3) {
         mode = Mode.PUBLIC;
@@ -83,6 +97,9 @@ public class KitsGUI implements Listener, InventoryHolder {
         loadKits();
         currentPage = 0;
         player.openInventory(getCurrentPage());
+      } else if (slot == 4 && choiceInventory.getItem(4) != null) {
+        new KitSelectEvent(player, null).callEvent();
+        player.closeInventory();
       }
     } else if (event.getInventory().getHolder() instanceof Page page && page.getGui() == this) {
       event.setCancelled(true);
@@ -92,6 +109,7 @@ public class KitsGUI implements Listener, InventoryHolder {
         nextPage();
       } else if (event.getSlot() == 49) {
         new KitSelectEvent(player, null).callEvent();
+        player.closeInventory();
       } else {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem != null && !clickedItem.getType().isAir()) {
@@ -110,11 +128,12 @@ public class KitsGUI implements Listener, InventoryHolder {
           }
         }
       }
+    } else if (event.getInventory().getHolder() == this && event.getInventory() != this.choiceInventory) {
+      event.setCancelled(true);
     }
   }
-
   public static KitsGUI getGUI(Player player) {
-    return KITS_GUIS.getOrDefault(player.getUniqueId(), new KitsGUI(player));
+      return KITS_GUIS.computeIfAbsent(player.getUniqueId(), k -> new KitsGUI(player));
   }
 
   public static void unregister(Player player) {
@@ -127,6 +146,12 @@ public class KitsGUI implements Listener, InventoryHolder {
 
   public Player getPlayer() {
     return player;
+  }
+
+  public Inventory getChoiceGUI(boolean showNoKitOption) {
+    this.mode = Mode.CHOICE;
+    updateChoiceInventory(showNoKitOption);
+    return choiceInventory;
   }
 
   public void addKit(Kit kit) {
@@ -171,6 +196,7 @@ public class KitsGUI implements Listener, InventoryHolder {
 
   public Inventory getCurrentPage() {
     if (mode == Mode.CHOICE) {
+      updateChoiceInventory(showNoKitOption);
       return choiceInventory;
     } else if (pages.isEmpty()) {
       Inventory emptyInv = Bukkit.createInventory(this, 54, "No kits available");
@@ -189,17 +215,6 @@ public class KitsGUI implements Listener, InventoryHolder {
     List<Kit> kits;
     if (mode == Mode.PUBLIC) {
       kits = new ArrayList<>(Kit.getPublicKits());
-      kits.sort((kit1, kit2) -> {
-        boolean isOwner1 = kit1.getOwner() != null && kit1.getOwner().getUniqueId().equals(VILLAGERS654_UUID);
-        boolean isOwner2 = kit2.getOwner() != null && kit2.getOwner().getUniqueId().equals(VILLAGERS654_UUID);
-        if (isOwner1 && !isOwner2) {
-          return -1;
-        } else if (!isOwner1 && isOwner2) {
-          return 1;
-        } else {
-          return kit1.getName().compareTo(kit2.getName());
-        }
-      });
     } else if (mode == Mode.PRIVATE) {
       Set<Kit> allKits = Kit.getKits(player, false);
       kits = new ArrayList<>();
@@ -208,11 +223,11 @@ public class KitsGUI implements Listener, InventoryHolder {
           kits.add(kit);
         }
       }
-      kits.sort(Comparator.comparing(Kit::getName));
     } else {
       return;
     }
 
+    kits.sort(Comparator.comparing(Kit::getName));
     int pageSize = 45;
     int totalPages = (int) Math.ceil((double) kits.size() / pageSize);
 
