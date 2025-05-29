@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,17 +32,18 @@ public class KitsGUI implements Listener, InventoryHolder {
   private int currentPage = 0;
   private int index;
   private Mode mode = Mode.CHOICE;
-  private boolean showNoKitOption;
+  private boolean allowEditing = true;
 
-  private enum Mode { CHOICE, PUBLIC, PRIVATE }
+  private enum Mode {
+    CHOICE,
+    PUBLIC,
+    PRIVATE
+  }
 
   public KitsGUI(Player player) {
     this.player = player;
-    this.showNoKitOption = false;
-
     this.choiceInventory = Bukkit.createInventory(this, 9, "Choose kits type");
     updateChoiceInventory(false);
-
     Bukkit.getPluginManager().registerEvents(this, AuroraKits.getInstance());
   }
 
@@ -52,13 +54,11 @@ public class KitsGUI implements Listener, InventoryHolder {
     meta.displayName(AuroraKits.getInstance().getLang().getComponent("public-kits"));
     publicItem.setItemMeta(meta);
     choiceInventory.setItem(3, publicItem);
-
     ItemStack privateItem = new ItemStack(Material.ENDER_CHEST);
     meta = privateItem.getItemMeta();
     meta.displayName(AuroraKits.getInstance().getLang().getComponent("private-kits"));
     privateItem.setItemMeta(meta);
     choiceInventory.setItem(5, privateItem);
-
     if (includeNoKit) {
       ItemStack noKitItem = new ItemStack(Material.BARRIER);
       meta = noKitItem.getItemMeta();
@@ -82,10 +82,8 @@ public class KitsGUI implements Listener, InventoryHolder {
     if (!(event.getWhoClicked() instanceof Player player)) {
       return;
     }
-
     if (event.getInventory() == this.choiceInventory) {
       event.setCancelled(true);
-
       int slot = event.getSlot();
       if (slot == 3) {
         mode = Mode.PUBLIC;
@@ -113,27 +111,36 @@ public class KitsGUI implements Listener, InventoryHolder {
       } else {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem != null && !clickedItem.getType().isAir()) {
-          String itemName = PlainTextComponentSerializer.plainText().serialize(clickedItem.displayName());
+          String itemName =
+              PlainTextComponentSerializer.plainText().serialize(clickedItem.displayName());
           String kitName = itemName.substring(1, itemName.length() - 1);
           Kit kit = Kit.getKit(player, kitName);
           if (kit != null) {
-            if (event.isRightClick() && !kit.isPublic()) {
-              kit.editKit(player);
-            } else if (new KitSelectEvent(player, kit).callEvent()) {
-              kit.giveKit(player);
-              player.closeInventory();
+            if (event.isLeftClick()) {
+              if (new KitSelectEvent(player, kit).callEvent()) {
+                kit.giveKit(player);
+                player.closeInventory();
+              }
+            } else if (event.isRightClick() && allowEditing) {
+              if (kit.getOwner().equals(player)) {
+                kit.editKit(player);
+              } else if (kit.isPublic()) {
+                KitEditor.getEditor(player).openCopyEditor(player, kit);
+              }
             }
           } else {
             player.sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-name"));
           }
         }
       }
-    } else if (event.getInventory().getHolder() == this && event.getInventory() != this.choiceInventory) {
+    } else if (event.getInventory().getHolder() == this
+        && event.getInventory() != this.choiceInventory) {
       event.setCancelled(true);
     }
   }
+
   public static KitsGUI getGUI(Player player) {
-      return KITS_GUIS.computeIfAbsent(player.getUniqueId(), k -> new KitsGUI(player));
+    return KITS_GUIS.computeIfAbsent(player.getUniqueId(), k -> new KitsGUI(player));
   }
 
   public static void unregister(Player player) {
@@ -148,10 +155,21 @@ public class KitsGUI implements Listener, InventoryHolder {
     return player;
   }
 
-  public Inventory getChoiceGUI(boolean showNoKitOption) {
+  public Inventory getChoiceGUI(boolean showNoKitOption, boolean allowEditing) {
     this.mode = Mode.CHOICE;
+    this.allowEditing = allowEditing;
     updateChoiceInventory(showNoKitOption);
     return choiceInventory;
+  }
+
+  public Inventory getCurrentPage(boolean allowEditing) {
+    this.allowEditing = allowEditing;
+    if (mode == Mode.CHOICE) {
+      updateChoiceInventory(false);
+    } else {
+      loadKits();
+    }
+    return getCurrentPage();
   }
 
   public void addKit(Kit kit) {
@@ -162,7 +180,7 @@ public class KitsGUI implements Listener, InventoryHolder {
     if (kit.isPublic() == isPublic) {
       Inventory lastPage = pages.get(pages.size() - 1).getInventory();
       if (lastPage.getContents()[44] != null) {
-        pages.add(new Page(new Kit[]{kit}, this));
+        pages.add(new Page(new Kit[] {kit}, this));
         index++;
       } else {
         lastPage.addItem(kit.getDisplayItem());
@@ -194,9 +212,8 @@ public class KitsGUI implements Listener, InventoryHolder {
     player.openInventory(getCurrentPage());
   }
 
-  public Inventory getCurrentPage() {
+  private Inventory getCurrentPage() {
     if (mode == Mode.CHOICE) {
-      updateChoiceInventory(showNoKitOption);
       return choiceInventory;
     } else if (pages.isEmpty()) {
       Inventory emptyInv = Bukkit.createInventory(this, 54, "No kits available");
@@ -226,11 +243,9 @@ public class KitsGUI implements Listener, InventoryHolder {
     } else {
       return;
     }
-
     kits.sort(Comparator.comparing(Kit::getName));
     int pageSize = 45;
     int totalPages = (int) Math.ceil((double) kits.size() / pageSize);
-
     pages.clear();
     for (int pageIndex = 0; pageIndex < totalPages; pageIndex++) {
       int start = pageIndex * pageSize;
@@ -258,10 +273,40 @@ public class KitsGUI implements Listener, InventoryHolder {
     private final KitsGUI gui;
 
     private Page(Kit[] kits, KitsGUI gui) {
-      inventory = Bukkit.createInventory(this, 54, AuroraKits.getInstance().getLang().getComponent("kit-gui"));
+      inventory =
+          Bukkit.createInventory(
+              this, 54, AuroraKits.getInstance().getLang().getComponent("kit-gui"));
       this.gui = gui;
       for (Kit kit : kits) {
-        inventory.addItem(kit.getDisplayItem());
+        ItemStack displayItem = kit.getDisplayItem().clone();
+        if (gui.allowEditing) {
+          ItemMeta meta = displayItem.getItemMeta();
+          List<Component> lore = meta.lore();
+          if (lore == null) lore = new ArrayList<>();
+          if (kit.isPublic()) {
+            if (kit.getOwner().equals(gui.getPlayer())) {
+              lore.add(AuroraKits.getInstance().getLang().getComponent("right-click-to-edit"));
+            } else {
+              lore.add(AuroraKits.getInstance().getLang().getComponent("right-click-to-copy"));
+            }
+          }
+          meta.lore(lore);
+          displayItem.setItemMeta(meta);
+        } else {
+          ItemMeta meta = displayItem.getItemMeta();
+          List<Component> lore = meta.lore();
+          if (lore != null) {
+            lore.removeIf(
+                component -> {
+                  String text = PlainTextComponentSerializer.plainText().serialize(component);
+                  return text.contains("Right click to edit")
+                      || text.contains("Right click to copy");
+                });
+            meta.lore(lore);
+            displayItem.setItemMeta(meta);
+          }
+        }
+        inventory.addItem(displayItem);
       }
       ItemMeta meta;
       ItemStack nextPage = new ItemStack(Material.PAPER);

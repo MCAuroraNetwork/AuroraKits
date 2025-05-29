@@ -13,12 +13,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
 import com.mongodb.client.MongoCollection;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -43,7 +43,9 @@ public class Kit {
     this.name = kitName;
     this.data = new KitDataHandler(this);
 
-    (isPublic ? PUBLIC_KITS : PRIVATE_KITS).get(owner.getUniqueId()).add(this);
+    (isPublic ? PUBLIC_KITS : PRIVATE_KITS)
+        .computeIfAbsent(owner.getUniqueId(), k -> new HashSet<>())
+        .add(this);
 
     if (this.exists()) {
       this.reload();
@@ -51,7 +53,8 @@ public class Kit {
   }
 
   public static void init() {
-    MongoCollection<Document> collection = AuroraKits.getInstance().getDatabase().getCollection("kits.public");
+    MongoCollection<Document> collection =
+        AuroraKits.getInstance().getDatabase().getCollection("kits.public");
 
     for (Document doc : collection.find()) {
       UUID owner = UUID.fromString(doc.getString("owner"));
@@ -205,18 +208,15 @@ public class Kit {
   public static void register(Player player) {
     UUID playerId = player.getUniqueId();
     MongoCollection<Document> collection =
-            AuroraKits.getInstance()
-                    .getDatabase()
-                    .getCollection("kits." + playerId);
+        AuroraKits.getInstance().getDatabase().getCollection("kits." + playerId);
 
     PRIVATE_KITS.put(playerId, new HashSet<>());
     PUBLIC_KITS.computeIfAbsent(playerId, k -> new HashSet<>());
 
     for (Document doc : collection.find()) {
-      String kitName   = doc.getString("_id");
+      String kitName = doc.getString("_id");
       boolean isPublic = doc.getBoolean("isPublic", false);
-      OfflinePlayer owner = Bukkit.getOfflinePlayer(
-              UUID.fromString(doc.getString("owner")));
+      OfflinePlayer owner = Bukkit.getOfflinePlayer(UUID.fromString(doc.getString("owner")));
 
       Kit kit = new Kit(kitName, owner, isPublic);
 
@@ -228,8 +228,8 @@ public class Kit {
     }
 
     AuroraKits.getInstance()
-            .getLogger()
-            .info("All kits loaded from MongoDB for player " + player.getName() + "!");
+        .getLogger()
+        .info("All kits loaded from MongoDB for player " + player.getName() + "!");
   }
 
   public static void unregister(Player player) {
@@ -383,19 +383,43 @@ public class Kit {
       return;
     }
 
-    if (Objects.requireNonNull(owner.getPlayer()).getInventory().getItemInMainHand().getItemMeta()
-        == null) {
-      Objects.requireNonNull(owner.getPlayer())
-          .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-invalid-item"));
-      return;
-    }
-
     displayItem =
         ItemStackUtil.createDisplayItem(
             owner.getPlayer().getInventory().getItemInMainHand().getType(),
             name,
             owner.getName(),
             isPublic);
+
+    this.contents = contents;
+    this.armor = armor;
+    this.offhand = offhand;
+
+    data.create();
+
+    if (isPublic) {
+      for (KitsGUI kitsGui : KitsGUI.getGuis()) {
+        kitsGui.addKit(this);
+      }
+    } else {
+      KitEditor.getEditor(owner.getPlayer()).addKit(this);
+      KitsGUI.getGUI(owner.getPlayer()).addKit(this);
+    }
+
+    Objects.requireNonNull(owner.getPlayer())
+        .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-created"));
+
+    this.reload();
+  }
+
+  public void create(
+      ItemStack[] contents, ItemStack[] armor, ItemStack offhand, Material displayMaterial) {
+    if (this.exists()) {
+      Objects.requireNonNull(owner.getPlayer())
+          .sendMessage(AuroraKits.getInstance().getLang().getComponent("kit-already-exists"));
+      return;
+    }
+
+    displayItem = ItemStackUtil.createDisplayItem(displayMaterial, name, owner.getName(), isPublic);
 
     this.contents = contents;
     this.armor = armor;

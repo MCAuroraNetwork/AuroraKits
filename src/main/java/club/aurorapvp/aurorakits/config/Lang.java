@@ -61,20 +61,11 @@ public class Lang {
     DEFAULTS.put("public-kits", "<green><bold>Public Kits");
     DEFAULTS.put("private-kits", "<blue><bold>Private Kits");
     DEFAULTS.put("no-kits-available", "<red><bold>No Kits Available");
-    DEFAULTS.put(
-        "help-command",
-        """
-                prefix <yellow><bold>All Commands:
-
-
-                <blue><bold>/kits: <reset><yellow>Opens the Kit Menu
-
-                <blue><bold>/kit [name]: <reset><yellow>Opens a Kit
-
-                <blue><bold>/kit create [name]: <reset><yellow>Creates a Kit
-
-                <blue><bold>/kit delete [name]: <reset><yellow>Deletes a kit
-                """);
+    DEFAULTS.put("kit-copied", "prefix <green>Kit copied as %s");
+    DEFAULTS.put("public-kit-label", "<aqua>Public Kit");
+    DEFAULTS.put("private-kit-label", "<aqua>Private Kit");
+    DEFAULTS.put("right-click-to-edit", "<gray>Right click to edit");
+    DEFAULTS.put("right-click-to-copy", "<gray>Right click to copy");
 
     for (String path : DEFAULTS.keySet()) {
       if (!getYaml().contains(path) || getYaml().getString(path) == null) {
@@ -107,6 +98,20 @@ public class Lang {
         pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
       }
     }
+    return MiniMessage.miniMessage().deserialize(pathString);
+  }
+
+  public Component formatComponent(String message, Object... args) {
+    String pathString = getYaml().getString(message);
+    assert pathString != null;
+    for (String placeholder : PLACEHOLDERS.keySet()) {
+      if (pathString.contains(placeholder)) {
+        pathString = pathString.replace(placeholder, PLACEHOLDERS.get(placeholder));
+      }
+    }
+
+    pathString = String.format(pathString, args);
+
     return MiniMessage.miniMessage().deserialize(pathString);
   }
 

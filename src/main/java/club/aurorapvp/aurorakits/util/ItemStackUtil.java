@@ -1,5 +1,6 @@
 package club.aurorapvp.aurorakits.util;
 
+import club.aurorapvp.aurorakits.AuroraKits;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -23,16 +24,14 @@ public class ItemStackUtil {
     if (isPublic) {
       meta.lore(
           List.of(
-              MiniMessage.miniMessage()
-                  .deserialize("<aqua>Created by " + creator),
-              MiniMessage.miniMessage().deserialize("This is a Public Kit")));
+              MiniMessage.miniMessage().deserialize("<aqua>Created by " + creator),
+              AuroraKits.getInstance().getLang().getComponent("public-kit-label")));
     } else {
       meta.lore(
           List.of(
-              MiniMessage.miniMessage()
-                  .deserialize("<aqua>Created by " + creator),
-              Component.text("This is a Private Kit"),
-              Component.text("Right click to edit")));
+              MiniMessage.miniMessage().deserialize("<aqua>Created by " + creator),
+              AuroraKits.getInstance().getLang().getComponent("private-kit-label"),
+              AuroraKits.getInstance().getLang().getComponent("right-click-to-edit")));
     }
 
     item.setItemMeta(meta);
